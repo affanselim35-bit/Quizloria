@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestLab | Kendini Keşfet</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #09090f;
+    color: white;
+}
+
+header {
+    padding: 22px 8%;
+    background: #12121d;
+    border-bottom: 1px solid #29293d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #a78bfa;
+}
+
+header span {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.hero {
+    text-align: center;
+    padding: 85px 20px 55px;
+    background: radial-gradient(
+        ellipse at top,
+        #302052 0%,
+        #09090f 70%
+    );
+}
+
+.hero h1 {
+    font-size: clamp(32px, 6vw, 55px);
+    margin-bottom: 15px;
+}
+
+.hero h1 strong {
+    color: #a78bfa;
+}
+
+.hero p {
+    color: #b8b8c9;
+    font-size: 18px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 35px 20px;
+}
+
+.section-title {
+    font-size: 27px;
+    margin-bottom: 25px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 22px;
+}
+
+.card {
+    background: #171724;
+    padding: 30px;
+    border-radius: 18px;
+    border: 1px solid #303047;
+    transition: 0.25s;
+}
+
+.card:hover {
+    transform: translateY(-7px);
+    border-color: #a78bfa;
+    box-shadow: 0 10px 35px #7c3aed33;
+}
+
+.icon {
+    font-size: 40px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #aaaabc;
+    line-height: 1.6;
+}
+
+button {
+    background: #7c3aed;
+    color: white;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #9461f5;
+}
+
+button:disabled {
+    background: #444454;
+    cursor: not-allowed;
+}
+
+.quiz-box {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #171724;
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid #393952;
+}
+
+.progress {
+    color: #a78bfa;
+    margin-bottom: 20px;
+}
+
+.question {
+    font-size: 23px;
+    margin-bottom: 25px;
+}
+
+.answer {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #27273b;
+    margin: 12px 0;
+    padding: 17px;
+    font-weight: normal;
+}
+
+.answer:hover {
+    background: #493078;
+}
+
+.hidden {
+    display: none;
+}
+
+.result {
+    text-align: center;
+}
+
+.result h2 {
+    color: #a78bfa;
+    font-size: 30px;
+}
+
+.result p {
+    color: #c5c5d5;
+    line-height: 1.8;
+}
+
+footer {
+    text-align: center;
+    padding: 35px;
+    color: #77778a;
+    border-top: 1px solid #29293d;
+    margin-top: 70px;
+}
+
+@media(max-width: 600px) {
+    header {
+        padding: 20px;
+    }
+
+    .hero {
+        padding: 60px 20px;
+    }
+
+    .quiz-box {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🧠 TestLab</div>
+    <span>Keşfet • Eğlen • Paylaş</span>
+</header>
+
+<section id="home">
+
+    <div class="hero">
+        <h1>Kendini <strong>Keşfet!</strong></h1>
+        <p>
+            Eğlenceli testleri çöz, kendini tanı
+            ve sonuçlarını arkadaşlarınla paylaş.
+        </p>
+    </div>
+
+    <div class="container">
+
+        <h2 class="section-title">🔥 Popüler Testler</h2>
+
+        <div class="grid">
+
+            <div class="card">
+                <div class="icon">🧠</div>
+                <h3>Hangi Kişilik Tipisin?</h3>
+                <p>
+                    10 soruda eğlenceli kişilik
+                    profilini keşfet!
+                </p>
+                <button onclick="startQuiz()">
+                    Teste Başla →
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="icon">⚽</div>
+                <h3>Futbol Bilgin Ne Kadar İyi?</h3>
+                <p>
+                    Futbol dünyasını ne kadar
+                    tanıdığını öğren.
+                </p>
+                <button onclick="startQuiz('football')">
+    Teste Başla →
+</button>
+            </div>
+
+            <div class="card">
+                <div class="icon">🎵</div>
+                <h3>Müzik Bilgini Test Et</h3>
+                <p>
+                    Müzik dünyasındaki bilgini
+                    ölçmeye hazır mısın?
+                </p>
+                <button onclick="startQuiz('music')">
+    Teste Başla →
+</button>
+            </div>
+
+            <div class="card">
+                <div class="icon">🌍</div>
+                <h3>Genel Kültür Testi</h3>
+                <p>
+                    Bakalım kaç soruyu doğru
+                    cevaplayabileceksin?
+                </p>
+                <button onclick="startQuiz('general')">Teste Başla →</button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="quiz" class="hidden">
+
+    <div class="quiz-box">
+
+        <div class="progress" id="progress"></div>
+
+        <h2 class="question" id="question"></h2>
+
+        <div id="answers"></div>
+
+        <button onclick="goHome()">
+            ← Ana Sayfa
+        </button>
+
+    </div>
+
+</section>
+
+<section id="result" class="hidden">
+
+    <div class="quiz-box result">
+
+        <div style="font-size:60px">✨</div>
+
+        <h2 id="resultTitle"></h2>
+
+        <p id="resultText"></p>
+
+        <button onclick="startQuiz(activeQuiz)">
+            Tekrar Çöz
+        </button>
+
+        <button onclick="goHome()">
+            Ana Sayfa
+        </button>
+
+    </div>
+
+</section>
+
+<footer>
+    © 2026 TestLab | Eğlence ve keşif dünyası
+</footer>
+
+<script>
+
+const questions = [
+    {
+        q: "Boş bir gününü nasıl geçirirsin?",
+        a: [
+            "Arkadaşlarımla buluşurum",
+            "Yeni bir şey öğrenirim",
+            "Evde dinlenirim",
+            "Yeni yerler keşfederim"
+        ]
+    },
+    {
+        q: "Bir sorunla karşılaşınca ne yaparsın?",
+        a: [
+            "Başkalarından yardım isterim",
+            "Mantıklı bir çözüm ararım",
+            "Önce sakinleşirim",
+            "Hemen harekete geçerim"
+        ]
+    },
+    {
+        q: "Arkadaşların seni nasıl tanımlar?",
+        a: [
+            "Sosyal",
+            "Zeki ve meraklı",
+            "Sakin",
+            "Cesur"
+        ]
+    },
+    {
+        q: "Hangi etkinliği seçerdin?",
+        a: [
+            "Büyük bir parti",
+            "Bilgi yarışması",
+            "Film gecesi",
+            "Macera gezisi"
+        ]
+    },
+    {
+        q: "Bir takımda hangi rolü alırsın?",
+        a: [
+            "İnsanları bir araya getiririm",
+            "Plan yaparım",
+            "Herkesi dinlerim",
+            "Liderlik yaparım"
+        ]
+    },
+    {
+        q: "En çok neye değer verirsin?",
+        a: [
+            "Arkadaşlık",
+            "Bilgi",
+            "Huzur",
+            "Özgürlük"
+        ]
+    },
+    {
+        q: "Yeni bir ortama girdiğinde...",
+        a: [
+            "Hemen insanlarla tanışırım",
+            "Önce ortamı incelerim",
+            "Sessizce alışmaya çalışırım",
+            "Yeni deneyimlere atılırım"
+        ]
+    },
+    {
+        q: "Hangi süper gücü isterdin?",
+        a: [
+            "İnsanların duygularını anlamak",
+            "Her şeyi bilmek",
+            "Zamanı durdurmak",
+            "Uçabilmek"
+        ]
+    },
+    {
+        q: "Bir hedef belirlediğinde...",
+        a: [
+            "Arkadaşlarımla paylaşırım",
+            "Detaylı plan yaparım",
+            "Kendi hızımda ilerlerim",
+            "Hemen başlamayı tercih ederim"
+        ]
+    },
+    {
+        q: "Hayatında hangisi daha önemli?",
+        a: [
+            "Güçlü ilişkiler",
+            "Kendimi geliştirmek",
+            "Dengeli bir yaşam",
+            "Yeni deneyimler"
+        ]
+    }
+];
+const footballQuestions = [
+    {q:"2022 Dünya Kupası'nı hangi ülke kazandı?",a:["Fransa","Arjantin","Brezilya","Hırvatistan"],correct:1},
+    {q:"UEFA Şampiyonlar Ligi'ni en çok kazanan takım hangisidir?",a:["Barcelona","Liverpool","Real Madrid","Bayern Münih"],correct:2},
+    {q:"Bir futbol takımı sahaya kaç oyuncuyla çıkar?",a:["9","10","11","12"],correct:2},
+    {q:"2010 Dünya Kupası'nı hangi ülke kazandı?",a:["Almanya","Hollanda","İspanya","İtalya"],correct:2},
+    {q:"Cristiano Ronaldo hangi ülkenin millî takımında oynadı?",a:["İspanya","Brezilya","Portekiz","Arjantin"],correct:2},
+    {q:"2005 Şampiyonlar Ligi finalini hangi takım kazandı?",a:["Milan","Liverpool","Chelsea","Barcelona"],correct:1},
+    {q:"Türkiye 2002 Dünya Kupası'nı kaçıncı tamamladı?",a:["2.","3.","4.","5."],correct:1},
+    {q:"Lionel Messi ilk profesyonel A takım maçına hangi kulüpte çıktı?",a:["PSG","Barcelona","Inter Miami","Newell's Old Boys"],correct:1},
+    {q:"Futbolda penaltı noktası kale çizgisinden kaç metre uzaktadır?",a:["9","10","11","12"],correct:2},
+    {q:"Euro 2024 şampiyonu hangi ülkedir?",a:["İngiltere","Fransa","İspanya","Almanya"],correct:2},
+    {q:"Beşiktaş'ın iç saha maçlarını oynadığı stadın bulunduğu ilçe hangisidir?",a:["Kadıköy","Beşiktaş","Şişli","Üsküdar"],correct:1},
+    {q:"2014 Dünya Kupası'nı hangi ülke kazandı?",a:["Arjantin","Brezilya","Almanya","İspanya"],correct:2},
+    {q:"Futbolda VAR neyin kısaltmasıdır?",a:["Video Assistant Referee","Virtual Action Replay","Video Attack Review","Verified Assistant Rules"],correct:0},
+    {q:"1996 Avrupa Futbol Şampiyonası'nı hangi ülke kazandı?",a:["Çekya","Almanya","İngiltere","Fransa"],correct:1},
+    {q:"2022 Dünya Kupası finalinde Arjantin hangi ülkeyi yendi?",a:["Hırvatistan","Fas","Fransa","Hollanda"],correct:2}
+];
+const musicQuestions = [
+    {q:"Ezhel'in gerçek adı nedir?",a:["Sercan İpekçioğlu","Ömer Sercan İpekçioğlu","Uğur Yıldırım","Şehinşah"],correct:1},
+    {q:"Şehinşah hangi müzik türüyle tanınır?",a:["Rock","Rap","Pop","Caz"],correct:1},
+    {q:"Michael Jackson hangi unvanla tanınır?",a:["Rock Kralı","Popun Kralı","Rap Kralı","Caz Kralı"],correct:1},
+    {q:"Spotify hangi amaçla kullanılır?",a:["Film düzenleme","Müzik ve podcast dinleme","Oyun geliştirme","Fotoğraf çekme"],correct:1},
+    {q:"Bir oktav kaç yarım sesten oluşur?",a:["6","8","10","12"],correct:3},
+    {q:"Eminem'in gerçek adı nedir?",a:["Marshall Mathers","Curtis Jackson","Calvin Broadus","Shawn Carter"],correct:0},
+    {q:"Şam hangi müzik türüyle tanınır?",a:["Rap","Klasik","Country","Opera"],correct:0},
+    {q:"The Weeknd hangi ülkedendir?",a:["ABD","Kanada","İngiltere","Fransa"],correct:1},
+    {q:"Piyanoda standart olarak kaç tuş bulunur?",a:["61","76","88","100"],correct:2},
+    {q:"Drake hangi şehirde doğmuştur?",a:["Los Angeles","New York","Toronto","Miami"],correct:2},
+    {q:"Grammy ödülleri hangi alanla ilgilidir?",a:["Sinema","Müzik","Spor","Edebiyat"],correct:1},
+    {q:"Bir şarkının hızını belirtmek için hangi terim kullanılır?",a:["Tempo","Melodi","Armoni","Tını"],correct:0},
+    {q:"Gitarda standart akortta kaç tel bulunur?",a:["4","5","6","8"],correct:2},
+    {q:"Billie Eilish hangi ülkede doğmuştur?",a:["Kanada","ABD","Avustralya","İngiltere"],correct:1},
+    {q:"DJ kısaltmasının açılımı nedir?",a:["Digital Jam","Disc Jockey","Dance Junior","Dynamic Jazz"],correct:1}
+];
+const generalQuestions = [
+    {q:"Türkiye'nin başkenti neresidir?",a:["İstanbul","Ankara","İzmir","Bursa"],correct:1},
+    {q:"Güneş Sistemi'nin en büyük gezegeni hangisidir?",a:["Dünya","Mars","Jüpiter","Venüs"],correct:2},
+    {q:"Mona Lisa tablosunu kim yapmıştır?",a:["Van Gogh","Picasso","Leonardo da Vinci","Michelangelo"],correct:2},
+    {q:"Dünyanın en büyük okyanusu hangisidir?",a:["Atlas","Hint","Arktik","Pasifik"],correct:3},
+    {q:"İstiklal Marşı'nın şairi kimdir?",a:["Nazım Hikmet","Mehmet Akif Ersoy","Orhan Veli","Yahya Kemal"],correct:1},
+    {q:"Su hangi kimyasal formülle gösterilir?",a:["CO2","O2","H2O","NaCl"],correct:2},
+    {q:"Japonya'nın başkenti neresidir?",a:["Osaka","Tokyo","Kyoto","Seul"],correct:1},
+    {q:"Bir üçgenin iç açılarının toplamı kaç derecedir?",a:["90","180","270","360"],correct:1},
+    {q:"Ay'a ilk ayak basan insan kimdir?",a:["Yuri Gagarin","Neil Armstrong","Buzz Aldrin","Alan Shepard"],correct:1},
+    {q:"Hangi organ kanı vücuda pompalar?",a:["Akciğer","Böbrek","Kalp","Karaciğer"],correct:2},
+    {q:"Türkiye Cumhuriyeti hangi yıl ilan edildi?",a:["1919","1920","1923","1938"],correct:2},
+    {q:"Dünyanın doğal uydusu hangisidir?",a:["Mars","Ay","Güneş","Venüs"],correct:1},
+    {q:"Hangi elementin simgesi Au'dur?",a:["Gümüş","Altın","Bakır","Demir"],correct:1},
+    {q:"Satrançta oyuna her oyuncu kaç taşla başlar?",a:["12","14","16","18"],correct:2},
+    {q:"Bir yılda kaç ay vardır?",a:["10","11","12","13"],correct:2}
+];
+
+let currentQuestion = 0;
+let scores = [0, 0, 0, 0];
+
+function showSection(id) {
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("result").classList.add("hidden");
+
+    document.getElementById(id).classList.remove("hidden");
+
+    window.scrollTo(0, 0);
+}
+
+let activeQuiz = "personality";
+
+function startQuiz(type = "personality") {
+    activeQuiz = type;
+    currentQuestion = 0;
+    scores = [0, 0, 0, 0];
+    correctAnswers = 0;
+
+    showSection("quiz");
+    showQuestion();
+}
+function getActiveQuestions() {
+    if (activeQuiz === "football") return footballQuestions;
+    if (activeQuiz === "music") return musicQuestions;
+    if (activeQuiz === "general") return generalQuestions;
+    return questions;
+}
+
+function showQuestion() {
+    const list = getActiveQuestions();
+    const item = list[currentQuestion];
+    document.getElementById("progress").textContent =
+        "Soru " + (currentQuestion + 1) + " / " + list.length;
+    document.getElementById("question").textContent = item.q;
+    const answers = document.getElementById("answers");
+    answers.innerHTML = "";
+    item.a.forEach((answer, index) => {
+        const button = document.createElement("button");
+        button.className = "answer";
+        button.textContent = answer;
+        button.onclick = () => selectAnswer(index);
+        answers.appendChild(button);
+    });
+}
+
+let correctAnswers = 0;
+
+function selectAnswer(index) {
+    if (activeQuiz === "personality") {
+        scores[index]++;
+    } else if (index === getActiveQuestions()[currentQuestion].correct) {
+        correctAnswers++;
+    }
+    currentQuestion++;
+    if (currentQuestion < getActiveQuestions().length) showQuestion();
+    else showResult();
+}
+
+function showResult() {
+    if (activeQuiz !== "personality") {
+        const total = getActiveQuestions().length;
+        const points = Math.round((correctAnswers / total) * 100);
+        const titles = {
+            football: "⚽ Futbol Testi Sonucun",
+            music: "🎵 Müzik Testi Sonucun",
+            general: "🌍 Genel Kültür Testi Sonucun"
+        };
+        document.getElementById("resultTitle").textContent = titles[activeQuiz];
+        document.getElementById("resultText").textContent =
+            total + " sorudan " + correctAnswers +
+            " tanesini doğru cevapladın! Puanın: " + points + "/100 🏆";
+        showSection("result");
+        return;
+    }
+    const types = [
+        {title:"🌟 Sosyal Yıldız",text:"İnsanlarla iletişim kurmayı seviyorsun. Arkadaşlık ve birlikte vakit geçirmek senin için önemli."},
+        {title:"🧠 Meraklı Düşünür",text:"Yeni bilgiler öğrenmekten ve sorunlara çözüm bulmaktan hoşlanıyorsun."},
+        {title:"🌙 Sakin Ruh",text:"Huzura ve dengeye önem veriyorsun. Olayları kendi hızında değerlendirmeyi seviyorsun."},
+        {title:"🔥 Maceracı",text:"Yeni deneyimlere açıksın. Fırsatları değerlendirmekten ve harekete geçmekten hoşlanıyorsun."}
+    ];
+    const winner = scores.indexOf(Math.max(...scores));
+    document.getElementById("resultTitle").textContent = types[winner].title;
+    document.getElementById("resultText").textContent = types[winner].text +
+        " Bu sonuç eğlence amaçlıdır; bilimsel bir kişilik değerlendirmesi değildir.";
+    showSection("result");
+}
+
+function goHome() {
+    showSection("home");
+}
+
+</script>
+
+</body>
+</html>
