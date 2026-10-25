@@ -199,6 +199,15 @@ footer {
         padding: 20px;
     }
 }
+
+.answer-review { text-align:left; margin:24px 0; }
+.answer-review h3 { color:#c4b5fd; text-align:center; }
+.review-item { background:#222236; border:1px solid #393952; border-radius:12px; padding:16px; margin:12px 0; overflow-wrap:anywhere; }
+.review-item p { margin:8px 0; line-height:1.5; }
+.review-correct { color:#86efac !important; }
+.review-wrong { color:#fca5a5 !important; }
+.result button { margin:5px; }
+@media(max-width:600px) { .result button { width:100%; margin:6px 0; } .answer-review { font-size:14px; } }
 </style>
 </head>
 
@@ -271,6 +280,19 @@ footer {
                 <button onclick="startQuiz('general')">Teste Başla →</button>
             </div>
 
+
+            <div class="card">
+                <div class="icon">🎮</div>
+                <h3>Oyun Dünyasını Ne Kadar Tanıyorsun?</h3>
+                <p>Minecraft, Roblox, GTA ve daha fazlası! 15 soruda bilgini ölç.</p>
+                <button onclick="startQuiz('gaming')">Teste Başla →</button>
+            </div>
+            <div class="card">
+                <div class="icon">🧩</div>
+                <h3>Mantık ve Zekâ Testi</h3>
+                <p>Örüntüler ve dikkat sorularıyla kendini dene. Eğlence amaçlıdır, IQ testi değildir.</p>
+                <button onclick="startQuiz('logic')">Teste Başla →</button>
+            </div>
         </div>
     </div>
 </section>
@@ -302,6 +324,8 @@ footer {
         <h2 id="resultTitle"></h2>
 
         <p id="resultText"></p>
+        <div id="answerReview" class="answer-review hidden"></div>
+        <button id="shareResult" onclick="shareQuizResult()">📤 Sonucu Paylaş</button>
 
         <button onclick="startQuiz(activeQuiz)">
             Tekrar Çöz
@@ -465,6 +489,42 @@ const generalQuestions = [
     {q:"Bir yılda kaç ay vardır?",a:["10","11","12","13"],correct:2}
 ];
 
+const gamingQuestions = [
+ {q:"Minecraft'ta Creeper genellikle ne yapar?",a:["Uçar","Patlar","Işınlanır","Yüzerek saldırır"],correct:1},
+ {q:"Roblox'ta oyun deneyimleri geliştirmek için kullanılan araç hangisidir?",a:["Roblox Studio","Photoshop","Excel","Blender Player"],correct:0},
+ {q:"GTA V'in üç ana oynanabilir karakterinden biri hangisidir?",a:["Arthur Morgan","Trevor Philips","Joel Miller","Nathan Drake"],correct:1},
+ {q:"Fortnite'ın Battle Royale modunda temel hedef nedir?",a:["En çok bina yapmak","Son hayatta kalan olmak","Bir yarış kazanmak","Bulmaca çözmek"],correct:1},
+ {q:"Minecraft'ta Nether'a gitmek için hangi yapı kullanılır?",a:["End portalı","Nether portalı","Deniz feneri","Köy kapısı"],correct:1},
+ {q:"Among Us'ta Impostor'un amacı nedir?",a:["Görevleri herkesten önce bitirmek","Diğer oyuncuları gizlice saf dışı bırakmak","Haritayı boyamak","Yeni oda inşa etmek"],correct:1},
+ {q:"EA SPORTS FC serisi hangi spor dalını konu alır?",a:["Basketbol","Futbol","Tenis","Voleybol"],correct:1},
+ {q:"Super Mario serisinin ana karakterinin mesleği nedir?",a:["Pilot","Aşçı","Tesisatçı","Dedektif"],correct:2},
+ {q:"Minecraft'ta elmas çıkarmak için en az hangi kazma gerekir?",a:["Tahta","Taş","Demir","Altın"],correct:2},
+ {q:"The Legend of Zelda serisinin ana oynanabilir kahramanı genellikle kimdir?",a:["Zelda","Link","Ganondorf","Kirby"],correct:1},
+ {q:"Rocket League'de oyuncular neyi kontrol eder?",a:["Arabaları","Uçakları","Gemileri","Robotları"],correct:0},
+ {q:"Pokémon serisinde Pikachu'nun türü hangisidir?",a:["Su","Ateş","Elektrik","Çimen"],correct:2},
+ {q:"Tetris'te amaç nedir?",a:["Tam yatay satırlar oluşturmak","Yıldız toplamak","Kaleye ulaşmak","Rakibi vurmak"],correct:0},
+ {q:"Minecraft'ta Ender Dragon hangi boyutta bulunur?",a:["Overworld","Nether","The End","Deep Dark"],correct:2},
+ {q:"PlayStation konsollarını geliştiren şirket hangisidir?",a:["Nintendo","Sony","Sega","Valve"],correct:1}
+];
+
+const logicQuestions = [
+ {q:"2, 4, 8, 16, ?",a:["24","30","32","36"],correct:2},
+ {q:"5 kalemin 2'si alınırsa geriye kaç kalem kalır?",a:["2","3","5","7"],correct:1},
+ {q:"Bir üçgenin kaç köşesi vardır?",a:["2","3","4","5"],correct:1},
+ {q:"1, 1, 2, 3, 5, ?",a:["6","7","8","10"],correct:2},
+ {q:"Hangisi diğerlerinden farklıdır?",a:["Elma","Armut","Havuç","Muz"],correct:2},
+ {q:"Bir saatte 60 dakika varsa 2,5 saat kaç dakikadır?",a:["120","130","150","180"],correct:2},
+ {q:"3, 6, 9, 12, ?",a:["14","15","16","18"],correct:1},
+ {q:"Ali, Ece'den uzun; Ece, Can'dan uzun. En uzun kim?",a:["Can","Ece","Ali","Bilinemez"],correct:2},
+ {q:"Bir düzine kaç tanedir?",a:["10","12","15","20"],correct:1},
+ {q:"Tüm kediler memelidir. Pamuk bir kediyse hangisi kesindir?",a:["Pamuk uçar","Pamuk memelidir","Pamuk siyahtır","Pamuk yüzemez"],correct:1},
+ {q:"10, 20, 30, 40, ?",a:["45","50","55","60"],correct:1},
+ {q:"4 kişi birbirleriyle birer kez tokalaşırsa toplam kaç tokalaşma olur?",a:["4","6","8","12"],correct:1},
+ {q:"Bir sayı 3 ile çarpılınca 21 oluyorsa sayı kaçtır?",a:["6","7","8","9"],correct:1},
+ {q:"Kare, üçgen, kare, üçgen, ?",a:["Daire","Kare","Üçgen","Dikdörtgen"],correct:1},
+ {q:"Bir kutuda 4 kırmızı ve 3 mavi top var. Toplam kaç top var?",a:["5","6","7","8"],correct:2}
+];
+
 let currentQuestion = 0;
 let scores = [0, 0, 0, 0];
 
@@ -485,6 +545,7 @@ function startQuiz(type = "personality") {
     currentQuestion = 0;
     scores = [0, 0, 0, 0];
     correctAnswers = 0;
+    selectedAnswers = [];
 
     showSection("quiz");
     showQuestion();
@@ -493,6 +554,8 @@ function getActiveQuestions() {
     if (activeQuiz === "football") return footballQuestions;
     if (activeQuiz === "music") return musicQuestions;
     if (activeQuiz === "general") return generalQuestions;
+    if (activeQuiz === "gaming") return gamingQuestions;
+    if (activeQuiz === "logic") return logicQuestions;
     return questions;
 }
 
@@ -514,8 +577,10 @@ function showQuestion() {
 }
 
 let correctAnswers = 0;
+let selectedAnswers = [];
 
 function selectAnswer(index) {
+    selectedAnswers.push(index);
     if (activeQuiz === "personality") {
         scores[index]++;
     } else if (index === getActiveQuestions()[currentQuestion].correct) {
@@ -527,18 +592,51 @@ function selectAnswer(index) {
 }
 
 function showResult() {
+    const review = document.getElementById("answerReview");
+    const shareButton = document.getElementById("shareResult");
+    review.replaceChildren();
+    review.classList.add("hidden");
+    shareButton.classList.remove("hidden");
     if (activeQuiz !== "personality") {
         const total = getActiveQuestions().length;
         const points = Math.round((correctAnswers / total) * 100);
         const titles = {
             football: "⚽ Futbol Testi Sonucun",
             music: "🎵 Müzik Testi Sonucun",
-            general: "🌍 Genel Kültür Testi Sonucun"
+            general: "🌍 Genel Kültür Testi Sonucun",
+            gaming: "🎮 Oyun Testi Sonucun",
+            logic: "🧩 Mantık Testi Sonucun"
         };
         document.getElementById("resultTitle").textContent = titles[activeQuiz];
         document.getElementById("resultText").textContent =
             total + " sorudan " + correctAnswers +
             " tanesini doğru cevapladın! Puanın: " + points + "/100 🏆";
+        const wrongCount = total - correctAnswers;
+        document.getElementById("resultText").textContent =
+            `✅ ${correctAnswers} doğru  •  ❌ ${wrongCount} yanlış  •  🏆 ${points}/100 puan`;
+        const heading = document.createElement("h3");
+        heading.textContent = "📋 Cevaplarını İncele";
+        review.appendChild(heading);
+        getActiveQuestions().forEach((item, i) => {
+            const selected = selectedAnswers[i];
+            const isCorrect = selected === item.correct;
+            const box = document.createElement("div");
+            box.className = "review-item";
+            const question = document.createElement("p");
+            question.textContent = `${i + 1}. ${item.q}`;
+            const yourAnswer = document.createElement("p");
+            yourAnswer.className = isCorrect ? "review-correct" : "review-wrong";
+            yourAnswer.textContent = `${isCorrect ? "✅" : "❌"} Senin cevabın: ${item.a[selected] ?? "Boş"}`;
+            box.append(question, yourAnswer);
+            if (!isCorrect) {
+                const correct = document.createElement("p");
+                correct.className = "review-correct";
+                correct.textContent = `Doğru cevap: ${item.a[item.correct]}`;
+                box.appendChild(correct);
+            }
+            review.appendChild(box);
+        });
+        review.classList.remove("hidden");
         showSection("result");
         return;
     }
@@ -553,6 +651,59 @@ function showResult() {
     document.getElementById("resultText").textContent = types[winner].text +
         " Bu sonuç eğlence amaçlıdır; bilimsel bir kişilik değerlendirmesi değildir.";
     showSection("result");
+}
+
+function shareQuizResult() {
+    const title = document.getElementById("resultTitle").textContent;
+    const result = document.getElementById("resultText").textContent;
+    const url = "https://affanselim35-bit.github.io/TestLab/";
+    const message = `${title}\n${result}\nTestLab'de sen de dene!\n${url}`;
+
+    let overlay = document.getElementById("shareDialogOverlay");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.id = "shareDialogOverlay";
+        overlay.style.cssText = "position:fixed;inset:0;background:#000b;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;";
+        overlay.innerHTML = `
+          <div role="dialog" aria-modal="true" aria-label="Sonucu paylaş" style="width:min(100%,460px);background:#171724;border:1px solid #a78bfa;border-radius:18px;padding:24px;color:white;box-shadow:0 20px 70px #0009">
+            <h2 style="margin-top:0;color:#a78bfa">📤 Sonucunu Paylaş</h2>
+            <p>Sonucunu kopyalayabilir veya WhatsApp'tan gönderebilirsin.</p>
+            <textarea id="shareMessage" readonly style="width:100%;height:145px;padding:12px;border-radius:10px;background:#27273b;color:white;border:1px solid #555;resize:vertical"></textarea>
+            <p id="shareFeedback" role="status" style="color:#b6f5cc;min-height:20px"></p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <button type="button" id="copyShare">📋 Kopyala</button>
+              <button type="button" id="whatsappShare">WhatsApp</button>
+              <button type="button" id="closeShare" style="background:#444454">Kapat</button>
+            </div>
+          </div>`;
+        document.body.appendChild(overlay);
+        overlay.addEventListener("click", e => { if (e.target === overlay) overlay.remove(); });
+        overlay.querySelector("#closeShare").onclick = () => overlay.remove();
+        overlay.querySelector("#copyShare").onclick = async () => {
+            const value = overlay.querySelector("#shareMessage").value;
+            let copied = false;
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(value);
+                    copied = true;
+                }
+            } catch (_) {}
+            if (!copied) {
+                const area = overlay.querySelector("#shareMessage");
+                area.focus();
+                area.select();
+                try { copied = document.execCommand("copy"); } catch (_) {}
+            }
+            overlay.querySelector("#shareFeedback").textContent = copied
+                ? "✅ Sonucun kopyalandı!"
+                : "Metin seçildi. Ctrl+C ile kopyalayabilirsin.";
+        };
+        overlay.querySelector("#whatsappShare").onclick = () => {
+            window.open("https://wa.me/?text=" + encodeURIComponent(overlay.querySelector("#shareMessage").value), "_blank", "noopener,noreferrer");
+        };
+    }
+    overlay.querySelector("#shareMessage").value = message;
+    overlay.querySelector("#shareFeedback").textContent = "";
 }
 
 function goHome() {
