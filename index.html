@@ -413,7 +413,7 @@ html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-status,html[data-v11-the
 <div class="v8-actions"><button id="v8SpinBtn" type="button" onclick="spinV8Wheel()">🎡 Şans Çarkını Çevir</button><button type="button" onclick="startMixedV8()">🧠 Karışık Test · 20 Soru</button></div>
 <div class="v6-mode-panel"><label for="quizMode"><strong>⚡ Oyun Modu</strong><br><small>Hız modunda her soru için 15 saniyen var.</small></label><select id="quizMode"><option value="normal">🌿 Normal Mod</option><option value="speed">⚡ Hız Modu · 15 sn</option></select></div>
 <div class="v13panel v14-lobby"><h2>🌐 Online Düello Odaları</h2><p>Arkadaşınla farklı bilgisayarlardan aynı anda yarış! Bir oda aç, altı haneli kodu paylaş veya arkadaşının kodunu gir.</p>
-<div id="v14SetupWarning" class="v14-notice">⚙️ Online bağlantı henüz kurulmadı. Firebase bağlantısı etkinleştirildiğinde odalar çalışacak.</div>
+<div id="v14SetupWarning" class="v14-notice">🌐 Online düello hazır! Oda oluştur veya kodla katıl. Firebase kuralları yayımlanmış olmalı.</div>
 <div class="v14-rooms"><div><h3>🏠 Oda Oluştur</h3><label for="v14HostName">Oyuncu adın</label><input id="v14HostName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname"><button id="v14CreateBtn" onclick="v14CreateRoom()">➕ Oda Oluştur</button></div><div><h3>🔑 Odaya Katıl</h3><label for="v14GuestName">Oyuncu adın</label><input id="v14GuestName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname"><label for="v14RoomCode">6 haneli oda kodu</label><input id="v14RoomCode" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" placeholder="Örn. 482915"><button id="v14JoinBtn" onclick="v14JoinRoom()">🚀 Odaya Katıl</button></div></div>
 <p class="v14-hint">İki oyuncunun da internete bağlı olması gerekir. Oda kodunu yalnızca oynayacağın kişiyle paylaş.</p></div><hr style="border:0;border-top:1px solid #604c83;margin:22px 0">
 <h2>🏅 Quizora Seviyen</h2><div id="v8XpLabel" aria-live="polite">Seviye 1 · 0 XP</div><div class="v8-xp-track"><div id="v8XpFill" class="v8-xp-fill" style="width:0%"></div></div><small id="v8XpNext">Sonraki seviyeye 100 XP</small>
@@ -1335,7 +1335,7 @@ function openV9Page(view='home'){
 
 // Online odalar için Firebase yapılandırması burada etkinleştirilecek.
 // Firebase proje bilgileri herkese açık istemci ayarlarıdır; özel anahtar veya servis hesabı eklemeyin.
-const QUIZORA_FIREBASE_CONFIG = null;
+const QUIZORA_FIREBASE_CONFIG = {"apiKey": "AIzaSyBHG6jgn5Et-hkwgfX7z6mmKjIlboMW1CY", "authDomain": "quizora-b1497.firebaseapp.com", "databaseURL": "https://quizora-b1497-default-rtdb.europe-west1.firebasedatabase.app", "projectId": "quizora-b1497", "storageBucket": "quizora-b1497.firebasestorage.app", "messagingSenderId": "780622338323", "appId": "1:780622338323:web:253a7f97b252da6b2fe2e6", "measurementId": "G-35PRTR2B96"};
 let v14Db=null,v14Auth=null,v14Session=null,v14RoomRef=null,v14RoomListener=null,v14Snapshot=null,v14Chosen=null,v14Submitting=false,v14LastIndex=-1;
 function v14Notice(message){const el=document.getElementById('v14SetupWarning');if(el)el.textContent=message}
 function v14Error(err){const msg=err&&err.message?err.message:String(err);v11Toast('⚠️ '+msg.slice(0,140));console.warn('Online düello:',err)}
@@ -1346,7 +1346,7 @@ async function v14Init(){
   const app=firebase.apps.length?firebase.app():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG);
   v14Auth=app.auth();v14Db=app.database();
   if(!v14Auth.currentUser)await v14Auth.signInAnonymously();
-  document.getElementById('v14SetupWarning').hidden=true;return true;
+  v14Notice('🌐 Firebase bağlantısı kuruldu. Oda oluşturabilir veya katılabilirsin.');return true;
  }catch(e){v14Notice('⚠️ Bağlantı kurulamadı: '+e.message);v14Error(e);return false}
 }
 function v14SetBusy(busy){document.getElementById('v14CreateBtn').disabled=busy;document.getElementById('v14JoinBtn').disabled=busy}
