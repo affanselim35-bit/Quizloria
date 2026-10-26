@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TestLab | Kendini Keşfet</title>
-<meta name="description" content="TestLab'de kişilik, futbol, müzik, genel kültür, oyun ve mantık testlerini ücretsiz çöz. Eğlen, bilgini ölç ve sonuçlarını paylaş!">
+<meta name="description" content="TestLab'de kişilik, futbol, müzik, genel kültür, oyun, mantık, coğrafya ve film testlerini ücretsiz çöz. Eğlen, bilgini ölç ve sonuçlarını paylaş!">
 <meta name="application-name" content="TestLab">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TestLab">
@@ -167,6 +167,16 @@ button:disabled {
     font-weight: normal;
 }
 
+.answer.selected-answer, .answer.selected-answer:hover {
+    background: #6941b7;
+    border: 2px solid #c4b5fd;
+    padding: 15px;
+}
+
+.quiz-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
+.quiz-actions button { margin: 0; }
+@media (max-width: 420px) { .quiz-actions button { padding: 12px 13px; font-size: 13px; } }
+
 .answer:hover {
     background: #493078;
 }
@@ -220,6 +230,154 @@ footer {
 .review-wrong { color:#fca5a5 !important; }
 .result button { margin:5px; }
 @media(max-width:600px) { .result button { width:100%; margin:6px 0; } .answer-review { font-size:14px; } }
+
+/* TestLab premium deneyim */
+.quiz-box {box-shadow:0 24px 75px rgba(0,0,0,.28);}
+.progress-track {height:9px;background:#303047;border-radius:999px;overflow:hidden;margin:-6px 0 26px;}
+.progress-fill {height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#c4b5fd);border-radius:999px;transition:width .35s ease;}
+.answer {border:1px solid transparent;transition:background .18s,border-color .18s,transform .18s;}
+.answer:focus-visible,button:focus-visible {outline:3px solid #c4b5fd;outline-offset:3px;}
+.answer.selected-answer {border-color:#c4b5fd;background:#51338a;box-shadow:0 0 0 1px #a78bfa55;}
+.achievement {display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border:1px solid #7651c3;border-radius:999px;background:#29213e;color:#f4eaff;font-weight:bold;margin:8px auto 14px;}
+.result .achievement + p {margin-top:8px;}
+@media(prefers-reduced-motion:reduce){.progress-fill,.answer{transition:none;}}
+
+/* Premium V2: kişisel istatistikler ve sonuç ekranı */
+.stats-panel{margin:0 0 34px;padding:25px;border:1px solid #51416e;border-radius:22px;background:linear-gradient(135deg,#201831,#151523);box-shadow:0 14px 40px #0004}
+.stats-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.stats-heading h2{margin:0;font-size:24px}.stats-heading p{margin:6px 0 0;color:#a9a3ba;font-size:13px}
+.stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stat-tile{background:#ffffff08;border:1px solid #ffffff14;border-radius:15px;padding:19px 12px;text-align:center}
+.stat-tile strong{display:block;font-size:clamp(21px,3vw,31px);color:#dfd1ff;margin-bottom:7px}
+.stat-tile span{font-size:13px;color:#b8b0c8}
+.recent-title{margin:22px 0 10px;font-size:17px;color:#e9dfff}
+.history-list{display:grid;gap:9px}
+.history-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:#ffffff08;border-radius:12px;color:#dcd5e8;font-size:14px}
+.history-row strong{color:#d9bfff;white-space:nowrap}
+.history-empty{color:#a9a3ba;font-size:14px;margin:4px 0}
+.clear-history{background:transparent;border:1px solid #65517e;color:#d8c9ec;font-size:12px;padding:9px 12px}
+.clear-history:hover{background:#3d2d56}
+.score-ring{--score:0;display:grid;place-items:center;width:166px;height:166px;margin:8px auto 24px;border-radius:50%;background:conic-gradient(#b28aff calc(var(--score)*1%),#343044 0);box-shadow:0 0 36px #7c3aed33;position:relative}
+.score-ring:before{content:'';position:absolute;inset:12px;border-radius:50%;background:#171724}
+.score-ring span{position:relative;font-size:38px;font-weight:800;color:#f2eaff}
+.score-ring small{font-size:15px;color:#ad9fc9}
+.result-kicker{color:#b8a0f5!important;font-size:13px;letter-spacing:2px;text-transform:uppercase;margin:0 0 12px!important}
+.result-summary{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}
+.result-chip{padding:10px 15px;background:#28243a;border:1px solid #48405f;border-radius:99px;font-size:14px;color:#e3dbef}
+@media(max-width:540px){.stats-grid{gap:7px}.stat-tile{padding:15px 6px}.stat-tile span{font-size:11px}.stats-panel{padding:17px}.history-row{font-size:12px}}
+
+/* Premium V3: filtreleme ve arama */
+.test-discovery{margin:12px 0 24px;padding:22px;border:1px solid rgba(168,133,255,.25);border-radius:22px;background:rgba(37,27,66,.64)}
+.test-search{width:100%;box-sizing:border-box;padding:15px 18px;border-radius:13px;border:1px solid rgba(175,145,255,.38);background:#171326;color:#fff;font:inherit;outline:none}
+.test-search:focus{border-color:#b99cff;box-shadow:0 0 0 3px rgba(170,130,255,.17)}
+.filter-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.filter-pill{border:1px solid rgba(177,145,255,.28);border-radius:999px;padding:10px 15px;background:#242036;color:#ddd;cursor:pointer;font:inherit;font-size:14px}
+.filter-pill.active{background:linear-gradient(135deg,#8a5cf6,#b079f8);color:white;border-color:transparent;box-shadow:0 6px 20px rgba(147,89,247,.25)}
+.test-count{font-size:13px;color:#c9bddc;margin:13px 0 0}
+.no-tests{padding:28px;text-align:center;color:#d5c7e9;border:1px dashed #765a9d;border-radius:15px}
+@media(max-width:600px){.test-discovery{padding:16px}.filter-pill{padding:9px 12px}}
+
+
+/* Geri bildirim V4 */
+.header-actions{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.feedback-open{border:1px solid #9874e5;background:linear-gradient(135deg,#6541bb,#9b66ee);color:#fff;padding:11px 17px;border-radius:999px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 5px 18px #6e39c24a}
+.feedback-open:hover{filter:brightness(1.12)}
+.feedback-backdrop{position:fixed;inset:0;background:rgba(8,5,19,.83);z-index:10000;display:flex;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)}
+.feedback-backdrop[hidden]{display:none}
+.feedback-modal{position:relative;width:min(100%,510px);max-height:90vh;overflow-y:auto;border-radius:23px;border:1px solid #8465ba;background:linear-gradient(145deg,#29203c,#171321);color:#fff;padding:28px;box-shadow:0 25px 80px #0009}
+.feedback-modal h2{font-size:25px;margin:0 0 8px}.feedback-modal p{color:#c8bed7;line-height:1.5}
+.feedback-modal label{display:block;margin:18px 0 8px;font-weight:600}
+.feedback-modal select,.feedback-modal textarea{width:100%;background:#100e1b;color:#fff;border:1px solid #655581;border-radius:12px;padding:13px;font:inherit}
+.feedback-modal textarea{min-height:130px;resize:vertical}
+.feedback-close{position:absolute;right:17px;top:13px;border:0;background:transparent;color:#fff;font-size:27px;cursor:pointer}
+.feedback-send{width:100%;margin-top:20px;padding:14px;border:0;border-radius:12px;color:white;background:linear-gradient(120deg,#754ad7,#a26af2);font:inherit;font-weight:700;cursor:pointer}
+.feedback-send:disabled{opacity:.55;cursor:not-allowed}
+.feedback-note{font-size:13px;margin-top:13px}
+@media(max-width:600px){header{gap:12px}.header-actions{gap:8px}.header span{display:none}.feedback-open{padding:9px 12px;font-size:13px}.feedback-modal{padding:23px}}
+
+/* Premium V5 */
+.daily-panel,.awards-panel{background:linear-gradient(125deg,#201a33,#171521);border:1px solid #55417e;border-radius:20px;padding:22px;margin:22px 0;box-shadow:0 12px 34px #0003}
+.daily-panel{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.daily-panel h2,.awards-panel h2{margin:0 0 8px;color:#e9d7ff}.daily-panel p,.awards-panel p{color:#cbbde3;margin:5px 0}
+.daily-panel button{border:0;border-radius:12px;background:linear-gradient(120deg,#7651d7,#ac70ed);padding:13px 18px;color:white;font:inherit;font-weight:700;cursor:pointer}
+.awards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
+.award-tile{background:#29223a;border:1px solid #4b3a65;border-radius:14px;padding:15px;opacity:.58}
+.award-tile.unlocked{opacity:1;border-color:#a16df0;background:linear-gradient(140deg,#3b2857,#29223a)}
+.award-tile strong{display:block;margin-bottom:5px}.award-tile small{color:#c5b8d8}
+.card{position:relative}.favorite-btn{position:absolute;right:14px;top:12px;border:1px solid #6c547c!important;background:#272038!important;color:#e9d6ff!important;border-radius:50%!important;width:39px;height:39px;padding:0!important;font-size:21px!important;line-height:1!important;cursor:pointer;z-index:1}
+.favorite-btn.is-favorite{color:#ff89b4!important;border-color:#ff89b4!important;background:#45243f!important}
+@media(max-width:600px){.daily-panel,.awards-panel{padding:17px}}
+
+/* V6: Hız modu, kişisel rekorlar ve yanlışları tekrar çöz */
+.v6-mode-panel{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#211b35;border:1px solid #55427f;border-radius:16px;padding:16px;margin:18px 0}
+.v6-mode-panel select{background:#151321;color:white;border:1px solid #9d79e9;border-radius:10px;padding:10px;font:inherit}
+.v6-timer{color:#e4c9ff;font-weight:800;font-size:1.12rem;margin:8px 0;text-align:center}.v6-timer.danger{color:#ff8b99}
+.v6-best{font-size:.86rem;color:#cdb7f5;margin:10px 0}.v6-retry{background:linear-gradient(120deg,#7c3aed,#a855f7);margin:10px 5px}
+.new-test-tag{display:inline-block;background:linear-gradient(120deg,#7c3aed,#b16cff);border-radius:999px;color:white;padding:5px 10px;font-size:11px;font-weight:800;margin-bottom:8px;letter-spacing:.06em}.new-test-card{border-color:#7452b3!important}
+
+.v8-panel{margin:22px auto 28px;padding:22px;border:1px solid rgba(174,126,255,.4);border-radius:22px;background:linear-gradient(135deg,rgba(85,44,146,.32),rgba(20,15,37,.88));max-width:1080px}
+.v8-panel h2{margin:0 0 9px}.v8-panel p{color:#cbbde4}.v8-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.v8-actions button{border:1px solid #a177ed;border-radius:13px;padding:12px 17px;background:#7040c6;color:#fff;font-weight:700;cursor:pointer}
+.v8-actions button:disabled{opacity:.6;cursor:wait}
+/* Premium spinning wheel: fixed pointer, readable slices and smooth deceleration */
+.v8-wheel-wrap{position:relative;width:min(290px,78vw);height:min(290px,78vw);margin:20px auto 16px;filter:drop-shadow(0 12px 25px #6c2cbd55)}
+.v8-wheel{position:absolute;inset:0;border:7px solid #d5b5ff;border-radius:50%;box-shadow:inset 0 0 0 3px #3a205d,0 0 0 3px #63399c,0 0 28px #8c4ae855;overflow:hidden;transition:transform 5.2s cubic-bezier(.11,.7,.12,1);will-change:transform}
+.v8-wheel-label{position:absolute;left:50%;top:50%;width:36px;height:25px;margin-left:-18px;margin-top:-12px;display:grid;place-items:center;font-size:17px;transform-origin:center;user-select:none;text-shadow:0 1px 4px #120b29}
+.v8-wheel-pointer{position:absolute;z-index:4;left:50%;top:-15px;transform:translateX(-50%);width:0;height:0;border-left:17px solid transparent;border-right:17px solid transparent;border-top:33px solid #f4dcff;filter:drop-shadow(0 3px 3px #1b0a34)}
+.v8-wheel-center{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);height:58px;width:58px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#e7d3ff,#8d4cdd);border:5px solid #fff2;box-shadow:0 3px 13px #20102f;font-size:29px}
+@media(prefers-reduced-motion:reduce){.v8-wheel{transition-duration:.2s}}
+.v8-status{min-height:26px;font-weight:700;color:#ead9ff}
+.v8-xp-track{height:12px;border-radius:20px;background:#231a34;overflow:hidden;margin:12px 0}
+.v8-xp-fill{height:100%;background:linear-gradient(90deg,#8d4be8,#dfb3ff);transition:width .4s}
+
+/* V9 navigation and missions */
+.v9-nav{display:flex;gap:7px;flex-wrap:wrap;align-items:center;justify-content:center;padding:10px 16px;background:#171025;border-bottom:1px solid #4b346c;position:sticky;top:0;z-index:90;box-shadow:0 5px 16px #0003}
+.v9-nav a{color:#e9dafa;text-decoration:none;border-radius:999px;padding:9px 13px;font-weight:650;font-size:13px;transition:background .2s}
+.v9-nav a:hover,.v9-nav a:focus-visible{background:#6336a6;color:white;outline-offset:3px}
+.v9-missions{max-width:1080px;margin:22px auto;padding:22px;background:linear-gradient(120deg,#25153c,#171225);border:1px solid #7854ac;border-radius:20px}
+.v9-missions h2{margin:0 0 8px}.v9-missions p{color:#d0c2df}.v9-mission-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:14px}
+.v9-mission{background:#241934;border:1px solid #63498b;border-radius:14px;padding:15px}.v9-mission.done{border-color:#b18aef;background:#332047}
+.v9-mission strong,.v9-mission small{display:block}.v9-mission small{color:#cfc0e4;margin-top:8px}
+.v9-mission-bar{height:8px;background:#150f20;border-radius:9px;overflow:hidden;margin-top:11px}.v9-mission-bar span{display:block;height:100%;background:linear-gradient(90deg,#8250e2,#c69af6);transition:width .3s}
+.v9-difficulty{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}.v9-difficulty label{font-weight:700}.v9-difficulty select{padding:10px 12px;border-radius:11px;background:#231733;color:#fff;border:1px solid #7d59b1}
+.v9-level-tag{display:inline-block;font-size:12px;color:#e8d9ff;border:1px solid #7652a7;border-radius:999px;padding:4px 10px;margin:8px 0}
+#home,#v9Profile,#v9Tests,#v9Missions,#v9Games{scroll-margin-top:95px}
+@media(max-width:600px){.v9-nav{justify-content:flex-start;gap:3px;padding:7px 9px}.v9-nav a{font-size:12px;padding:8px}.v9-missions{padding:15px}}
+.v9-nav a.v9-active{background:#7542bb;color:white;box-shadow:0 0 0 1px #b08ae8}
+
+.v11-box{max-width:1080px;margin:20px auto;padding:24px;border-radius:22px;border:1px solid #8055bc;background:linear-gradient(135deg,#302045,#181321);color:#f6eeff}
+.v11-box[hidden],.v11-toast[hidden]{display:none!important}.v11-box h2{margin:0 0 12px}.v11-setting{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:12px 0;padding:13px;border-radius:12px;background:#ffffff0d}.v11-setting select{padding:10px;border-radius:10px;max-width:55%}.v11-setting input{width:21px;height:21px;accent-color:#9a62ef}.v11-hint{font-size:13px;opacity:.8}
+.v11-toast{position:fixed;right:20px;bottom:20px;z-index:9999;max-width:min(90vw,350px);background:#40226d;color:white;border:1px solid #c69cff;border-radius:16px;padding:15px 20px;box-shadow:0 15px 45px #0009;font-weight:700}
+
+html[data-v11-motion="off"] *,html[data-v11-motion="off"] *::before,html[data-v11-motion="off"] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+
+/* V11.1: gerçek tema paletleri. Tüm sayfaya hue-rotate uygulamak emoji ve fotoğrafları bozuyordu. */
+html[data-v11-theme="blue"]{--t-accent:#2878e8;--t-bright:#66b7ff;--t-hover:#3d91f4;--t-glow:#2a78e855;--t-soft:#1a3359;--t-panel:#14243d;--t-deep:#0e182a;--t-border:#365e92;--t-text:#cde7ff}
+html[data-v11-theme="green"]{--t-accent:#188a64;--t-bright:#48d7a1;--t-hover:#20a87c;--t-glow:#20a87c55;--t-soft:#183d33;--t-panel:#142d28;--t-deep:#101f1c;--t-border:#347e65;--t-text:#c8ffe8}
+html[data-v11-theme="pink"]{--t-accent:#d63f95;--t-bright:#ff9acb;--t-hover:#ed59a9;--t-glow:#df4a9955;--t-soft:#51243d;--t-panel:#392036;--t-deep:#211522;--t-border:#a14a7a;--t-text:#ffe1f2}
+html[data-v11-theme="black"]{--t-accent:#555b69;--t-bright:#cbd1df;--t-hover:#70788a;--t-glow:#858b9955;--t-soft:#292c34;--t-panel:#202229;--t-deep:#101115;--t-border:#535764;--t-text:#eceef3}
+html[data-v11-theme]:not([data-v11-theme="purple"]) body{background:var(--t-deep)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) header{background:var(--t-panel);border-color:var(--t-border)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .hero{background:radial-gradient(ellipse at top,var(--t-soft),var(--t-deep) 72%)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .logo,html[data-v11-theme]:not([data-v11-theme="purple"]) .hero h1 strong{color:var(--t-bright)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) button:not(.favorite-btn):not(.feedback-close):not(:disabled){background:var(--t-accent);color:#fff}
+html[data-v11-theme]:not([data-v11-theme="purple"]) button:not(.favorite-btn):not(.feedback-close):not(:disabled):hover{background:var(--t-hover)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .card,html[data-v11-theme]:not([data-v11-theme="purple"]) .review-item{background:var(--t-panel);border-color:var(--t-border)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .card:hover{border-color:var(--t-bright);box-shadow:0 10px 35px var(--t-glow)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-nav{background:var(--t-panel);border-color:var(--t-border)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-nav a.v9-active,html[data-v11-theme]:not([data-v11-theme="purple"]) .filter-pill.active{background:var(--t-accent);box-shadow:0 0 0 1px var(--t-bright)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-nav a:hover{background:var(--t-soft)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v11-box,html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-panel,html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-missions,html[data-v11-theme]:not([data-v11-theme="purple"]) .stats-panel,html[data-v11-theme]:not([data-v11-theme="purple"]) .daily-panel,html[data-v11-theme]:not([data-v11-theme="purple"]) .awards-panel,html[data-v11-theme]:not([data-v11-theme="purple"]) .test-discovery,html[data-v11-theme]:not([data-v11-theme="purple"]) .feedback-modal{background:linear-gradient(130deg,var(--t-panel),var(--t-deep));border-color:var(--t-border)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-mission,html[data-v11-theme]:not([data-v11-theme="purple"]) .award-tile,html[data-v11-theme]:not([data-v11-theme="purple"]) .v6-mode-panel,html[data-v11-theme]:not([data-v11-theme="purple"]) .result-chip{background:var(--t-soft);border-color:var(--t-border)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .test-search,html[data-v11-theme]:not([data-v11-theme="purple"]) .filter-pill,html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-difficulty select,html[data-v11-theme]:not([data-v11-theme="purple"]) .v6-mode-panel select{background:var(--t-deep);border-color:var(--t-border);color:white}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .answer.selected-answer{background:var(--t-soft);border-color:var(--t-bright);box-shadow:0 0 0 1px var(--t-glow)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .progress-fill,html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-xp-fill,html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-mission-bar span{background:linear-gradient(90deg,var(--t-accent),var(--t-bright))}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .new-test-tag,html[data-v11-theme]:not([data-v11-theme="purple"]) .feedback-open,html[data-v11-theme]:not([data-v11-theme="purple"]) .feedback-send{background:linear-gradient(120deg,var(--t-accent),var(--t-hover))}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v11-toast{background:var(--t-panel);border-color:var(--t-bright)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v11-setting input{accent-color:var(--t-accent)}
+html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-status,html[data-v11-theme]:not([data-v11-theme="purple"]) .v9-level-tag,html[data-v11-theme]:not([data-v11-theme="purple"]) .v6-best{color:var(--t-text)}
+
+.home-tests-button{margin-top:22px;padding:15px 27px;border:1px solid #c8a1ff;border-radius:16px;background:linear-gradient(135deg,#7840cc,#9a58eb);color:#fff;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 10px 28px #0005;transition:transform .2s,filter .2s}.home-tests-button:hover{transform:translateY(-2px);filter:brightness(1.12)}.home-tests-button:focus-visible{outline:3px solid #fff;outline-offset:3px}html[data-v11-theme]:not([data-v11-theme="purple"]) .home-tests-button{background:var(--t-accent);border-color:var(--t-bright)}
 </style>
 </head>
 
@@ -227,10 +385,27 @@ footer {
 
 <header>
     <div class="logo">🧠 TestLab</div>
-    <span>Keşfet • Eğlen • Paylaş</span>
+    <div class="header-actions"><span>Keşfet • Eğlen • Paylaş</span><button class="feedback-open" type="button" onclick="openFeedback()">💬 Öneri Gönder</button></div>
 </header>
 
-<section id="home">
+<nav class="v9-nav" aria-label="Site bölümleri"><a href="#home" data-view="home" onclick="openV9Page('home');return false">🏠 Ana Sayfa</a><a href="#v9Tests" data-view="tests" onclick="openV9Page('tests');return false">🧠 Testler</a><a href="#v9Games" data-view="games" onclick="openV9Page('games');return false">🎮 Oyun Modları</a><a href="#v9Profile" data-view="profile" onclick="openV9Page('profile');return false">🏆 Profilim</a><a href="#v9Missions" data-view="missions" onclick="openV9Page('missions');return false">🎯 Görevler</a><a href="#v11Settings" data-view="settings" onclick="openV9Page('settings');return false">⚙️ Ayarlar</a><a href="#" onclick="openFeedback();return false">💬 Öneri Gönder</a></nav>
+<section id="home"><section id="v11Resume" class="v11-box" hidden><h2>🔖 Yarım Kalan Testin</h2><p id="v11ResumeInfo"></p><div class="v8-actions"><button onclick="v11Resume()">▶️ Devam Et</button><button onclick="v11Discard()">🗑️ Baştan Başla</button></div></section>
+<section id="v11Settings" class="v11-box"><h2>⚙️ Ayarlar</h2><p>TestLab'i kendine göre özelleştir. Tercihlerin bu tarayıcıda saklanır.</p>
+<div class="v11-setting"><label for="v11Theme">🎨 Renk teması</label><select id="v11Theme" onchange="v11SaveSettings()"><option value="purple">💜 Mor (Varsayılan)</option><option value="blue">💙 Mavi</option><option value="green">💚 Yeşil</option><option value="pink">🩷 Pembe</option><option value="black">🌑 Siyah</option></select></div>
+<div class="v11-setting"><label for="v11Motion">✨ Animasyonlar</label><input type="checkbox" id="v11Motion" onchange="v11SaveSettings()" checked></div>
+<div class="v11-setting"><label for="v11Sound">🔊 Ses efektleri</label><input type="checkbox" id="v11Sound" onchange="v11SaveSettings()"></div><button type="button" onclick="v11PreviewSound()" style="margin:8px 0 14px;padding:11px 17px;border-radius:12px;cursor:pointer">🔊 Sesi Test Et</button>
+<p class="v11-hint">Test ilerlemesi ve ayarlar yalnızca bu cihazın tarayıcısında tutulur.</p></section>
+<div id="v11Toast" role="status" aria-live="polite" class="v11-toast" hidden></div>
+<section id="v9Games" class="v8-panel" aria-label="Oyun modları">
+<h2>🎮 Oyun Modları</h2><p>Farklı bir deneyim için şans çarkını çevir veya karışık teste katıl.</p>
+<div class="v8-wheel-wrap" aria-label="Test seçen şans çarkı"><div class="v8-wheel-pointer" aria-hidden="true"></div><div id="v8Wheel" class="v8-wheel" aria-hidden="true"></div><div class="v8-wheel-center" aria-hidden="true">🧠</div></div>
+<div id="v8WheelStatus" class="v8-status" aria-live="polite">Çark seni hangi teste götürecek?</div>
+<div class="v8-actions"><button id="v8SpinBtn" type="button" onclick="spinV8Wheel()">🎡 Şans Çarkını Çevir</button><button type="button" onclick="startMixedV8()">🧠 Karışık Test · 20 Soru</button></div>
+<div class="v6-mode-panel"><label for="quizMode"><strong>⚡ Oyun Modu</strong><br><small>Hız modunda her soru için 15 saniyen var.</small></label><select id="quizMode"><option value="normal">🌿 Normal Mod</option><option value="speed">⚡ Hız Modu · 15 sn</option></select></div>
+<hr style="border:0;border-top:1px solid #604c83;margin:22px 0">
+<h2>🏅 TestLab Seviyen</h2><div id="v8XpLabel" aria-live="polite">Seviye 1 · 0 XP</div><div class="v8-xp-track"><div id="v8XpFill" class="v8-xp-fill" style="width:0%"></div></div><small id="v8XpNext">Sonraki seviyeye 100 XP</small>
+</section>
+
 
     <div class="hero">
         <h1>Kendini <strong>Keşfet!</strong></h1>
@@ -238,15 +413,50 @@ footer {
             Eğlenceli testleri çöz, kendini tanı
             ve sonuçlarını arkadaşlarınla paylaş.
         </p>
+        <button type="button" class="home-tests-button" onclick="openV9Page('tests')">🧠 22 Testi Keşfet →</button>
     </div>
 
     <div class="container">
 
-        <h2 class="section-title">🔥 Popüler Testler</h2>
+        <section id="v9Profile" class="stats-panel" aria-label="TestLab istatistiklerim">
+          <div class="stats-heading"><div><h2>📊 TestLab Profilim</h2><p>Sonuçların yalnızca bu tarayıcıda saklanır.</p></div><button type="button" class="clear-history" onclick="clearTestHistory()">Geçmişi Temizle</button></div>
+          <div class="stats-grid"><div class="stat-tile"><strong id="statCount">0</strong><span>Çözülen Test</span></div><div class="stat-tile"><strong id="statAverage">—</strong><span>Ortalama Puan</span></div><div class="stat-tile"><strong id="statBadge">—</strong><span>En İyi Rozet</span></div></div>
+          <h3 class="recent-title">🕘 Son Sonuçlarım</h3><div id="historyList" class="history-list"><p class="history-empty">Henüz tamamlanmış test yok.</p></div>
+        </section>
 
-        <div class="grid">
+        <section id="v9Missions" class="v9-missions" aria-label="Günlük görevler"><h2>🎯 Günlük Görevler</h2><p>Bugün test çözerek görevleri tamamla, bonus XP kazan. Görevler her gün yenilenir.</p><div id="v9MissionGrid" class="v9-mission-grid"></div><p id="v9MissionStatus" role="status" style="margin-top:13px"></p></section>
+<section class="daily-panel" aria-label="Günün testi">
+          <div><h2>🎯 Günün Meydan Okuması</h2><p id="dailyName">Bugünün testi hazırlanıyor...</p><p id="dailyStatus">Her gün yeni bir test!</p></div>
+          <button type="button" onclick="startDailyQuiz()">Meydan Okumayı Başlat →</button>
+        </section>
+        <section class="awards-panel" aria-label="Başarımlarım"><h2>🏆 Başarımlarım</h2><p>Test çözerek başarımları aç. İlerlemen bu tarayıcıda saklanır.</p><div id="awardsGrid" class="awards-grid"></div></section>
+        
+        <h2 id="v9Tests" class="section-title">🔥 Popüler Testler</h2>
 
-            <div class="card">
+        <div class="v9-difficulty"><label for="v9Difficulty">🧠 Zorluk:</label><select id="v9Difficulty" onchange="filterTests()"><option value="all">Tüm seviyeler</option><option value="easy">🟢 Kolay</option><option value="medium">🟡 Orta</option><option value="hard">🔴 Zor</option></select></div><div class="test-discovery" aria-label="Testleri filtrele">
+          <input id="testSearch" class="test-search" type="search" placeholder="🔎 Test ara..." aria-label="Test ara" oninput="filterTests()">
+          <div class="filter-row" role="group" aria-label="Test kategorileri">
+            <button class="filter-pill active" type="button" data-filter="all" onclick="setTestFilter('all')">✨ Tümü</button>
+            <button class="filter-pill" type="button" data-filter="personality" onclick="setTestFilter('personality')">🧠 Kişilik</button>
+            <button class="filter-pill" type="button" data-filter="knowledge" onclick="setTestFilter('knowledge')">📚 Bilgi</button>
+            <button class="filter-pill" type="button" data-filter="fun" onclick="setTestFilter('fun')">🎮 Eğlence</button>
+            <button class="filter-pill" type="button" data-filter="sports" onclick="setTestFilter('sports')">⚽ Spor</button>
+            <button class="filter-pill" type="button" data-filter="favorites" onclick="setTestFilter('favorites')">❤️ Favorilerim</button>
+          </div>
+          <p class="test-count" id="testCount" aria-live="polite">22 test gösteriliyor</p>
+        </div>
+        <div class="grid" id="testGrid">
+<div class="card" data-category="sports" data-test="footballstars"><span class="new-test-tag">✨ YENİ</span><div class="icon">🌟</div><h3>Futbol Efsaneleri</h3><p>Futbol tarihinin unutulmaz yıldızları! 12 soru.</p><button onclick="startQuiz('footballstars')">Teste Başla →</button></div>
+<div class="card" data-category="fun" data-test="lego"><span class="new-test-tag">✨ YENİ</span><div class="icon">🧱</div><h3>LEGO ve Tasarım</h3><p>Parçaları birleştir, bilgini göster! 12 soru.</p><button onclick="startQuiz('lego')">Teste Başla →</button></div>
+<div class="card" data-category="knowledge" data-test="inventions"><span class="new-test-tag">✨ YENİ</span><div class="icon">💡</div><h3>İcatlar ve Keşifler</h3><p>Dünyayı değiştiren fikirleri keşfet! 12 soru.</p><button onclick="startQuiz('inventions')">Teste Başla →</button></div>
+
+<div class="card" data-category="fun"><span class="new-test-tag">✨ YENİ</span><div class="icon">🍕</div><h3>Yemek Kültürü</h3><p>Dünya mutfaklarından lezzetli sorular! 12 soru.</p><button onclick="startQuiz('food')">Teste Başla →</button></div>
+<div class="card" data-category="knowledge"><span class="new-test-tag">✨ YENİ</span><div class="icon">🏛️</div><h3>Mitoloji ve Efsaneler</h3><p>Efsanelerdeki tanrıları ve kahramanları tanı! 12 soru.</p><button onclick="startQuiz('mythology')">Teste Başla →</button></div>
+<div class="card" data-category="knowledge"><span class="new-test-tag">✨ YENİ</span><div class="icon">🌍</div><h3>Dünya ve Kültürler</h3><p>Dünya üzerindeki gelenekleri keşfet! 12 soru.</p><button onclick="startQuiz('world')">Teste Başla →</button></div>
+<div class="card" data-category="knowledge"><span class="new-test-tag">✨ YENİ</span><div class="icon">👨‍💻</div><h3>Kodlama ve Yazılım</h3><p>Yazılım dünyasına ne kadar hâkimsin? 12 soru.</p><button onclick="startQuiz('coding')">Teste Başla →</button></div>
+
+
+            <div class="card" data-category="personality">
                 <div class="icon">🧠</div>
                 <h3>Hangi Kişilik Tipisin?</h3>
                 <p>
@@ -258,7 +468,7 @@ footer {
                 </button>
             </div>
 
-            <div class="card">
+            <div class="card" data-category="sports">
                 <div class="icon">⚽</div>
                 <h3>Futbol Bilgin Ne Kadar İyi?</h3>
                 <p>
@@ -270,7 +480,7 @@ footer {
 </button>
             </div>
 
-            <div class="card">
+            <div class="card" data-category="fun">
                 <div class="icon">🎵</div>
                 <h3>Müzik Bilgini Test Et</h3>
                 <p>
@@ -282,7 +492,7 @@ footer {
 </button>
             </div>
 
-            <div class="card">
+            <div class="card" data-category="knowledge">
                 <div class="icon">🌍</div>
                 <h3>Genel Kültür Testi</h3>
                 <p>
@@ -293,19 +503,40 @@ footer {
             </div>
 
 
-            <div class="card">
+            <div class="card" data-category="fun">
                 <div class="icon">🎮</div>
                 <h3>Oyun Dünyasını Ne Kadar Tanıyorsun?</h3>
                 <p>Minecraft, Roblox, GTA ve daha fazlası! 15 soruda bilgini ölç.</p>
                 <button onclick="startQuiz('gaming')">Teste Başla →</button>
             </div>
-            <div class="card">
+            <div class="card" data-category="knowledge">
                 <div class="icon">🧩</div>
                 <h3>Mantık ve Zekâ Testi</h3>
                 <p>Örüntüler ve dikkat sorularıyla kendini dene. Eğlence amaçlıdır, IQ testi değildir.</p>
                 <button onclick="startQuiz('logic')">Teste Başla →</button>
             </div>
+            <div class="card" data-category="knowledge">
+                <div class="icon">🗺️</div>
+                <h3>Coğrafya Bilgini Test Et</h3>
+                <p>Ülkeler, başkentler ve dünya hakkında 15 soruda kendini dene!</p>
+                <button onclick="startQuiz('geography')">Teste Başla →</button>
+            </div>
+            <div class="card" data-category="fun">
+                <div class="icon">🎬</div>
+                <h3>Film ve Dizi Bilgini Test Et</h3>
+                <p>Sevilen filmler ve dizilerden 15 eğlenceli soru!</p>
+                <button onclick="startQuiz('cinema')">Teste Başla →</button>
+            </div>
+
+            <div class="card" data-category="knowledge"><div class="icon">🔬</div><h3>Bilim ve Uzay Testi</h3><p>Gezegenler, canlılar ve bilim hakkında 12 eğlenceli soru!</p><button onclick="startQuiz('science')">Teste Başla →</button></div>
+            <div class="card" data-category="knowledge"><div class="icon">🏛️</div><h3>Tarih Bilgini Test Et</h3><p>Tarihin önemli olayları ve medeniyetleri seni bekliyor. 12 soru!</p><button onclick="startQuiz('history')">Teste Başla →</button></div>
+            <div class="card" data-category="knowledge"><div class="icon">💻</div><h3>Teknoloji ve İnternet Testi</h3><p>Bilgisayarlar, internet ve dijital dünyadan 12 soru!</p><button onclick="startQuiz('technology')">Teste Başla →</button></div>
+<div class="card new-test-card" data-category="knowledge"><span class="new-test-tag">✨ YENİ</span><div class="icon">🏎️</div><h3>Otomobil Bilgini Test Et</h3><p>Markalar, motorlar ve otomobil dünyasından 15 soru!</p><button onclick="startQuiz('cars')">Teste Başla →</button></div>
+<div class="card new-test-card" data-category="knowledge"><span class="new-test-tag">✨ YENİ</span><div class="icon">🐾</div><h3>Hayvanlar Âlemi</h3><p>Doğadaki canlıları ne kadar tanıyorsun? 15 soru!</p><button onclick="startQuiz('animals')">Teste Başla →</button></div>
+<div class="card new-test-card" data-category="sports"><span class="new-test-tag">✨ YENİ</span><div class="icon">🏀</div><h3>Spor Dünyası</h3><p>Basketbol, olimpiyatlar ve farklı sporlar! 15 soru!</p><button onclick="startQuiz('sportsworld')">Teste Başla →</button></div>
+<div class="card new-test-card" data-category="knowledge"><span class="new-test-tag">✨ YENİ</span><div class="icon">🧩</div><h3>Zekâ ve Bulmacalar</h3><p>Örüntüler, mantık ve eğlenceli bilmeceler! 15 soru!</p><button onclick="startQuiz('puzzles')">Teste Başla →</button></div>
         </div>
+        <p id="noTests" class="no-tests hidden">Bu aramaya uygun test bulunamadı. Başka bir kelime dene.</p>
     </div>
 </section>
 
@@ -313,15 +544,17 @@ footer {
 
     <div class="quiz-box">
 
-        <div class="progress" id="progress"></div>
+        <div class="progress" id="progress"></div><div id="v6Timer" class="v6-timer hidden" aria-live="off"></div>
+        <div class="progress-track" role="progressbar" aria-label="Test ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack"><div class="progress-fill" id="progressFill"></div></div>
 
         <h2 class="question" id="question"></h2>
 
         <div id="answers"></div>
 
-        <button onclick="goHome()">
-            ← Ana Sayfa
-        </button>
+        <div class="quiz-actions">
+            <button onclick="goHome()">← Ana Sayfa</button>
+            <button id="nextQuestion" type="button" onclick="confirmAnswer()" disabled>Sonraki Soru →</button>
+        </div>
 
     </div>
 
@@ -331,12 +564,16 @@ footer {
 
     <div class="quiz-box result">
 
-        <div style="font-size:60px">✨</div>
+        <p class="result-kicker">TEST TAMAMLANDI ✦</p>
+        <div id="scoreRing" class="score-ring hidden" role="img" aria-label="Test puanı"><span id="scoreRingValue">0<small>/100</small></span></div>
+        <div id="personalitySparkle" style="font-size:60px">✨</div>
 
         <h2 id="resultTitle"></h2>
 
+        <div id="achievement" class="achievement hidden"></div>
         <p id="resultText"></p>
-        <div id="answerReview" class="answer-review hidden"></div>
+        <div id="resultSummary" class="result-summary hidden"></div>
+        <div id="answerReview" class="answer-review hidden"></div><p id="v6Best" class="v6-best hidden"></p><button id="retryWrong" class="v6-retry hidden" type="button" onclick="retryWrongAnswers()">🔄 Yanlışlarımı Tekrar Çöz</button>
         <button id="shareResult" onclick="shareQuizResult()">📤 Sonucu Paylaş</button>
 
         <button onclick="startQuiz(activeQuiz)">
@@ -537,6 +774,98 @@ const logicQuestions = [
  {q:"Bir kutuda 4 kırmızı ve 3 mavi top var. Toplam kaç top var?",a:["5","6","7","8"],correct:2}
 ];
 
+const geographyQuestions = [
+ {q:"Türkiye'nin en büyük gölü hangisidir?",a:["Tuz Gölü","Van Gölü","Beyşehir Gölü","İznik Gölü"],correct:1},
+ {q:"Fransa'nın başkenti neresidir?",a:["Lyon","Marsilya","Paris","Nice"],correct:2},
+ {q:"Dünyanın yüz ölçümü en büyük kıtası hangisidir?",a:["Afrika","Avrupa","Asya","Güney Amerika"],correct:2},
+ {q:"Nil Nehri hangi kıtadadır?",a:["Asya","Afrika","Avrupa","Okyanusya"],correct:1},
+ {q:"Japonya'nın para birimi hangisidir?",a:["Won","Yen","Yuan","Dolar"],correct:1},
+ {q:"Brezilya hangi kıtadadır?",a:["Avrupa","Afrika","Güney Amerika","Asya"],correct:2},
+ {q:"İzmir hangi denizin kıyısındadır?",a:["Karadeniz","Akdeniz","Marmara Denizi","Ege Denizi"],correct:3},
+ {q:"Kanada'nın başkenti neresidir?",a:["Toronto","Vancouver","Ottawa","Montreal"],correct:2},
+ {q:"Everest Dağı hangi sıradağlarda bulunur?",a:["Alpler","Himalayalar","Andlar","Toroslar"],correct:1},
+ {q:"Mısır'daki piramitleriyle ünlü şehir hangisidir?",a:["Gize","İskenderiye","Luksor","Asvan"],correct:0},
+ {q:"İtalya'nın başkenti neresidir?",a:["Milano","Roma","Venedik","Napoli"],correct:1},
+ {q:"Dünyanın en büyük sıcak çölü hangisidir?",a:["Gobi","Sahra","Atakama","Kalahari"],correct:1},
+ {q:"Hangi ülke bir ada ülkesidir?",a:["İsviçre","Moğolistan","İzlanda","Avusturya"],correct:2},
+ {q:"Türkiye'nin kuzeyinde hangi deniz bulunur?",a:["Ege Denizi","Akdeniz","Karadeniz","Kızıldeniz"],correct:2},
+ {q:"Avustralya'nın başkenti neresidir?",a:["Sidney","Melbourne","Canberra","Perth"],correct:2}
+];
+
+const cinemaQuestions = [
+ {q:"Harry Potter serisindeki büyücülük okulunun adı nedir?",a:["Hogwarts","Nevermore","Narnia","Wakanda"],correct:0},
+ {q:"Toy Story filmindeki kovboy oyuncağın adı nedir?",a:["Buzz","Woody","Andy","Rex"],correct:1},
+ {q:"Titanic filminin yönetmeni kimdir?",a:["Steven Spielberg","Christopher Nolan","James Cameron","Peter Jackson"],correct:2},
+ {q:"Stranger Things dizisindeki kasabanın adı nedir?",a:["Hawkins","Riverdale","Gotham","Springfield"],correct:0},
+ {q:"Yüzüklerin Efendisi serisindeki yüzüğü taşıyan hobbit kimdir?",a:["Sam","Bilbo","Frodo","Merry"],correct:2},
+ {q:"Batman'in yaşadığı kurgusal şehrin adı nedir?",a:["Metropolis","Gotham","Star City","Central City"],correct:1},
+ {q:"Kung Fu Panda filminin ana karakteri hangi hayvandır?",a:["Kaplan","Panda","Ayı","Tilki"],correct:1},
+ {q:"Frozen filmindeki iki kız kardeşin isimleri nedir?",a:["Anna ve Elsa","Moana ve Elsa","Anna ve Rapunzel","Merida ve Anna"],correct:0},
+ {q:"Star Wars serisindeki ışın kılıcını kullanan savaşçılardan biri hangisidir?",a:["Jedi","Hobbit","Na'vi","Minyon"],correct:0},
+ {q:"The Matrix filmindeki baş karakterin adı nedir?",a:["Neo","Jack","Tony","Rocky"],correct:0},
+ {q:"Örümcek Adam'ın süper kahraman adı hangisidir?",a:["Iron Man","Spider-Man","Ant-Man","Hulk"],correct:1},
+ {q:"Shrek filmindeki Shrek hangi türden bir karakterdir?",a:["Ejderha","Dev (ogre)","Cüce","Elf"],correct:1},
+ {q:"Inside Out (Ters Yüz) filminde hangi kavram karakterleştirilir?",a:["Gezegenler","Duygular","Mevsimler","Sporlar"],correct:1},
+ {q:"Jurassic Park filmlerinde hangi canlılar ön plandadır?",a:["Dinozorlar","Robotlar","Korsanlar","Uzaylılar"],correct:0},
+ {q:"Real Steel filminde boks yapanlar hangileridir?",a:["Arabalar","Robotlar","Hayvanlar","Uzaylılar"],correct:1}
+];
+
+
+const scienceQuestions = [
+ {q:"Güneş Sistemi'ndeki en büyük gezegen hangisidir?",a:["Dünya","Jüpiter","Mars","Venüs"],correct:1},
+ {q:"Bitkiler fotosentez sırasında atmosferden hangi gazı alır?",a:["Oksijen","Helyum","Karbondioksit","Azot"],correct:2},
+ {q:"Suyun kimyasal formülü hangisidir?",a:["CO2","H2O","O2","NaCl"],correct:1},
+ {q:"İnsan vücudunda kanı pompalayan organ hangisidir?",a:["Akciğer","Beyin","Karaciğer","Kalp"],correct:3},
+ {q:"Dünya'nın doğal uydusu hangisidir?",a:["Ay","Güneş","Mars","Venüs"],correct:0},
+ {q:"Ses boşlukta yayılabilir mi?",a:["Evet, her zaman","Hayır","Yalnızca geceleri","Yalnızca uzay araçlarında"],correct:1},
+ {q:"Maddenin temel hâllerinden biri hangisidir?",a:["Işık","Ses","Gaz","Gölge"],correct:2},
+ {q:"İnsanlar solunum için en çok hangi gaza ihtiyaç duyar?",a:["Oksijen","Hidrojen","Argon","Helyum"],correct:0},
+ {q:"Kızıl Gezegen olarak bilinen gezegen hangisidir?",a:["Merkür","Satürn","Mars","Neptün"],correct:2},
+ {q:"Yer çekimi üzerine çalışmalarıyla tanınan bilim insanı kimdir?",a:["Isaac Newton","Mozart","Picasso","Homeros"],correct:0},
+ {q:"Elektrik akımının SI birimi hangisidir?",a:["Metre","Amper","Kilogram","Saniye"],correct:1},
+ {q:"Hücrenin genetik bilgisinin büyük kısmı ökaryot hücrelerde nerede bulunur?",a:["Hücre duvarı","Sitoplazma","Çekirdek","Ribozom"],correct:2}
+];
+const historyQuestions = [
+ {q:"Türkiye Cumhuriyeti hangi yıl ilan edildi?",a:["1919","1920","1923","1938"],correct:2},
+ {q:"İstanbul'un fethi hangi yılda gerçekleşti?",a:["1071","1453","1517","1923"],correct:1},
+ {q:"Malazgirt Savaşı hangi yılda yapıldı?",a:["1071","1299","1453","1920"],correct:0},
+ {q:"Türkiye Cumhuriyeti'nin ilk cumhurbaşkanı kimdir?",a:["İsmet İnönü","Mustafa Kemal Atatürk","Kazım Karabekir","Fevzi Çakmak"],correct:1},
+ {q:"Osmanlı Devleti'nin kurucusu kimdir?",a:["Orhan Gazi","Fatih Sultan Mehmet","Osman Gazi","Yavuz Sultan Selim"],correct:2},
+ {q:"Fransız İhtilali hangi yıl başladı?",a:["1492","1789","1914","1945"],correct:1},
+ {q:"Birinci Dünya Savaşı hangi yıl başladı?",a:["1905","1914","1923","1939"],correct:1},
+ {q:"Antik Mısır'da hükümdarlara ne ad verilirdi?",a:["Sezar","Firavun","Şah","Han"],correct:1},
+ {q:"Kurtuluş Savaşı'nda Büyük Taarruz hangi yıl başladı?",a:["1918","1920","1922","1925"],correct:2},
+ {q:"Tarihte yazıyı ilk kullanan uygarlıklardan biri hangisidir?",a:["Sümerler","Vikingler","İnkalar","Aztekler"],correct:0},
+ {q:"Roma İmparatorluğu'nun merkez şehri hangisiydi?",a:["Atina","Roma","Paris","Londra"],correct:1},
+ {q:"TBMM ilk kez hangi tarihte açıldı?",a:["23 Nisan 1920","29 Ekim 1923","19 Mayıs 1919","30 Ağustos 1922"],correct:0}
+];
+const technologyQuestions = [
+ {q:"CPU kısaltması neyi ifade eder?",a:["Merkezi İşlem Birimi","Ekran Kartı","Sabit Disk","İnternet Tarayıcısı"],correct:0},
+ {q:"HTML en çok ne için kullanılır?",a:["Video düzenleme","Web sayfası yapısını oluşturma","Donanım tamiri","Ses kaydı"],correct:1},
+ {q:"Bir web sitesinin adresini açmak için hangisi kullanılır?",a:["Hesap makinesi","Tarayıcı","Resim editörü","Dosya sıkıştırıcı"],correct:1},
+ {q:"RAM'in temel görevi nedir?",a:["Geçici çalışma belleği sağlamak","Görüntüyü yazdırmak","Elektrik üretmek","İnterneti dağıtmak"],correct:0},
+ {q:"Hangisi bir işletim sistemidir?",a:["Photoshop","Windows","YouTube","Bluetooth"],correct:1},
+ {q:"İki aşamalı doğrulama neyi artırır?",a:["Ekran parlaklığını","Hesap güvenliğini","İnternet hızını","Depolama kapasitesini"],correct:1},
+ {q:"USB genellikle ne amaçla kullanılır?",a:["Veri ve cihaz bağlantısı","Ekran temizliği","Ses yalıtımı","Kağıt baskısı"],correct:0},
+ {q:"Hangisi bir programlama dilidir?",a:["JPEG","Python","Wi-Fi","HDMI"],correct:1},
+ {q:"SSD'nin temel kullanım amacı nedir?",a:["Veri depolamak","Ses kaydetmek","Ağ şifresi oluşturmak","Ekran görüntüsü üretmek"],correct:0},
+ {q:"HTTPS, HTTP'ye göre genellikle ne sağlar?",a:["Daha büyük ekran","Şifrelenmiş bağlantı","Daha ağır bilgisayar","Sınırsız internet"],correct:1},
+ {q:"E-posta adreslerinde yaygın olarak hangi işaret bulunur?",a:["#","@","%","&"],correct:1},
+ {q:"Bir dosyanın .png uzantısı genellikle neyi belirtir?",a:["Görsel dosyası","Ses dosyası","Çalıştırılabilir program","Metin belgesi"],correct:0}
+];
+
+const foodQuestions = [{"q": "Pizza hangi ülkeyle özdeşleşmiştir?", "a": ["İtalya", "Japonya", "Meksika", "Norveç"], "correct": 0}, {"q": "Suşi hangi ülkenin mutfağıyla özdeşleşmiştir?", "a": ["Mısır", "İspanya", "Japonya", "Brezilya"], "correct": 2}, {"q": "Guacamole temel olarak hangi meyveden yapılır?", "a": ["Elma", "Muz", "Üzüm", "Avokado"], "correct": 3}, {"q": "Baklavanın temel malzemelerinden biri hangisidir?", "a": ["Yufka", "Makarna", "Pirinç", "Patates"], "correct": 0}, {"q": "Humusun ana malzemesi nedir?", "a": ["Nohut", "Mercimek", "Bezelye", "Mısır"], "correct": 0}, {"q": "Espresso hangi içecek türüdür?", "a": ["Çay", "Meyve suyu", "Kahve", "Ayran"], "correct": 2}, {"q": "Taco hangi ülkenin mutfağına aittir?", "a": ["Hindistan", "İsveç", "Meksika", "Çin"], "correct": 2}, {"q": "Mozzarella nedir?", "a": ["Tatlı", "Peynir", "Meyve", "Baharat"], "correct": 1}, {"q": "Simit genellikle hangi malzemeyle kaplanır?", "a": ["Fındık", "Tarçın", "Kakao", "Susam"], "correct": 3}, {"q": "Paella hangi ülkenin yemeğidir?", "a": ["Almanya", "Türkiye", "Kanada", "İspanya"], "correct": 3}, {"q": "Bitter çikolatanın temel hammaddesi nedir?", "a": ["Kakao", "Pirinç", "Vanilya", "Kahve"], "correct": 0}, {"q": "Ramen hangi ülkeyle özdeşleşmiştir?", "a": ["Fas", "İtalya", "Japonya", "Arjantin"], "correct": 2}];
+const mythologyQuestions = [{"q": "Yunan mitolojisinde denizlerin tanrısı kimdir?", "a": ["Zeus", "Poseidon", "Hermes", "Ares"], "correct": 1}, {"q": "Thor hangi mitolojiye aittir?", "a": ["Aztek", "Mısır", "İskandinav", "Yunan"], "correct": 2}, {"q": "Anubis hangi uygarlığın mitolojisindedir?", "a": ["Roma", "Antik Mısır", "Hint", "Çin"], "correct": 1}, {"q": "Yunan mitolojisinde bilgelik tanrıçası kimdir?", "a": ["Hera", "Artemis", "Athena", "Afrodit"], "correct": 2}, {"q": "Medusa hangi özelliğiyle bilinir?", "a": ["Deniz tanrısı olması", "Güneşi taşıması", "Saçlarının yılanlarla betimlenmesi", "Kanatlı at olması"], "correct": 2}, {"q": "Odin hangi mitolojinin önemli tanrılarındandır?", "a": ["Maya", "Sümer", "Japon", "İskandinav"], "correct": 3}, {"q": "Pegasus nasıl bir efsanevi canlıdır?", "a": ["Tek gözlü dev", "Ateş kuşu", "Kanatlı at", "Deniz canavarı"], "correct": 2}, {"q": "Minotor nasıl tasvir edilir?", "a": ["Boğa başlı insan", "Kanatlı yılan", "Üç başlı kartal", "Altın balık"], "correct": 0}, {"q": "Zeus hangi dağla ilişkilendirilir?", "a": ["Fuji", "Olimpos", "Everest", "Ağrı"], "correct": 1}, {"q": "Roma mitolojisinde savaş tanrısı kimdir?", "a": ["Satürn", "Neptün", "Mars", "Merkür"], "correct": 2}, {"q": "Fenrir hangi mitolojideki kurttur?", "a": ["Mısır", "Çin", "İskandinav", "Yunan"], "correct": 2}, {"q": "Herkül hangi özelliğiyle tanınır?", "a": ["Zamanı durdurması", "Denizlere hükmetmesi", "Olağanüstü gücü", "Görünmez olması"], "correct": 2}];
+const worldQuestions = [{"q": "Eyfel Kulesi hangi şehirdedir?", "a": ["Madrid", "Paris", "Roma", "Berlin"], "correct": 1}, {"q": "Japonya’nın para birimi nedir?", "a": ["Yen", "Dolar", "Peso", "Euro"], "correct": 0}, {"q": "Brezilya’da en yaygın konuşulan dil hangisidir?", "a": ["İtalyanca", "İspanyolca", "Fransızca", "Portekizce"], "correct": 3}, {"q": "Tac Mahal hangi ülkededir?", "a": ["Pakistan", "İran", "Nepal", "Hindistan"], "correct": 3}, {"q": "Kolezyum hangi şehirdedir?", "a": ["Roma", "Londra", "Atina", "Viyana"], "correct": 0}, {"q": "Çin Seddi hangi ülkededir?", "a": ["Moğolistan", "Tayland", "Çin", "Japonya"], "correct": 2}, {"q": "Machu Picchu hangi ülkededir?", "a": ["Meksika", "Peru", "Bolivya", "Şili"], "correct": 1}, {"q": "Kangurularla özdeşleşen ülke hangisidir?", "a": ["İsveç", "Mısır", "Avustralya", "Kanada"], "correct": 2}, {"q": "Flamenko hangi ülkeyle özdeşleşir?", "a": ["Hindistan", "İspanya", "Japonya", "Norveç"], "correct": 1}, {"q": "Piramitleriyle tanınan Gize hangi ülkededir?", "a": ["Tunus", "Mısır", "Sudan", "Fas"], "correct": 1}, {"q": "Özgürlük Heykeli hangi şehirdedir?", "a": ["New York", "Toronto", "Paris", "Tokyo"], "correct": 0}, {"q": "Karnavalıyla ünlü Rio de Janeiro hangi ülkededir?", "a": ["Arjantin", "Portekiz", "Brezilya", "Kolombiya"], "correct": 2}];
+const codingQuestions = [{"q": "HTML temel olarak ne için kullanılır?", "a": ["Donanım üretmek", "İnternet sağlamak", "Web sayfası yapısını oluşturmak", "Fotoğraf düzenlemek"], "correct": 2}, {"q": "CSS neyi düzenler?", "a": ["İşletim sistemini", "Web sayfasının görünümünü", "Donanımı", "Veri tabanını"], "correct": 1}, {"q": "JavaScript genellikle ne için kullanılır?", "a": ["Web sayfasına etkileşim eklemek", "Bilgisayarı şarj etmek", "Ekranı temizlemek", "Kablo bağlamak"], "correct": 0}, {"q": "Python hangi tür teknolojidir?", "a": ["Tarayıcı", "İşlemci", "Programlama dili", "Ekran kartı"], "correct": 2}, {"q": "Bir değişkenin amacı nedir?", "a": ["Ses çıkarmak", "Monitör açmak", "Veri saklamak", "Dosya silmek"], "correct": 2}, {"q": "Döngü ne işe yarar?", "a": ["Yazıcı takmak", "Bilgisayarı kapatmak", "İşlemleri tekrarlamak", "Ekranı boyamak"], "correct": 2}, {"q": "Git genellikle ne için kullanılır?", "a": ["Resim çizme", "Video izleme", "Sürüm kontrolü", "Müzik çalma"], "correct": 2}, {"q": "Bir boolean değer hangisi olabilir?", "a": ["3.14", "42", "Merhaba", "true"], "correct": 3}, {"q": "API kısaltması neyle ilgilidir?", "a": ["Pil kapasitesi", "Dosya sıkıştırma", "Monitör parlaklığı", "Yazılımların iletişim kurması"], "correct": 3}, {"q": "Bir algoritma nedir?", "a": ["Bir problemi çözmek için adımlar", "Grafik kartı", "İnternet kablosu", "Bilgisayar markası"], "correct": 0}, {"q": "404 HTTP durum kodu genellikle neyi gösterir?", "a": ["İstek başarılı", "Yetki verildi", "Sayfa bulunamadı", "Sunucu taşındı"], "correct": 2}, {"q": "Bir dizinin (array) temel amacı nedir?", "a": ["Birden çok değeri tutmak", "Bilgisayarı açmak", "İnternet hızını artırmak", "Ekran kaydetmek"], "correct": 0}];
+const footballstarsQuestions = [{"q": "2002 Dünya Kupası’nı hangi ülke kazandı?", "a": ["Almanya", "Brezilya", "Fransa", "İtalya"], "correct": 1}, {"q": "Lionel Messi hangi ülkenin millî takımında oynadı?", "a": ["Portekiz", "Brezilya", "Arjantin", "İspanya"], "correct": 2}, {"q": "Cristiano Ronaldo hangi ülkelidir?", "a": ["Belçika", "Portekiz", "Fransa", "İtalya"], "correct": 1}, {"q": "Pelé hangi ülkenin futbol efsanesidir?", "a": ["Brezilya", "Hollanda", "İngiltere", "Almanya"], "correct": 0}, {"q": "Diego Maradona 1986 Dünya Kupası’nı hangi ülkeyle kazandı?", "a": ["Şili", "Uruguay", "İtalya", "Arjantin"], "correct": 3}, {"q": "Zinedine Zidane hangi ülkenin millî takımında oynadı?", "a": ["İspanya", "Fas", "Portekiz", "Fransa"], "correct": 3}, {"q": "2006 Dünya Kupası’nı hangi ülke kazandı?", "a": ["İtalya", "Fransa", "Almanya", "Brezilya"], "correct": 0}, {"q": "Ronaldinho hangi ülkenin millî takımında oynadı?", "a": ["Arjantin", "Brezilya", "Kolombiya", "Meksika"], "correct": 1}, {"q": "2010 Dünya Kupası finalinde Hollanda’yı hangi ülke yendi?", "a": ["Almanya", "İspanya", "Fransa", "İtalya"], "correct": 1}, {"q": "2014 Dünya Kupası’nı hangi ülke kazandı?", "a": ["Hollanda", "Almanya", "Arjantin", "Brezilya"], "correct": 1}, {"q": "Johan Cruyff hangi ülkenin futbol efsanesidir?", "a": ["Belçika", "Hollanda", "İsveç", "Danimarka"], "correct": 1}, {"q": "2022 Dünya Kupası’nı hangi ülke kazandı?", "a": ["Arjantin", "Hırvatistan", "Fas", "Fransa"], "correct": 0}];
+const legoQuestions = [{"q": "LEGO markası hangi ülkede doğdu?", "a": ["ABD", "İsveç", "Almanya", "Danimarka"], "correct": 3}, {"q": "LEGO parçalarının en bilinen özelliği nedir?", "a": ["Sadece metalden yapılmaları", "Birbirine takılabilmeleri", "Suda erimeleri", "Yalnızca tek kullanımlık olmaları"], "correct": 1}, {"q": "LEGO minifigürleri genellikle kaç ana parçadan oluşur?", "a": ["Baş, gövde ve bacak", "Sadece ayak", "Sadece baş", "Sadece el"], "correct": 0}, {"q": "LEGO Technic serisi daha çok neye odaklanır?", "a": ["Yemek tarifleri", "Resim çerçeveleri", "Mekanik sistemler", "Müzik albümleri"], "correct": 2}, {"q": "LEGO Speed Champions serisinin ana teması nedir?", "a": ["Deniz canlıları", "Gezegenler", "Otomobiller", "Masallar"], "correct": 2}, {"q": "LEGO NINJAGO serisindeki karakterler genellikle ne olarak bilinir?", "a": ["Dedektifler", "Ninjalar", "Korsanlar", "Astronotlar"], "correct": 1}, {"q": "Bir LEGO modelinin yapımında kullanılan adım adım görseller ne olarak adlandırılır?", "a": ["Yapım talimatları", "Harita anahtarı", "Ses kaydı", "Hava raporu"], "correct": 0}, {"q": "LEGO parçalarını ayırmaya yarayan araç hangisidir?", "a": ["Dürbün", "Parça ayırıcı", "Termometre", "Pusula"], "correct": 1}, {"q": "LEGO setlerinde “minifigür” neyi ifade eder?", "a": ["Motor parçası", "Yapıştırıcı", "Pil yuvası", "Küçük karakter figürü"], "correct": 3}, {"q": "LEGO City serisi çoğunlukla neyi konu alır?", "a": ["Deniz altı efsanelerini", "Şehir yaşamını", "Uzay savaşlarını", "Antik tanrıları"], "correct": 1}, {"q": "LEGO parçalarıyla oluşturulan yapıya ne denir?", "a": ["Sunucu", "Algoritma", "Model", "Veritabanı"], "correct": 2}, {"q": "LEGO ile tasarım yaparken denge için hangisi önemlidir?", "a": ["Her parçayı kırmak", "Parçaları rastgele atmak", "Sağlam bağlantılar", "Sadece tek parça kullanmak"], "correct": 2}];
+const inventionsQuestions = [{"q": "Telefonun geliştirilmesiyle en çok ilişkilendirilen mucit kimdir?", "a": ["Alexander Graham Bell", "Galileo Galilei", "Isaac Newton", "Albert Einstein"], "correct": 0}, {"q": "Ampulün yaygınlaşmasında önemli rol oynayan mucit kimdir?", "a": ["Thomas Edison", "Marco Polo", "Nikolaus Copernicus", "Charles Darwin"], "correct": 0}, {"q": "Matbaa teknolojisinin Avrupa’da gelişmesiyle ilişkilendirilen kişi kimdir?", "a": ["James Watt", "Louis Pasteur", "Johannes Gutenberg", "Michael Faraday"], "correct": 2}, {"q": "Penisilini keşfeden bilim insanı kimdir?", "a": ["Alan Turing", "Marie Curie", "Niels Bohr", "Alexander Fleming"], "correct": 3}, {"q": "İlk başarılı motorlu uçuşu yapan kardeşler kimlerdir?", "a": ["Wright kardeşler", "Montgolfier kardeşler", "Lumière kardeşler", "Grimm kardeşler"], "correct": 0}, {"q": "Dünya’nın Güneş etrafında döndüğünü savunan Güneş merkezli modeliyle tanınan astronom kimdir?", "a": ["Arşimet", "Tesla", "Edison", "Kopernik"], "correct": 3}, {"q": "Radyoaktivite üzerine çalışmalarıyla tanınan bilim insanı kimdir?", "a": ["Marie Curie", "Ada Lovelace", "Florence Nightingale", "Jane Goodall"], "correct": 0}, {"q": "Modern bilgisayar biliminin öncülerinden biri kimdir?", "a": ["Alan Turing", "Louis Armstrong", "Pablo Picasso", "Neil Armstrong"], "correct": 0}, {"q": "Buhar makinesinin geliştirilmesiyle tanınan mühendis kimdir?", "a": ["Gregor Mendel", "James Watt", "Alexander Fleming", "Johannes Kepler"], "correct": 1}, {"q": "Dünya çapında ağ (World Wide Web) fikrini geliştiren kişi kimdir?", "a": ["Tim Berners-Lee", "Mark Zuckerberg", "Bill Gates", "Steve Jobs"], "correct": 0}, {"q": "Yer çekimi yasasıyla tanınan bilim insanı kimdir?", "a": ["Michael Faraday", "Charles Darwin", "Isaac Newton", "Dmitri Mendeleyev"], "correct": 2}, {"q": "Periyodik tabloyu geliştirmesiyle tanınan bilim insanı kimdir?", "a": ["Louis Pasteur", "Alan Turing", "Johannes Gutenberg", "Dmitri Mendeleyev"], "correct": 3}];
+const carsQuestions = [{"q":"BMW'nin merkezi hangi ülkededir?","a":["Japonya","İtalya","ABD","Almanya"],"correct":3},{"q":"Mercedes-Benz logosunda kaç köşeli yıldız vardır?","a":["6","5","3","4"],"correct":2},{"q":"Ferrari markası hangi ülkede kurulmuştur?","a":["Fransa","İsveç","Almanya","İtalya"],"correct":3},{"q":"Toyota hangi ülkenin markasıdır?","a":["Güney Kore","Çin","Japonya","ABD"],"correct":2},{"q":"ABS sistemi neye yardımcı olur?","a":["Yakıt deposunu doldurmaya","Farları açmaya","Motoru soğutmaya","Fren sırasında tekerleklerin kilitlenmesini önlemeye"],"correct":3},{"q":"Elektrikli otomobiller enerjiyi temel olarak nerede depolar?","a":["Egzozda","Yakıt filtresinde","Radyatörde","Bataryada"],"correct":3},{"q":"Porsche'nin merkezi hangi ülkededir?","a":["İngiltere","İspanya","Almanya","ABD"],"correct":2},{"q":"Formula 1 yarışlarında kullanılan araçların temel amacı nedir?","a":["Yük taşımak","Denizde ilerlemek","Pistte en hızlı tur ve yarışı tamamlamak","Arazi sürüşü yapmak"],"correct":2},{"q":"Turboşarjın temel işlevi nedir?","a":["Motora daha fazla hava göndermek","Freni güçlendirmek","Lastiği şişirmek","Direksiyonu kilitlemek"],"correct":0},{"q":"Hibrit otomobil genellikle hangi iki güç kaynağını kullanır?","a":["Rüzgâr ve kömür","Yalnızca güneş","İçten yanmalı motor ve elektrik motoru","İki dizel motor"],"correct":2},{"q":"Lamborghini markası hangi ülkeden çıkmıştır?","a":["Kanada","Japonya","Hollanda","İtalya"],"correct":3},{"q":"Otomobilde devir göstergesi neyi gösterir?","a":["Dış sıcaklığı","Lastik çapını","Yakıt fiyatını","Motorun dakikadaki dönüş sayısını"],"correct":3},{"q":"Volvo hangi ülkede kurulmuştur?","a":["Fransa","İtalya","İsveç","Türkiye"],"correct":2},{"q":"Bir otomobilde diferansiyel ne işe yarar?","a":["Camları siler","Far rengini değiştirir","Klimayı çalıştırır","Virajda tekerleklerin farklı hızda dönmesine olanak verir"],"correct":3},{"q":"Emniyet kemerinin temel amacı nedir?","a":["Çarpışmada yolcunun korunmasına yardımcı olmak","Aracı hızlandırmak","Radyoyu açmak","Yakıt tüketimini azaltmak"],"correct":0}];
+const animalsQuestions = [{"q":"Dünyanın en büyük yaşayan hayvanı hangisidir?","a":["Beyaz köpekbalığı","Mavi balina","Zürafa","Afrika fili"],"correct":1},{"q":"Penguenler doğal yaşamda en çok hangi yarımkürede bulunur?","a":["Kuzey Yarımküre","Hiçbirinde","Her ikisinde eşit","Güney Yarımküre"],"correct":3},{"q":"Ahtapotun kaç kolu vardır?","a":["6","12","8","10"],"correct":2},{"q":"Arılar bitkiler arasında neyin taşınmasına yardım eder?","a":["Taş","Tuz","Kum","Polen"],"correct":3},{"q":"Memeliler yavrularını genellikle neyle besler?","a":["Süt","Nektar","Toprak","Yaprak suyu"],"correct":0},{"q":"Bukalemunlar özellikle hangi özellikleriyle tanınır?","a":["Renk değiştirebilme","Su altında nefes alma","Ateş çıkarma","Uçabilme"],"correct":0},{"q":"Dünyanın en hızlı kara hayvanı hangisidir?","a":["Çita","Kurt","At","Aslan"],"correct":0},{"q":"Deniz kaplumbağaları nefes almak için ne yapar?","a":["Solungaç kullanır","Hiç nefes almaz","Kum yer","Su yüzeyine çıkar"],"correct":3},{"q":"Yarasalar hangi hayvan grubundadır?","a":["Sürüngenler","Balıklar","Memeliler","Kuşlar"],"correct":2},{"q":"Zürafaların uzun boynu özellikle neye ulaşmalarını kolaylaştırır?","a":["Yer altı yuvalarına","Yüksek dallardaki yapraklara","Deniz tabanına","Kayaların içine"],"correct":1},{"q":"Mercan resifleri çoğunlukla nerede bulunur?","a":["Çöllerde","Dağ zirvelerinde","Denizlerde","Buzullarda"],"correct":2},{"q":"Kangurular hangi kıtayla özdeşleşmiştir?","a":["Güney Amerika","Antarktika","Avrupa","Avustralya"],"correct":3},{"q":"Baykuşlar hangi duyularıyla özellikle tanınır?","a":["Koku alamama","Dokunamama","İyi işitme","Tat alamama"],"correct":2},{"q":"Karıncalar hangi yaşam biçimiyle bilinir?","a":["Uçmadan yüzme","Tek başına göç etme","Koloniler hâlinde yaşama","Suda yaşama"],"correct":2},{"q":"Yunuslar hangi hayvan sınıfına girer?","a":["Memeliler","Balıklar","Amfibiler","Böcekler"],"correct":0}];
+const sportsworldQuestions = [{"q":"Basketbolda serbest atış kaç sayıdır?","a":["3","1","4","2"],"correct":1},{"q":"Voleybolda bir takım sahada kaç oyuncuyla oynar?","a":["6","8","7","5"],"correct":0},{"q":"Olimpiyat halkalarının sayısı kaçtır?","a":["5","4","6","7"],"correct":0},{"q":"Teniste sıfır puan hangi kelimeyle ifade edilir?","a":["Zero","Blank","Love","Nil"],"correct":2},{"q":"Basketbolda üç sayı çizgisinin gerisinden atılan basket kaç sayıdır?","a":["1","2","3","4"],"correct":2},{"q":"Futbolda bir takım sahada kaç oyuncuyla başlar?","a":["9","10","12","11"],"correct":3},{"q":"Maraton koşusunun resmî uzunluğu yaklaşık kaç kilometredir?","a":["21","42,195","35","50"],"correct":1},{"q":"Badmintonda kullanılan tüylü topun adı nedir?","a":["Mekik","Puck","Disk","Topaç"],"correct":0},{"q":"Yüzmede hangi stil vardır?","a":["Kartal","Kelebek","Şahin","Panter"],"correct":1},{"q":"Masa tenisinde kullanılan ekipman hangisidir?","a":["Eldiven","Sopa","Yay","Raket"],"correct":3},{"q":"Voleybolda topa en fazla kaç takım dokunuşuyla karşıya gönderilir?","a":["5","2","3","4"],"correct":2},{"q":"Buz hokeyinde oyuncuların vurmaya çalıştığı nesne nedir?","a":["Mekik","Tenis topu","Disk (puck)","Küre"],"correct":2},{"q":"Hentbolda oyuncular topu ağırlıklı olarak nasıl taşır ve atar?","a":["Sopayla","Ayakla","Raketle","Elle"],"correct":3},{"q":"Satrançta her oyuncu oyuna kaç taşla başlar?","a":["20","16","14","12"],"correct":1},{"q":"Modern Olimpiyat Oyunları ilk kez hangi şehirde düzenlendi?","a":["Paris","Atina","Londra","Roma"],"correct":1}];
+const puzzlesQuestions = [{"q":"2, 4, 8, 16, ? dizisinde sıradaki sayı kaçtır?","a":["30","32","36","24"],"correct":1},{"q":"Bir düzinede kaç tane vardır?","a":["20","10","11","12"],"correct":3},{"q":"5 kalemden 2'sini alırsan elinde kaç kalem olur?","a":["3","5","2","7"],"correct":2},{"q":"1, 4, 9, 16, ? dizisinin devamı nedir?","a":["36","25","20","24"],"correct":1},{"q":"Bir üçgenin iç açıları toplamı kaç derecedir?","a":["90","270","360","180"],"correct":3},{"q":"3 kedi 3 fareyi 3 dakikada yakalıyorsa 6 kedi 6 fareyi aynı hızla kaç dakikada yakalar?","a":["12","6","9","3"],"correct":3},{"q":"Bir haftada kaç saat vardır?","a":["144","180","120","168"],"correct":3},{"q":"Aşağıdakilerden hangisi diğerlerinden farklıdır?","a":["Havuç","Muz","Armut","Elma"],"correct":0},{"q":"10, 20, 30, ?, 50 dizisinde eksik sayı nedir?","a":["40","45","60","35"],"correct":0},{"q":"Bir saatte yelkovan kaç tam tur atar?","a":["60","1","12","2"],"correct":1},{"q":"İki basamaklı en küçük pozitif tam sayı kaçtır?","a":["10","99","11","12"],"correct":0},{"q":"Bir karenin kaç köşegeni vardır?","a":["2","1","4","8"],"correct":0},{"q":"7 + 3 × 2 işleminin sonucu kaçtır?","a":["20","17","10","13"],"correct":3},{"q":"Bir sınıfta 4 sıra, her sırada 3 öğrenci varsa toplam kaç öğrenci vardır?","a":["16","9","7","12"],"correct":3},{"q":"A, C, E, G, ? harf dizisinde sıradaki harf nedir?","a":["K","I","J","H"],"correct":1}];
+
 let currentQuestion = 0;
 let scores = [0, 0, 0, 0];
 
@@ -550,39 +879,104 @@ function showSection(id) {
     window.scrollTo(0, 0);
 }
 
+const HISTORY_KEY = "testlab_history_v2";
+const quizNames = {footballstars:"Futbol Efsaneleri",lego:"LEGO ve Tasarım",inventions:"İcatlar ve Keşifler",food:"Yemek Kültürü",mythology:"Mitoloji ve Efsaneler",world:"Dünya ve Kültürler",coding:"Kodlama ve Yazılım",mixed:"Karışık Test",personality:"Kişilik Testi",football:"Futbol",music:"Müzik",general:"Genel Kültür",gaming:"Oyun",logic:"Mantık",geography:"Coğrafya",cinema:"Film ve Dizi",science:"Bilim ve Uzay",history:"Tarih",technology:"Teknoloji ve İnternet",cars:"Otomobil",animals:"Hayvanlar Âlemi",sportsworld:"Spor Dünyası",puzzles:"Zekâ ve Bulmacalar"};
+function readTestHistory(){try{const data=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");return Array.isArray(data)?data.filter(x=>x&&typeof x.type==="string").slice(0,100):[]}catch(e){return []}}
+function saveTestResult(record){try{const history=readTestHistory();history.unshift(record);localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,100)))}catch(e){/* Depolama kapalıysa testler yine çalışır. */}}
+function renderTestStats(){
+  const history=readTestHistory();
+  document.getElementById("statCount").textContent=history.length;
+  const scored=history.filter(x=>Number.isFinite(x.points));
+  document.getElementById("statAverage").textContent=scored.length?Math.round(scored.reduce((sum,x)=>sum+x.points,0)/scored.length)+"/100":"—";
+  const best=scored.length?Math.max(...scored.map(x=>x.points)):null;
+  document.getElementById("statBadge").textContent=best===null?"—":best>=90?"💎 Elmas":best>=70?"🥇 Altın":best>=45?"🥈 Gümüş":"🥉 Bronz";
+  const list=document.getElementById("historyList");list.replaceChildren();
+  if(!history.length){const p=document.createElement("p");p.className="history-empty";p.textContent="Henüz tamamlanmış test yok. İlk testini çöz!";list.appendChild(p);return}
+  history.slice(0,5).forEach(item=>{const row=document.createElement("div");row.className="history-row";const label=document.createElement("span");const date=new Date(item.date);label.textContent=(quizNames[item.type]||"Test")+(Number.isNaN(date.getTime())?"":" · "+date.toLocaleDateString("tr-TR"));const score=document.createElement("strong");score.textContent=Number.isFinite(item.points)?item.points+"/100":(item.profile||"Tamamlandı");row.append(label,score);list.appendChild(row)})
+}
+function clearTestHistory(){if(!confirm("Bu cihazdaki test geçmişini ve günlük görev XP ödüllerini silmek istiyor musun?"))return;try{localStorage.removeItem(HISTORY_KEY);localStorage.removeItem(V9_BONUS_KEY)}catch(e){}renderTestStats();renderAwards();renderDailyChallenge();renderV9Missions();renderV8XP()}
+function displayScoreRing(points){const ring=document.getElementById("scoreRing");ring.classList.remove("hidden");ring.style.setProperty("--score",points);document.getElementById("scoreRingValue").innerHTML=points+"<small>/100</small>";document.getElementById("personalitySparkle").classList.add("hidden")}
+function setResultSummary(items){const box=document.getElementById("resultSummary");box.replaceChildren();items.forEach(value=>{const span=document.createElement("span");span.className="result-chip";span.textContent=value;box.appendChild(span)});box.classList.remove("hidden")}
 let activeQuiz = "personality";
+let pendingAnswer = null;
+let activeQuestionList = [];
+let v6Mode="normal", v6Practice=false, v6TimerId=null, v6Seconds=15;
+let v6WrongQuestions=[];
+const V6_BEST_KEY="testlab_personal_bests_v6";
+function readPersonalBests(){try{return JSON.parse(localStorage.getItem(V6_BEST_KEY)||"{}")||{}}catch(e){return {}}}
+function updatePersonalBest(type,points){const all=readPersonalBests();const prior=all[type];if(typeof prior!=="number"||points>prior){all[type]=points;try{localStorage.setItem(V6_BEST_KEY,JSON.stringify(all))}catch(e){}}return {best:all[type],isNew:typeof prior!=="number"||points>prior}}
+function stopV6Timer(){if(v6TimerId!==null){clearInterval(v6TimerId);v6TimerId=null}}
+function beginV6Timer(){stopV6Timer();const el=document.getElementById("v6Timer");el.classList.toggle("hidden",v6Mode!=="speed");if(v6Mode!=="speed")return;v6Seconds=15;el.classList.remove("danger");el.textContent="⏱️ Kalan süre: 15 saniye";v6TimerId=setInterval(()=>{v6Seconds--;el.textContent="⏱️ Kalan süre: "+v6Seconds+" saniye";el.classList.toggle("danger",v6Seconds<=5);if(v6Seconds<=0){stopV6Timer();pendingAnswer=-1;confirmAnswer()}},1000)}
+function retryWrongAnswers(){if(!v6WrongQuestions.length)return;stopV6Timer();v6Practice=true;v6Mode="normal";activeQuestionList=[...v6WrongQuestions];currentQuestion=0;correctAnswers=0;selectedAnswers=[];pendingAnswer=null;scores=[0,0,0,0];showSection("quiz");showQuestion()}
+
 
 function startQuiz(type = "personality") {
+    stopV6Timer();v6Practice=false;v6Mode=document.getElementById("quizMode").value;
     activeQuiz = type;
     currentQuestion = 0;
     scores = [0, 0, 0, 0];
     correctAnswers = 0;
     selectedAnswers = [];
+    pendingAnswer = null;
+    // Her yeni denemede soruların sırası değişir, cevap anahtarları korunur.
+    activeQuestionList = [...getQuestionBank(type)];
+    for (let i = activeQuestionList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [activeQuestionList[i], activeQuestionList[j]] = [activeQuestionList[j], activeQuestionList[i]];
+    }
 
     showSection("quiz");
+    v11SaveProgress();
     showQuestion();
 }
-function getActiveQuestions() {
-    if (activeQuiz === "football") return footballQuestions;
-    if (activeQuiz === "music") return musicQuestions;
-    if (activeQuiz === "general") return generalQuestions;
-    if (activeQuiz === "gaming") return gamingQuestions;
-    if (activeQuiz === "logic") return logicQuestions;
+function getQuestionBank(type = activeQuiz) {
+    if (type === "football") return footballQuestions;
+    if (type === "music") return musicQuestions;
+    if (type === "general") return generalQuestions;
+    if (type === "gaming") return gamingQuestions;
+    if (type === "logic") return logicQuestions;
+    if (type === "geography") return geographyQuestions;
+    if (type === "cinema") return cinemaQuestions;
+    if (type === "science") return scienceQuestions;
+    if (type === "history") return historyQuestions;
+    if (type === "technology") return technologyQuestions;
+    if (type === "cars") return carsQuestions;
+    if (type === "animals") return animalsQuestions;
+    if (type === "sportsworld") return sportsworldQuestions;
+    if (type === "puzzles") return puzzlesQuestions;
+    if (type === "food") return foodQuestions;
+    if (type === "mythology") return mythologyQuestions;
+    if (type === "world") return worldQuestions;
+    if (type === "coding") return codingQuestions;
+    if (type === "footballstars") return footballstarsQuestions;
+    if (type === "lego") return legoQuestions;
+    if (type === "inventions") return inventionsQuestions;
+    if (type === "mixed") return buildMixedV8();
     return questions;
 }
+function getActiveQuestions() { return activeQuestionList; }
 
 function showQuestion() {
+    pendingAnswer = null;
+    const nextButton = document.getElementById("nextQuestion");
+    nextButton.disabled = true;
+    nextButton.textContent = currentQuestion === getActiveQuestions().length - 1 ? "Sonucu Gör →" : "Sonraki Soru →";
     const list = getActiveQuestions();
     const item = list[currentQuestion];
     document.getElementById("progress").textContent =
         "Soru " + (currentQuestion + 1) + " / " + list.length;
     document.getElementById("question").textContent = item.q;
+    const percentage = Math.round((currentQuestion / list.length) * 100);
+    document.getElementById("progressFill").style.width = percentage + "%";
+    document.getElementById("progressTrack").setAttribute("aria-valuenow", percentage);
     const answers = document.getElementById("answers");
     answers.innerHTML = "";
+    beginV6Timer();
     item.a.forEach((answer, index) => {
         const button = document.createElement("button");
         button.className = "answer";
         button.textContent = answer;
+        button.setAttribute("aria-pressed", "false");
         button.onclick = () => selectAnswer(index);
         answers.appendChild(button);
     });
@@ -592,6 +986,22 @@ let correctAnswers = 0;
 let selectedAnswers = [];
 
 function selectAnswer(index) {
+    pendingAnswer = index;
+    document.querySelectorAll("#answers .answer").forEach((button, i) => {
+        const selected = i === index;
+        button.classList.toggle("selected-answer", selected);
+        button.setAttribute("aria-pressed", String(selected));
+    });
+    document.getElementById("nextQuestion").disabled = false;
+    v11SaveProgress();
+    v11SoundEffect("select");
+}
+
+function confirmAnswer() {
+    if (pendingAnswer === null) return;
+    stopV6Timer();
+    const index = pendingAnswer;
+    v11SoundEffect(index===getActiveQuestions()[currentQuestion].correct?"correct":"next");
     selectedAnswers.push(index);
     if (activeQuiz === "personality") {
         scores[index]++;
@@ -599,31 +1009,55 @@ function selectAnswer(index) {
         correctAnswers++;
     }
     currentQuestion++;
-    if (currentQuestion < getActiveQuestions().length) showQuestion();
-    else showResult();
+    if (currentQuestion < getActiveQuestions().length){v11SaveProgress();showQuestion();}
+    else {v11ClearProgress();showResult();}
 }
 
 function showResult() {
+    stopV6Timer();
+    v11ClearProgress();
+    const retryButton=document.getElementById("retryWrong");retryButton.classList.add("hidden");
+    const bestLine=document.getElementById("v6Best");bestLine.classList.add("hidden");
     const review = document.getElementById("answerReview");
     const shareButton = document.getElementById("shareResult");
     review.replaceChildren();
+    const badge = document.getElementById("achievement");
+    badge.classList.add("hidden");
     review.classList.add("hidden");
     shareButton.classList.remove("hidden");
+    document.getElementById("scoreRing").classList.add("hidden");
+    document.getElementById("personalitySparkle").classList.remove("hidden");
+    document.getElementById("resultSummary").classList.add("hidden");
     if (activeQuiz !== "personality") {
         const total = getActiveQuestions().length;
         const points = Math.round((correctAnswers / total) * 100);
+        const level = points >= 90 ? "💎 Elmas" : points >= 70 ? "🥇 Altın" : points >= 45 ? "🥈 Gümüş" : "🥉 Bronz";
+        badge.textContent = level + " Rozet • " + points + "/100";
+        badge.classList.remove("hidden");
         const titles = {
             football: "⚽ Futbol Testi Sonucun",
             music: "🎵 Müzik Testi Sonucun",
             general: "🌍 Genel Kültür Testi Sonucun",
             gaming: "🎮 Oyun Testi Sonucun",
-            logic: "🧩 Mantık Testi Sonucun"
+            logic: "🧩 Mantık Testi Sonucun",
+            geography: "🗺️ Coğrafya Testi Sonucun",
+            cinema: "🎬 Film ve Dizi Testi Sonucun",
+            science: "🔬 Bilim ve Uzay Testi Sonucun",
+            history: "🏛️ Tarih Testi Sonucun",
+            technology: "💻 Teknoloji Testi Sonucun",cars:"🏎️ Otomobil Testi Sonucun",animals:"🐾 Hayvanlar Testi Sonucun",sportsworld:"🏀 Spor Testi Sonucun",puzzles:"🧩 Bulmaca Testi Sonucun",mixed:"🧠 Karışık Test Sonucun"
         };
         document.getElementById("resultTitle").textContent = titles[activeQuiz];
         document.getElementById("resultText").textContent =
             total + " sorudan " + correctAnswers +
             " tanesini doğru cevapladın! Puanın: " + points + "/100 🏆";
+        displayScoreRing(points);
         const wrongCount = total - correctAnswers;
+        setResultSummary(["✅ "+correctAnswers+" doğru","❌ "+wrongCount+" yanlış","🏅 "+level]);
+        v6WrongQuestions=getActiveQuestions().filter((item,i)=>selectedAnswers[i]!==item.correct);
+        if(v6WrongQuestions.length){retryButton.classList.remove("hidden");retryButton.textContent="🔄 "+v6WrongQuestions.length+" Yanlışımı Tekrar Çöz"}
+        if(v6Practice){bestLine.textContent="🧩 Yanlışları tekrar etme turu · Bu tur istatistiklerine eklenmez.";bestLine.classList.remove("hidden")}
+        else {const record=updatePersonalBest(activeQuiz,points);bestLine.textContent=(record.isNew?"🎉 Yeni kişisel rekor! ":"🥇 Kişisel rekorun: ")+record.best+"/100";bestLine.classList.remove("hidden");saveTestResult({type:activeQuiz,points,date:new Date().toISOString()})}
+        refreshV5();
         document.getElementById("resultText").textContent =
             `✅ ${correctAnswers} doğru  •  ❌ ${wrongCount} yanlış  •  🏆 ${points}/100 puan`;
         const heading = document.createElement("h3");
@@ -662,6 +1096,9 @@ function showResult() {
     document.getElementById("resultTitle").textContent = types[winner].title;
     document.getElementById("resultText").textContent = types[winner].text +
         " Bu sonuç eğlence amaçlıdır; bilimsel bir kişilik değerlendirmesi değildir.";
+    setResultSummary(["✨ "+types[winner].title,"🧠 Eğlenceli kişilik profili"]);
+    saveTestResult({type:"personality",profile:types[winner].title,date:new Date().toISOString()});
+    refreshV5();
     showSection("result");
 }
 
@@ -719,10 +1156,253 @@ function shareQuizResult() {
 }
 
 function goHome() {
-    showSection("home");
+    stopV6Timer();
+    renderTestStats();
+    refreshV5();
+    openV9Page("home");
 }
 
+
+const FAVORITES_KEY="testlab_favorites_v5";
+const TEST_IDS=["personality","football","music","general","gaming","logic","geography","cinema","science","history","technology","cars","animals","sportsworld","puzzles","food","mythology","world","coding","footballstars","lego","inventions"];
+function readFavorites(){try{const a=JSON.parse(localStorage.getItem(FAVORITES_KEY)||"[]");return Array.isArray(a)?a.filter(x=>TEST_IDS.includes(x)):[]}catch(e){return []}}
+function toggleFavorite(type){const fav=readFavorites();const next=fav.includes(type)?fav.filter(x=>x!==type):[...fav,type];try{localStorage.setItem(FAVORITES_KEY,JSON.stringify(next))}catch(e){}renderFavorites();filterTests()}
+function renderFavorites(){const fav=readFavorites();document.querySelectorAll("#testGrid .card").forEach(card=>{const btn=card.querySelector(".favorite-btn");if(!btn)return;const yes=fav.includes(card.dataset.test);btn.classList.toggle("is-favorite",yes);btn.textContent=yes?"♥":"♡";btn.title=yes?"Favorilerden çıkar":"Favorilere ekle";btn.setAttribute("aria-label",btn.title);btn.setAttribute("aria-pressed",String(yes))})}
+function getDailyType(){const date=new Date();const day=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;let hash=0;for(const ch of day)hash=(hash*31+ch.charCodeAt(0))>>>0;return TEST_IDS[hash%TEST_IDS.length]}
+function renderDailyChallenge(){const type=getDailyType();const done=readTestHistory().some(x=>x.type===type&&new Date(x.date).toDateString()===new Date().toDateString());document.getElementById("dailyName").textContent=quizNames[type]+" • Bugünün seçimi";document.getElementById("dailyStatus").textContent=done?"✅ Bugünkü meydan okumayı tamamladın! Yeniden de çözebilirsin.":"✨ Bugün bu testi tamamlayarak meydan okumayı bitir!"}
+function startDailyQuiz(){startQuiz(getDailyType())}
+const AWARDS=[
+ {icon:"🌱",title:"İlk Adım",desc:"İlk testini tamamla",check:(h)=>h.length>=1},
+ {icon:"🧠",title:"Bilgi Avcısı",desc:"5 farklı test tamamla",check:(h)=>new Set(h.map(x=>x.type)).size>=5},
+ {icon:"💎",title:"Mükemmeliyetçi",desc:"Bir bilgi testinden 100 puan al",check:(h)=>h.some(x=>x.type!=="personality"&&x.points===100)},
+ {icon:"🔥",title:"Test Ustası",desc:"Toplam 20 test tamamla",check:(h)=>h.length>=20}
+];
+function renderAwards(){const h=readTestHistory();const grid=document.getElementById("awardsGrid");grid.replaceChildren();AWARDS.forEach(a=>{const unlocked=a.check(h);const tile=document.createElement("div");tile.className="award-tile"+(unlocked?" unlocked":"");const name=document.createElement("strong");name.textContent=a.icon+" "+a.title;const detail=document.createElement("small");detail.textContent=a.desc+" • "+(unlocked?"Kazanıldı ✓":"Kilitli 🔒");tile.append(name,detail);grid.appendChild(tile)})}
+function setupV5(){document.querySelectorAll("#testGrid .card").forEach(card=>{const match=card.querySelector("button[onclick^='startQuiz']");if(!match)return;const found=match.getAttribute("onclick").match(/startQuiz\('([^']+)'\)/);const type=found?found[1]:"personality";card.dataset.test=type;card.dataset.difficulty=V9_DIFFICULTIES[type]||"medium";const tag=document.createElement("span");tag.className="v9-level-tag";tag.textContent=({easy:"🟢 Kolay",medium:"🟡 Orta",hard:"🔴 Zor"})[card.dataset.difficulty];card.appendChild(tag);const button=document.createElement("button");button.type="button";button.className="favorite-btn";button.onclick=()=>toggleFavorite(type);card.appendChild(button)});refreshV5();filterTests()}
+function refreshV5(){renderFavorites();renderAwards();renderDailyChallenge();renderPersonalBests();renderV9Missions();renderV8XP();v11NotifyAchievements()}
+function renderPersonalBests(){const best=readPersonalBests();document.querySelectorAll("#testGrid .card").forEach(card=>{let line=card.querySelector(".v6-best");if(!line){line=document.createElement("p");line.className="v6-best";card.appendChild(line)}const value=best[card.dataset.test];line.textContent=typeof value==="number"?"🥇 Kişisel rekor: "+value+"/100":""})}
+
+
+let selectedTestFilter="all";
+function setTestFilter(category){
+ selectedTestFilter=category;
+ document.querySelectorAll(".filter-pill").forEach(b=>{const active=b.dataset.filter===category;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active))});
+ filterTests();
+}
+function filterTests(){
+ const query=document.getElementById("testSearch").value.toLocaleLowerCase("tr-TR").trim();
+ let shown=0;
+ document.querySelectorAll("#testGrid .card").forEach(card=>{
+  const difficulty=document.getElementById("v9Difficulty").value;
+  const difficultyMatch=difficulty==="all"||card.dataset.difficulty===difficulty;
+  const categoryMatch=selectedTestFilter==="all"||(selectedTestFilter==="favorites"?readFavorites().includes(card.dataset.test):card.dataset.category===selectedTestFilter);
+  const searchMatch=card.textContent.toLocaleLowerCase("tr-TR").includes(query);
+  const visible=categoryMatch&&searchMatch&&difficultyMatch;
+  card.classList.toggle("hidden",!visible);
+  if(visible)shown++;
+ });
+ document.getElementById("testCount").textContent=shown+" test gösteriliyor";
+ document.getElementById("noTests").classList.toggle("hidden",shown!==0);
+}
+
+const V8_TYPES=["football","music","general","gaming","logic","geography","cinema","science","history","technology","cars","animals","sportsworld","puzzles","food","mythology","world","coding"];
+function buildMixedV8(){
+ const pool=V8_TYPES.flatMap(type=>getQuestionBank(type).map(q=>({...q,source:type})));
+ for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+ return pool.slice(0,20);
+}
+function startMixedV8(){startQuiz("mixed")}
+const V8_ICONS=["⚽","🎵","📚","🎮","💡","🌍","🎬","🔬","🏛️","💻","🏎️","🐾","🏀","🧩","🍕","⚡","🌐","👨‍💻","🌟","🧱","🔎"];
+let v8WheelBusy=false,v8WheelDegrees=0;
+function setupV8Wheel(){
+ const wheel=document.getElementById("v8Wheel");
+ const step=360/V8_TYPES.length;
+ const colors=["#8149cf","#4d2b8b","#b06bea","#58349e","#9960dc","#3c246f","#aa72e6"];
+ wheel.style.background=`conic-gradient(${V8_TYPES.map((_,i)=>`${colors[i%colors.length]} ${i*step}deg ${(i+1)*step}deg`).join(",")})`;
+ wheel.innerHTML=V8_TYPES.map((type,i)=>{
+  const icon=V8_ICONS[i]||"❓";
+  const angle=(i+.5)*step;
+  return `<span class="v8-wheel-label" style="transform:rotate(${angle}deg) translateY(-105px) rotate(${-angle}deg)">${icon}</span>`;
+ }).join("");
+}
+function spinV8Wheel(){
+ if(v8WheelBusy)return;
+ v8WheelBusy=true;
+ const btn=document.getElementById("v8SpinBtn"),status=document.getElementById("v8WheelStatus"),wheel=document.getElementById("v8Wheel");
+ btn.disabled=true;status.textContent="🎡 Çark dönüyor, bakalım hangi test çıkacak...";
+ const index=Math.floor(Math.random()*V8_TYPES.length),type=V8_TYPES[index],step=360/V8_TYPES.length;
+ const target=(360-((index+.5)*step)%360)%360;
+ const current=((v8WheelDegrees%360)+360)%360;
+ const correction=(target-current+360)%360;
+ v8WheelDegrees+=360*6+correction;
+ wheel.style.transform=`rotate(${v8WheelDegrees}deg)`;
+ const finish=()=>{
+  status.textContent="🎉 Seçilen test: "+(quizNames[type]||type);
+  btn.disabled=false;v8WheelBusy=false;
+  if(confirm((quizNames[type]||type)+" testini başlatmak ister misin?"))startQuiz(type);
+ };
+ setTimeout(finish,window.matchMedia('(prefers-reduced-motion: reduce)').matches?300:5300);
+}
+setupV8Wheel();
+function renderV8XP(){
+ const history=readTestHistory();
+ // Her tamamlanan bilgi testi: 50 XP + puanın yarısı; kişilik: 40 XP.
+ const xp=history.reduce((total,item)=>total+(Number.isFinite(item.points)?50+Math.floor(item.points/2):40),0)+v9BonusXP();
+ const level=Math.floor(xp/200)+1,progress=xp%200;
+ const title=level>=30?"💎 TestLab Efsanesi":level>=20?"🏆 Test Ustası":level>=10?"⚡ Bilgi Avcısı":level>=5?"🧠 Meraklı":"🌱 Yeni Başlayan";
+ document.getElementById("v8XpLabel").textContent=`${title} · Seviye ${level} · ${xp} XP`;
+ document.getElementById("v8XpFill").style.width=(progress/200*100)+"%";
+ document.getElementById("v8XpNext").textContent=`Sonraki seviyeye ${200-progress} XP`;
+}
+
+
+
+const V9_DIFFICULTIES={personality:"easy",football:"medium",music:"easy",general:"medium",gaming:"easy",logic:"hard",geography:"medium",cinema:"easy",science:"hard",history:"medium",technology:"medium",cars:"medium",animals:"easy",sportsworld:"medium",puzzles:"hard",food:"easy",mythology:"medium",world:"medium",coding:"hard",footballstars:"medium",lego:"easy",inventions:"medium"};
+const V9_BONUS_KEY="testlab_v9_daily_bonus";
+function v9Today(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
+function v9BonusData(){try{return JSON.parse(localStorage.getItem(V9_BONUS_KEY)||"{}")||{}}catch(e){return {}}}
+function v9BonusXP(){return Object.values(v9BonusData()).reduce((n,v)=>n+(Array.isArray(v)?v.reduce((a,b)=>a+Number(b||0),0):0),0)}
+function renderV9Missions(){
+ const today=v9Today();const todays=readTestHistory().filter(r=>{const d=new Date(r.date);return !isNaN(d)&&[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")===today});
+ const doneCount=todays.length,highScore=todays.some(r=>Number.isFinite(r.points)&&r.points>=80),dailyDone=todays.some(r=>r.type===getDailyType());
+ const tasks=[{name:"📚 İki test tamamla",count:Math.min(doneCount,2),total:2,reward:50},{name:"🎯 80 veya üzeri puan al",count:highScore?1:0,total:1,reward:75},{name:"🌟 Günün testini tamamla",count:dailyDone?1:0,total:1,reward:100}];
+ const saved=v9BonusData();const claims=Array.isArray(saved[today])?saved[today]:[0,0,0];let newly=0;
+ tasks.forEach((t,i)=>{if(t.count===t.total&&!claims[i]){claims[i]=t.reward;newly+=t.reward}});
+ if(newly){saved[today]=claims;try{localStorage.setItem(V9_BONUS_KEY,JSON.stringify(saved))}catch(e){}}
+ const grid=document.getElementById("v9MissionGrid");grid.replaceChildren();
+ tasks.forEach((t,i)=>{const tile=document.createElement("div");tile.className="v9-mission"+(t.count===t.total?" done":"");const name=document.createElement("strong");name.textContent=t.name;const desc=document.createElement("small");desc.textContent=t.count===t.total?"✅ Tamamlandı · +"+t.reward+" XP":"İlerleme: "+t.count+"/"+t.total+" · Ödül: +"+t.reward+" XP";const track=document.createElement("div");track.className="v9-mission-bar";const fill=document.createElement("span");fill.style.width=(t.count/t.total*100)+"%";track.append(fill);tile.append(name,desc,track);grid.append(tile)});
+ document.getElementById("v9MissionStatus").textContent=newly?"🎉 Tebrikler! "+newly+" bonus XP kazandın!":"Tamamlanan görevler otomatik kaydedilir.";
+ return newly;
+}
+
+
+// V9: Each navigation tab is a separate view, rather than an anchor scroll.
+const v9ViewGroups={
+ home:['.hero','.daily-panel','#v11Resume'],
+ tests:['#v9Tests','.v9-difficulty','.test-discovery','#testGrid','#noTests'],
+ games:['#v9Games'],
+ profile:['#v9Profile','.awards-panel'],
+ missions:['#v9Missions'],
+ settings:['#v11Settings']
+};
+function openV9Page(view='home'){
+ if(!v9ViewGroups[view])view='home';
+ showSection('home');
+ const selectors=[...new Set(Object.values(v9ViewGroups).flat())];
+ selectors.forEach(selector=>{
+   const el=document.querySelector('#home '+selector);
+   if(el)el.style.display=v9ViewGroups[view].includes(selector)?((selector==='#noTests'&&el.classList.contains('hidden'))||(selector==='#v11Resume'&&el.hidden)?'none':''):'none';
+ });
+ document.querySelectorAll('.v9-nav [data-view]').forEach(a=>{
+   const active=a.dataset.view===view;
+   a.classList.toggle('v9-active',active);
+   if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+ });
+ if(view==='profile'){renderTestStats();refreshV5()}
+ if(view==='missions'){renderV9Missions();renderV8XP()}
+ if(view==='tests')filterTests();
+ if(view==='home')v11RenderResume();
+ window.scrollTo({top:0,behavior:'instant'});
+}
+
+
+const V11_PROGRESS="testlab_v11_progress",V11_SETTINGS="testlab_v11_settings";
+function v11ReadProgress(){try{return JSON.parse(localStorage.getItem(V11_PROGRESS)||"null")}catch(e){return null}}
+function v11SaveProgress(){
+ if(v6Practice)return;
+ try{localStorage.setItem(V11_PROGRESS,JSON.stringify({type:activeQuiz,mode:v6Mode,question:currentQuestion,answers:selectedAnswers,pending:pendingAnswer,correct:correctAnswers,scores:scores,list:activeQuestionList,at:Date.now()}))}catch(e){}
+}
+function v11ClearProgress(){try{localStorage.removeItem(V11_PROGRESS)}catch(e){}v11RenderResume()}
+function v11RenderResume(){
+ const data=v11ReadProgress(),box=document.getElementById("v11Resume");if(!box)return;
+ const valid=data&&Array.isArray(data.list)&&data.list.length>0&&data.question<data.list.length;
+ box.hidden=!valid;
+ if(valid){document.getElementById("v11ResumeInfo").textContent=(quizNames[data.type]||"Test")+" · "+data.question+"/"+data.list.length+" soru tamamlandı"+(data.mode==="speed"?" · Hız Modu":"");if(box.closest("#home")&&document.querySelector('.v9-nav .v9-active')?.dataset.view==='home')box.style.display='';}
+}
+function v11Discard(){v11ClearProgress();v11Toast("Yarım kalan test silindi.");}
+function v11Resume(){
+ const d=v11ReadProgress();if(!d||!Array.isArray(d.list)||!d.list.length)return;
+ stopV6Timer();activeQuiz=d.type;activeQuestionList=d.list;currentQuestion=d.question;selectedAnswers=d.answers||[];correctAnswers=d.correct||0;scores=d.scores||[0,0,0,0];v6Mode=d.mode||"normal";v6Practice=false;
+ document.getElementById("quizMode").value=v6Mode;
+ showSection("quiz");showQuestion();
+ if(Number.isInteger(d.pending)&&d.pending>=0&&d.pending<activeQuestionList[currentQuestion].a.length)selectAnswer(d.pending);
+}
+let v11ToastTimer;
+function v11Toast(message){const el=document.getElementById("v11Toast");if(!el)return;el.textContent=message;el.hidden=false;clearTimeout(v11ToastTimer);v11ToastTimer=setTimeout(()=>el.hidden=true,3800)}
+function v11Settings(){try{return JSON.parse(localStorage.getItem(V11_SETTINGS)||"{}")}catch(e){return {}}}
+function v11ApplySettings(){
+ const d=v11Settings();const theme=["purple","blue","green","pink","black"].includes(d.theme)?d.theme:"purple";
+ document.documentElement.dataset.v11Theme=theme;document.documentElement.dataset.v11Motion=d.motion===false?"off":"on";
+ document.getElementById("v11Theme").value=theme;document.getElementById("v11Motion").checked=d.motion!==false;document.getElementById("v11Sound").checked=d.sound===true;
+}
+function v11SaveSettings(){
+ const d={theme:document.getElementById("v11Theme").value,motion:document.getElementById("v11Motion").checked,sound:document.getElementById("v11Sound").checked};
+ try{localStorage.setItem(V11_SETTINGS,JSON.stringify(d))}catch(e){}
+ v11ApplySettings();v11Toast("⚙️ Ayarlar kaydedildi.");
+}
+let v11AudioContext=null;
+function v11SoundEffect(kind="select",force=false){
+ if(!force&&!v11Settings().sound)return;
+ try{
+  const AudioCtor=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtor)return;
+  if(!v11AudioContext)v11AudioContext=new AudioCtor();
+  const ctx=v11AudioContext;
+  if(ctx.state==="suspended")ctx.resume().catch(()=>{});
+  const tones=kind==="correct"?[[660,0],[880,.09]]:kind==="next"?[[410,0],[520,.09]]:[[600,0]];
+  tones.forEach(([frequency,delay])=>{
+   const oscillator=ctx.createOscillator(),volume=ctx.createGain(),start=ctx.currentTime+delay;
+   oscillator.type="sine";oscillator.frequency.setValueAtTime(frequency,start);
+   volume.gain.setValueAtTime(.0001,start);
+   volume.gain.exponentialRampToValueAtTime(.14,start+.015);
+   volume.gain.exponentialRampToValueAtTime(.0001,start+.16);
+   oscillator.connect(volume);volume.connect(ctx.destination);
+   oscillator.start(start);oscillator.stop(start+.17);
+  });
+ }catch(error){console.warn("Ses oynatılamadı:",error)}
+}
+function v11PreviewSound(){
+ if(!document.getElementById("v11Sound").checked){document.getElementById("v11Sound").checked=true;v11SaveSettings()}
+ v11SoundEffect("correct",true);
+ v11Toast("🔊 Ses testi oynatıldı. Ses duymuyorsan sekmenin ve cihazının sesini kontrol et.");
+}
+let v11LastLevel=null,v11KnownAwards=null;
+function v11NotifyAchievements(){
+ const h=readTestHistory(),level=Math.floor(h.reduce((total,item)=>total+(Number.isFinite(item.points)?50+Math.floor(item.points/2):40),0)/200)+1;
+ const awards=AWARDS.filter(a=>a.check(h)).map(a=>a.title);
+ if(v11LastLevel!==null&&level>v11LastLevel)v11Toast("🎉 Seviye atladın! Yeni seviyen: "+level);
+ else if(v11KnownAwards!==null){const added=awards.find(a=>!v11KnownAwards.includes(a));if(added)v11Toast("🏆 Yeni başarım: "+added)}
+ v11LastLevel=level;v11KnownAwards=awards;
+}
+
+setupV5();
+v11ApplySettings();
+v11RenderResume();
+v11NotifyAchievements();
+renderTestStats();
+openV9Page("home");
 </script>
 
+<div id="feedbackBackdrop" class="feedback-backdrop" hidden onclick="if(event.target===this)closeFeedback()">
+ <section class="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+  <button class="feedback-close" type="button" onclick="closeFeedback()" aria-label="Pencereyi kapat">×</button>
+  <h2 id="feedbackTitle">💬 TestLab'i Birlikte Geliştirelim</h2>
+  <p>Yeni test fikirlerini, geliştirme önerilerini ve karşılaştığın hataları bizimle paylaşabilirsin.</p>
+  <label for="feedbackType">Öneri türü</label>
+  <select id="feedbackType"><option>💡 Yeni özellik önerisi</option><option>🧠 Yeni test isteği</option><option>🐛 Hata bildirimi</option><option>⭐ Genel değerlendirme</option></select>
+  <label for="feedbackMessage">Mesajın</label>
+  <textarea id="feedbackMessage" maxlength="1500" placeholder="TestLab'de şunu görmek isterdim..."></textarea>
+  <button id="feedbackSend" class="feedback-send" type="button" disabled>🚀 Önerimi Gönder</button>
+  <p class="feedback-note" id="feedbackStatus" role="status">🛠️ Ön izleme: Gönderim henüz aktif değil. Google Forms bağlantısı eklendiğinde öneriler iletilebilecek.</p>
+ </section>
+</div>
+<script>
+let feedbackPreviousFocus=null;
+function openFeedback(){feedbackPreviousFocus=document.activeElement;document.getElementById('feedbackBackdrop').hidden=false;document.getElementById('feedbackType').focus()}
+function closeFeedback(){document.getElementById('feedbackBackdrop').hidden=true;if(feedbackPreviousFocus)feedbackPreviousFocus.focus()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('feedbackBackdrop').hidden)closeFeedback()});
+
+
+</script>
 </body>
 </html>
