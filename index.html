@@ -385,6 +385,7 @@ html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-status,html[data-v11-the
 .v8-wheel-result button:hover{filter:brightness(1.15)}
 .v13panel{margin:22px 0;padding:22px;border-radius:18px;border:1px solid #9b78c4;background:#ffffff0a;color:#eee}.v13panel input,.v13panel select{padding:11px;border:1px solid #9172bb;background:#211832;color:white;border-radius:9px;margin:5px;max-width:100%}.v13panel button{background:#6e3aaa;border:1px solid #a889d3;color:white;border-radius:9px;padding:11px 15px;margin:5px;cursor:pointer}.v13options{display:flex;flex-wrap:wrap}.v13-duel-answer{display:block;width:95%;text-align:left}.v13panel [hidden]{display:none!important}.v13-duel-screen{max-width:820px;margin:32px auto;min-height:390px;padding:28px}.v13-duel-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:25px;font-weight:800}.v13-duel-screen .v13-duel-answer{font-size:16px;padding:16px;margin:10px 0;border-radius:12px}.v13-duel-screen h3{font-size:24px}.v13-duel-screen p{font-size:18px;line-height:1.6}.v13-duel-screen .v13-duel-answer.v13-selected{outline:3px solid #e1b8ff;background:#563389}.v13-duel-screen .v13-duel-answer.v13-answer-correct{background:#18734b}.v13-duel-screen .v13-duel-answer.v13-answer-wrong{background:#963d50}.v13-next-button{margin-top:12px!important;font-size:17px}.v13-next-button:disabled{opacity:.4;cursor:not-allowed}
 .v14-lobby .v14-rooms{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:20px 0}.v14-rooms>div{background:#ffffff0b;border-radius:15px;padding:18px}.v14-rooms label{display:block;margin-top:12px;font-weight:700}.v14-rooms input{display:block;width:100%;box-sizing:border-box;margin:8px 0}.v14-rooms button{width:100%;margin:10px 0 0}.v14-notice{background:#ffe4a41b;border:1px solid #e0b766;border-radius:12px;padding:14px;margin:15px 0}.v14-hint{opacity:.78;font-size:13px}.v14-arena{max-width:850px;margin:30px auto;min-height:420px}.v14-arena-header{display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between}.v14-code{font-size:40px;letter-spacing:8px;font-weight:900;color:#d8b4ff;margin:12px 0}.v14-answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.v14-answers button{padding:16px;text-align:left;font-size:16px;min-height:64px}.v14-answers button.v14-picked{outline:3px solid #d4a7ff}.v14-answers button.v14-right{background:#22754e}.v14-answers button.v14-wrong{background:#a13e53}.v14-score{display:flex;gap:15px;justify-content:space-around;background:#ffffff12;padding:14px;border-radius:12px}.v14-score span{font-size:18px}.v14-feedback{padding:14px;border-radius:10px;background:#ffffff0c;margin:15px 0}.v14-wait{font-size:17px;opacity:.9}.v14-arena button:disabled,.v14-rooms button:disabled{opacity:.45;cursor:not-allowed}@media(max-width:650px){.v14-lobby .v14-rooms,.v14-answers{grid-template-columns:1fr}.v14-code{font-size:32px}}
+.v17-select{display:block;width:100%;box-sizing:border-box;margin:8px 0 13px;padding:12px;border-radius:10px;background:#211832;color:white;border:1px solid #9172bb;font:inherit}.v17-pill{display:inline-block;background:#35214f;border:1px solid #8f67c5;border-radius:10px;padding:9px 12px;margin:8px 5px 8px 0}.v17-clock{font-size:22px;font-weight:800;color:#e8d3ff;margin:12px 0}.v17-clock.danger{color:#ff8c9c}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -414,7 +415,10 @@ html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-status,html[data-v11-the
 <div class="v6-mode-panel"><label for="quizMode"><strong>⚡ Oyun Modu</strong><br><small>Hız modunda her soru için 15 saniyen var.</small></label><select id="quizMode"><option value="normal">🌿 Normal Mod</option><option value="speed">⚡ Hız Modu · 15 sn</option></select></div>
 <div class="v13panel v14-lobby"><h2>🌐 Online Düello Odaları</h2><p>Arkadaşınla farklı bilgisayarlardan aynı anda yarış! Bir oda aç, altı haneli kodu paylaş veya arkadaşının kodunu gir.</p>
 <div id="v14SetupWarning" class="v14-notice">🌐 Online düello hazır! Oda oluştur veya kodla katıl. Firebase kuralları yayımlanmış olmalı.</div>
-<div class="v14-rooms"><div><h3>🏠 Oda Oluştur</h3><label for="v14HostName">Oyuncu adın</label><input id="v14HostName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname"><button id="v14CreateBtn" onclick="v14CreateRoom()">➕ Oda Oluştur</button></div><div><h3>🔑 Odaya Katıl</h3><label for="v14GuestName">Oyuncu adın</label><input id="v14GuestName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname"><label for="v14RoomCode">6 haneli oda kodu</label><input id="v14RoomCode" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" placeholder="Örn. 482915"><button id="v14JoinBtn" onclick="v14JoinRoom()">🚀 Odaya Katıl</button></div></div>
+<div class="v14-rooms"><div><h3>🏠 Oda Oluştur</h3><label for="v14HostName">Oyuncu adın</label><input id="v14HostName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname">
+<label for="v17Test">🧠 Düello testi</label><select id="v17Test" class="v17-select"><option value="mixed">🎲 Rastgele karışık</option></select>
+<label for="v17Mode">⚡ Oyun modu</label><select id="v17Mode" class="v17-select" onchange="v17ModeChanged()"><option value="normal">🌿 Normal (süresiz)</option><option value="timed">⏱️ Süreli</option></select>
+<div id="v17TimeRow" hidden><label for="v17Time">⏳ Soru başına süre</label><select id="v17Time" class="v17-select"><option value="10">10 saniye</option><option value="15" selected>15 saniye</option><option value="20">20 saniye</option><option value="30">30 saniye</option></select></div><button id="v14CreateBtn" onclick="v14CreateRoom()">➕ Oda Oluştur</button></div><div><h3>🔑 Odaya Katıl</h3><label for="v14GuestName">Oyuncu adın</label><input id="v14GuestName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname"><label for="v14RoomCode">6 haneli oda kodu</label><input id="v14RoomCode" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" placeholder="Örn. 482915"><button id="v14JoinBtn" onclick="v14JoinRoom()">🚀 Odaya Katıl</button></div></div>
 <p class="v14-hint">İki oyuncunun da internete bağlı olması gerekir. Oda kodunu yalnızca oynayacağın kişiyle paylaş.</p></div><hr style="border:0;border-top:1px solid #604c83;margin:22px 0">
 <h2>🏅 Quizora Seviyen</h2><div id="v8XpLabel" aria-live="polite">Seviye 1 · 0 XP</div><div class="v8-xp-track"><div id="v8XpFill" class="v8-xp-fill" style="width:0%"></div></div><small id="v8XpNext">Sonraki seviyeye 100 XP</small>
 </section>
@@ -1337,6 +1341,14 @@ function openV9Page(view='home'){
 // Firebase proje bilgileri herkese açık istemci ayarlarıdır; özel anahtar veya servis hesabı eklemeyin.
 const QUIZORA_FIREBASE_CONFIG = {"apiKey": "AIzaSyBHG6jgn5Et-hkwgfX7z6mmKjIlboMW1CY", "authDomain": "quizora-b1497.firebaseapp.com", "databaseURL": "https://quizora-b1497-default-rtdb.europe-west1.firebasedatabase.app", "projectId": "quizora-b1497", "storageBucket": "quizora-b1497.firebasestorage.app", "messagingSenderId": "780622338323", "appId": "1:780622338323:web:253a7f97b252da6b2fe2e6", "measurementId": "G-35PRTR2B96"};
 let v14Db=null,v14Auth=null,v14Session=null,v14RoomRef=null,v14RoomListener=null,v14Snapshot=null,v14Chosen=null,v14Submitting=false,v14LastIndex=-1;
+let v17Deadline=0,v17TimerId=null,v17TimedOut=false;
+function v17ModeChanged(){document.getElementById('v17TimeRow').hidden=document.getElementById('v17Mode').value!=='timed'}
+function v17InitOptions(){const el=document.getElementById('v17Test');if(!el||el.options.length>1)return;V8_TYPES.forEach(type=>{const opt=document.createElement('option');opt.value=type;opt.textContent=quizNames[type]||type;el.append(opt)})}
+function v17ResetTimer(){if(v17TimerId)clearInterval(v17TimerId);v17TimerId=null;v17Deadline=0;v17TimedOut=false}
+function v17StartTimer(){v17ResetTimer();const r=v14Snapshot;if(!r||r.mode!=='timed'||r.status!=='playing')return;v17Deadline=Date.now()+Number(r.seconds||15)*1000;v17TimerId=setInterval(v17Tick,250);v17Tick()}
+function v17Tick(){const r=v14Snapshot,s=v14Session;if(!r||!s||r.status!=='playing'||r.mode!=='timed'||!v17Deadline)return;const seconds=Math.max(0,Math.ceil((v17Deadline-Date.now())/1000));const clock=document.getElementById('v17Clock');if(clock){clock.textContent='⏱️ Kalan süre: '+seconds+' sn';clock.classList.toggle('danger',seconds<=5)}if(seconds===0&&!v17TimedOut){v17TimedOut=true;const answers=r.answers&&r.answers[r.index]||{};if(!Number.isInteger(answers[s.uid]))v17SubmitTimeout();}}
+async function v17SubmitTimeout(){if(!v14RoomRef||!v14Session||!v14Snapshot)return;const index=v14Snapshot.index,uid=v14Session.uid;try{await v14RoomRef.child('answers/'+index+'/'+uid).transaction(x=>x===null?-1:undefined,undefined,false)}catch(e){v14Error(e)}}
+
 function v14Notice(message){const el=document.getElementById('v14SetupWarning');if(el)el.textContent=message}
 function v14Error(err){const msg=err&&err.message?err.message:String(err);v11Toast('⚠️ '+msg.slice(0,140));console.warn('Online düello:',err)}
 async function v14Init(){
@@ -1357,10 +1369,14 @@ async function v14CreateRoom(){
  try{
   if(!await v14Init())return;
   const name=v14SafeName('v14HostName'),uid=v14Auth.currentUser.uid;
-  const questions=buildMixedV8().slice(0,10).map(q=>({q:q.q,a:q.a,correct:q.correct}));
+  const test=document.getElementById('v17Test').value,mode=document.getElementById('v17Mode').value,seconds=Number(document.getElementById('v17Time').value);
+  const bank=test==='mixed'?buildMixedV8():getQuestionBank(test);
+  const shuffled=[...bank];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
+  if(shuffled.length<10)throw new Error('Bu testte düello için yeterli soru yok.');
+  const questions=shuffled.slice(0,10).map(q=>({q:q.q,a:q.a,correct:q.correct}));
   for(let attempt=0;attempt<6;attempt++){
    const code=v14Code(),ref=v14Db.ref('rooms/'+code);
-   const initial={hostUid:uid,hostName:name,status:'waiting',createdAt:firebase.database.ServerValue.TIMESTAMP,index:0,questions};
+   const initial={hostUid:uid,hostName:name,status:'waiting',createdAt:firebase.database.ServerValue.TIMESTAMP,index:0,questions,test,mode,seconds:mode==='timed'?seconds:0};
    // Firebase transaction requires read permission, but a new room is not readable
    // under the secure rules until it exists. Creation needs only a guarded write.
    try{
@@ -1394,14 +1410,15 @@ async function v14JoinRoom(){
  }catch(e){v14Error(e)}finally{v14SetBusy(false)}
 }
 function v14Connect(ref,code,role){
- v14Disconnect();v14RoomRef=ref;v14Session={code,role,uid:v14Auth.currentUser.uid};v14Chosen=null;v14LastIndex=-1;
+ v14Disconnect();v14RoomRef=ref;v14Session={code,role,uid:v14Auth.currentUser.uid};v14Chosen=null;v14LastIndex=-1;v17ResetTimer();
  showSection('v14OnlineScreen');
  v14RoomListener=ref.on('value',snapshot=>{
   if(!v14Session||v14RoomRef!==ref)return;
-  v14Snapshot=snapshot.val();v14Render();
+  const previous=v14Snapshot;v14Snapshot=snapshot.val();if(v14Snapshot&&v14Snapshot.status==='playing'&&(!previous||previous.status!=='playing'||previous.index!==v14Snapshot.index))v17StartTimer();if(v14Snapshot&&v14Snapshot.status==='finished')v17ResetTimer();v14Render();
  },v14Error);
 }
 function v14Disconnect(){
+ v17ResetTimer();
  if(v14RoomRef&&v14RoomListener)v14RoomRef.off('value',v14RoomListener);
  v14RoomRef=null;v14RoomListener=null;v14Session=null;v14Snapshot=null;v14Chosen=null;v14LastIndex=-1;
 }
@@ -1413,6 +1430,7 @@ function v14Render(){
  const r=v14Snapshot,s=v14Session;if(!s)return;
  if(!r){box.append(v14El('h2','Oda artık bulunamıyor.'));return}
  if(r.status==='waiting'){
+  box.append(v14El('p','🧠 '+(r.test==='mixed'?'Rastgele karışık':(quizNames[r.test]||'Karışık'))+' · '+(r.mode==='timed'?'⏱️ '+r.seconds+' sn':'🌿 Normal'),'v17-pill'));
   box.append(v14El('h2','🏠 Oda hazır!'),v14El('p','Oda kodu:'),v14El('div',s.code,'v14-code'));
   box.append(v14Button('📋 Oda Kodunu Kopyala',async()=>{try{await navigator.clipboard.writeText(s.code);v11Toast('Oda kodu kopyalandı!')}catch(e){v11Toast('Oda kodunu elle paylaşabilirsin.')}}));
   box.append(v14El('p','🔵 '+r.hostName+' · '+(r.guestUid?'🟢 '+(r.guestName||'Arkadaşın'):'⏳ İkinci oyuncu bekleniyor...'),'v14-wait'));
@@ -1421,6 +1439,7 @@ function v14Render(){
   return;
  }
  const index=r.index||0,questions=r.questions||[],host=r.hostUid,guest=r.guestUid;
+ box.append(v14El('p','🧠 '+(r.test==='mixed'?'Rastgele karışık':(quizNames[r.test]||'Karışık'))+' · '+(r.mode==='timed'?'⏱️ '+r.seconds+' sn':'🌿 Normal'),'v17-pill'));
  const allScores=[0,0];
  for(let i=0;i<questions.length;i++){
   const a=r.answers&&r.answers[i];if(!a)continue;
@@ -1432,28 +1451,29 @@ function v14Render(){
   const result=allScores[0]===allScores[1]?'🤝 Berabere!':'🏆 Kazanan: '+(allScores[0]>allScores[1]?r.hostName:r.guestName);
   box.append(v14El('h2',result),v14El('p','Final skoru: '+allScores[0]+' - '+allScores[1]));return;
  }
- if(v14LastIndex!==index){v14Chosen=null;v14LastIndex=index}
+ if(v14LastIndex!==index){v14Chosen=null;v14LastIndex=index;if(r.mode==='timed'&&!v17Deadline)v17StartTimer()}
  const q=questions[index],ans=r.answers&&r.answers[index]||{},mine=ans[s.uid],otherUid=s.role==='host'?guest:host,other=ans[otherUid];
  const mineDone=Number.isInteger(mine),otherDone=Number.isInteger(other),both=mineDone&&otherDone;
- box.append(v14El('p','Soru '+(index+1)+' / '+questions.length),v14El('h2',q.q));
+ box.append(v14El('p','Soru '+(index+1)+' / '+questions.length),v14El('h2',q.q));if(r.mode==='timed'){const clock=v14El('div','','v17-clock');clock.id='v17Clock';box.append(clock)}
  const options=v14El('div',undefined,'v14-answers');
  q.a.forEach((label,i)=>{
-  const btn=v14Button(label,()=>{if(mineDone||v14Submitting)return;v14Chosen=i;v14Render()},mineDone||v14Submitting);
+  const btn=v14Button(label,()=>{if(mineDone||v14Submitting||v17TimedOut)return;v14Chosen=i;v14Render()},mineDone||v14Submitting||v17TimedOut);
   if((mineDone&&mine===i)||(!mineDone&&v14Chosen===i))btn.classList.add('v14-picked');
   if(both&&i===q.correct)btn.classList.add('v14-right');
   if(both&&mine===i&&mine!==q.correct)btn.classList.add('v14-wrong');
   options.append(btn);
  });box.append(options);
- if(!mineDone){box.append(v14Button('✔️ Cevabı Onayla',v14Submit,v14Chosen===null||v14Submitting));}
+ if(!mineDone){if(v17TimedOut)box.append(v14El('p','⌛ Süre doldu, cevabın boş sayılıyor.','v14-feedback'));box.append(v14Button('✔️ Cevabı Onayla',v14Submit,v14Chosen===null||v14Submitting||v17TimedOut));}
  else if(!both){box.append(v14El('p','⏳ Cevabın kaydedildi. Rakibinin cevabı bekleniyor...','v14-feedback'));}
+ if(r.mode==='timed'&&v17Deadline){const clock=document.getElementById('v17Clock');if(clock){const left=Math.max(0,Math.ceil((v17Deadline-Date.now())/1000));clock.textContent='⏱️ Kalan süre: '+left+' sn';clock.classList.toggle('danger',left<=5)}}
  if(both){
-  box.append(v14El('p',(mine===q.correct?'✅ Doğru cevap!':'❌ Yanlış cevap!')+' Doğru cevap: '+q.a[q.correct],'v14-feedback'));
+  box.append(v14El('p',(mine===-1?'⌛ Süre doldu!':mine===q.correct?'✅ Doğru cevap!':'❌ Yanlış cevap!')+' Doğru cevap: '+q.a[q.correct],'v14-feedback'));
   if(s.role==='host')box.append(v14Button(index===questions.length-1?'🏁 Sonuçları Göster':'Sonraki Soru →',v14Next));
   else box.append(v14El('p','⏳ Oda sahibinin sonraki soruya geçmesi bekleniyor.'));
  }
 }
 async function v14Submit(){
- const r=v14Snapshot,s=v14Session;if(!r||!s||v14Chosen===null||v14Submitting)return;
+ const r=v14Snapshot,s=v14Session;if(!r||!s||v14Chosen===null||v14Submitting||v17TimedOut)return;
  const index=r.index,answer=v14Chosen;
  v14Submitting=true;v14Render();
  try{
@@ -1603,6 +1623,7 @@ function v11NotifyAchievements(){
 }
 
 setupV5();
+v17InitOptions();
 v11ApplySettings();
 v11RenderResume();
 v11NotifyAchievements();
