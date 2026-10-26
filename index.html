@@ -1361,8 +1361,16 @@ async function v14CreateRoom(){
   for(let attempt=0;attempt<6;attempt++){
    const code=v14Code(),ref=v14Db.ref('rooms/'+code);
    const initial={hostUid:uid,hostName:name,status:'waiting',createdAt:firebase.database.ServerValue.TIMESTAMP,index:0,questions};
-   const result=await ref.transaction(current=>current===null?initial:undefined,undefined,false);
-   if(result.committed){v14Connect(ref,code,'host');return}
+   // Firebase transaction requires read permission, but a new room is not readable
+   // under the secure rules until it exists. Creation needs only a guarded write.
+   try{
+    await ref.set(initial);
+    v14Connect(ref,code,'host');
+    return;
+   }catch(err){
+    if(err && err.code==='PERMISSION_DENIED')continue;
+    throw err;
+   }
   }
   throw new Error('Oda kodu oluşturulamadı. Tekrar dene.');
  }catch(e){v14Error(e)}finally{v14SetBusy(false)}
