@@ -915,7 +915,22 @@ function showSection(id) {
 const HISTORY_KEY = "testlab_history_v2";
 const quizNames = {footballstars:"Futbol Efsaneleri",lego:"LEGO ve Tasarım",inventions:"İcatlar ve Keşifler",food:"Yemek Kültürü",mythology:"Mitoloji ve Efsaneler",world:"Dünya ve Kültürler",coding:"Kodlama ve Yazılım",mixed:"Karışık Test",personality:"Kişilik Testi",football:"Futbol",music:"Müzik",general:"Genel Kültür",gaming:"Oyun",logic:"Mantık",geography:"Coğrafya",cinema:"Film ve Dizi",science:"Bilim ve Uzay",history:"Tarih",technology:"Teknoloji ve İnternet",cars:"Otomobil",animals:"Hayvanlar Âlemi",sportsworld:"Spor Dünyası",puzzles:"Zekâ ve Bulmacalar"};
 function readTestHistory(){try{const data=JSON.parse(localStorage.getItem(HISTORY_KEY)||"[]");return Array.isArray(data)?data.filter(x=>x&&typeof x.type==="string").slice(0,100):[]}catch(e){return []}}
-function saveTestResult(record){try{const history=readTestHistory();history.unshift(record);localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,100)))}catch(e){/* Depolama kapalıysa testler yine çalışır. */}}
+// GA4: Tamamlanan testleri test adına göre say. Kişisel bilgi gönderilmez.
+function trackQuizCompletion(record){
+  try {
+    if (typeof window.gtag !== "function" || !record || !record.type) return;
+    const eventData = {
+      quiz_id: String(record.type),
+      quiz_name: quizNames[record.type] || String(record.type)
+    };
+    if (Number.isFinite(record.points)) eventData.quiz_score = record.points;
+    window.gtag("event", "quiz_complete", eventData);
+  } catch (e) { /* Analitik hatası test deneyimini etkilemesin. */ }
+}
+function saveTestResult(record){
+  trackQuizCompletion(record);
+  try{const history=readTestHistory();history.unshift(record);localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,100)))}catch(e){/* Depolama kapalıysa testler yine çalışır. */}
+}
 function renderTestStats(){
   const history=readTestHistory();
   document.getElementById("statCount").textContent=history.length;
