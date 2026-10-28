@@ -1,0 +1,5 @@
+node_modules/
+*-debug.log
+*-mobile.png
+firebase-debug.log
+
