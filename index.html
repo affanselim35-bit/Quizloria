@@ -455,7 +455,7 @@ html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-status,html[data-v11-the
 
     <div class="container">
 
-        <section id="v9Profile" class="stats-panel" aria-label="Quizloria istatistiklerim"><div id="q19Profile" class="q19-profile" aria-live="polite">👤 Hesap durumu yükleniyor...</div>
+        <section id="v9Profile" class="stats-panel" aria-label="Quizloria istatistiklerim"><div id="q19Profile" class="q19-profile" aria-live="polite">👤 Hesap durumu yükleniyor...</div><div id="q20Cloud" class="q20-cloud" hidden><h3>☁️ Hesap Senkronizasyonu</h3><p id="q20Status">Test sonuçlarını hesabına kaydetmek için eşitle.</p><button type="button" onclick="q20Sync()">☁️ Geçmişimi Eşitle</button><p class="q20-small">Bu cihazdaki geçmişin hesabına aktarılır. Diğer cihazlarda aynı hesapla eşitleyebilirsin.</p></div>
           <div class="stats-heading"><div><h2>📊 Quizloria Profilim</h2><p>Sonuçların yalnızca bu tarayıcıda saklanır.</p></div><button type="button" class="clear-history" onclick="clearTestHistory()">Geçmişi Temizle</button></div>
           <div class="stats-grid"><div class="stat-tile"><strong id="statCount">0</strong><span>Çözülen Test</span></div><div class="stat-tile"><strong id="statAverage">—</strong><span>Ortalama Puan</span></div><div class="stat-tile"><strong id="statBadge">—</strong><span>En İyi Rozet</span></div></div>
           <div class="v13panel"><h3>🔥 Günlük Seri</h3><p id="v13Streak"></p><h3>📈 Gelişim Grafiği</h3><canvas id="v13Chart" width="650" height="250" style="width:100%;max-width:650px"></canvas><p id="v13ChartCaption"></p></div><h3 class="recent-title">🕘 Son Sonuçlarım</h3><div id="historyList" class="history-list"><p class="history-empty">Henüz tamamlanmış test yok.</p></div>
@@ -948,6 +948,7 @@ function trackQuizCompletion(record){
 function saveTestResult(record){
   trackQuizCompletion(record);
   try{const history=readTestHistory();history.unshift(record);localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,100)))}catch(e){/* Depolama kapalıysa testler yine çalışır. */}
+  if(window.q20SaveResult)window.q20SaveResult(record);
 }
 function renderTestStats(){
   const history=readTestHistory();
@@ -960,7 +961,7 @@ function renderTestStats(){
   if(!history.length){const p=document.createElement("p");p.className="history-empty";p.textContent="Henüz tamamlanmış test yok. İlk testini çöz!";list.appendChild(p);return}
   history.slice(0,5).forEach(item=>{const row=document.createElement("div");row.className="history-row";const label=document.createElement("span");const date=new Date(item.date);label.textContent=(quizNames[item.type]||"Test")+(Number.isNaN(date.getTime())?"":" · "+date.toLocaleDateString("tr-TR"));const score=document.createElement("strong");score.textContent=Number.isFinite(item.points)?item.points+"/100":(item.profile||"Tamamlandı");row.append(label,score);list.appendChild(row)})
 }
-function clearTestHistory(){if(!confirm("Bu cihazdaki test geçmişini ve günlük görev XP ödüllerini silmek istiyor musun?"))return;try{localStorage.removeItem(HISTORY_KEY);localStorage.removeItem(V9_BONUS_KEY)}catch(e){}renderTestStats();renderAwards();renderDailyChallenge();renderV9Missions();renderV8XP()}
+function clearTestHistory(){if(!confirm("Bu cihazdaki test geçmişini ve günlük görev XP ödüllerini silmek istiyor musun? Bulut geçmişi otomatik silinmez."))return;try{localStorage.removeItem(HISTORY_KEY);localStorage.removeItem(V9_BONUS_KEY)}catch(e){}renderTestStats();renderAwards();renderDailyChallenge();renderV9Missions();renderV8XP()}
 function displayScoreRing(points){const ring=document.getElementById("scoreRing");ring.classList.remove("hidden");ring.style.setProperty("--score",points);document.getElementById("scoreRingValue").innerHTML=points+"<small>/100</small>";document.getElementById("personalitySparkle").classList.add("hidden")}
 function setResultSummary(items){const box=document.getElementById("resultSummary");box.replaceChildren();items.forEach(value=>{const span=document.createElement("span");span.className="result-chip";span.textContent=value;box.appendChild(span)});box.classList.remove("hidden")}
 let activeQuiz = "personality";
@@ -1711,6 +1712,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElemen
   </form><button class="q19-switch" id="q19Switch" type="button" onclick="q19Toggle()">Zaten hesabın var mı? Giriş yap</button>
  </div>
 </div>
+<style>
+.q20-cloud{margin:16px 0 24px;padding:20px;border:1px solid #8262bd;border-radius:17px;background:linear-gradient(135deg,#281d40,#181522)}
+.q20-cloud[hidden]{display:none}.q20-cloud h3{margin:0 0 8px;color:#e9d8ff}.q20-cloud p{color:#d6c8e7;line-height:1.5}.q20-small{font-size:12px}
+</style>
 <script>
 (function(){
 let mode='register';const el=id=>document.getElementById(id);
@@ -1720,11 +1725,57 @@ window.q19Toggle=function(){q19Open(mode==='register'?'login':'register')};
 window.q19Close=function(){el('q19Backdrop').hidden=true;el('q19Form').reset()};
 window.q19Logout=async function(){try{await auth().signOut();q19Render(null)}catch(e){alert('Çıkış yapılamadı: '+e.message)}};
 function q19Render(user){const entry=el('q19Entry'),profile=el('q19Profile');if(!entry||!profile)return;
-if(user&&!user.isAnonymous){const name=user.displayName||user.email?.split('@')[0]||'Üye';entry.innerHTML='<h2>👋 Hoş geldin!</h2><p id="q19Welcome"></p><div class="q19-buttons"><button type="button" onclick="openV9Page(&#39;profile&#39;)">Profilime Git →</button><button class="q19-outline" type="button" onclick="q19Logout()">Çıkış Yap</button></div>';el('q19Welcome').textContent=name+' · Quizloria hesabın açık.';profile.replaceChildren();const title=document.createElement('strong');title.textContent='👤 '+name;const info=document.createElement('p');info.textContent=user.email||'';const note=document.createElement('small');note.textContent='Test geçmişin şimdilik bu cihazda tutulur.';const logout=document.createElement('button');logout.textContent='Çıkış Yap';logout.onclick=q19Logout;profile.append(title,info,note,document.createElement('br'),logout)}else{entry.innerHTML='<h2>✨ Quizloria’ya Katıl</h2><p>Hesabını oluştur, kendi kullanıcı adını seç ve Quizloria deneyimini kişiselleştir.</p><div class="q19-buttons"><button type="button" onclick="q19Open(&#39;register&#39;)">✨ Kayıt Ol</button><button type="button" class="q19-outline" onclick="q19Open(&#39;login&#39;)">Giriş Yap</button></div>';profile.innerHTML='<strong>👤 Henüz giriş yapmadın</strong><p>Hesabını oluştur veya giriş yap.</p><button type="button" onclick="q19Open(&#39;login&#39;)">Giriş Yap</button>'}}
+if(user&&!user.isAnonymous){const name=user.displayName||user.email?.split('@')[0]||'Üye';entry.innerHTML='<h2>👋 Hoş geldin!</h2><p id="q19Welcome"></p><div class="q19-buttons"><button type="button" onclick="openV9Page(&#39;profile&#39;)">Profilime Git →</button><button class="q19-outline" type="button" onclick="q19Logout()">Çıkış Yap</button></div>';el('q19Welcome').textContent=name+' · Quizloria hesabın açık.';profile.replaceChildren();const title=document.createElement('strong');title.textContent='👤 '+name;const info=document.createElement('p');info.textContent=user.email||'';const note=document.createElement('small');note.textContent='Test geçmişini buluta aktarmak için aşağıdaki Eşitle düğmesini kullan.';const logout=document.createElement('button');logout.textContent='Çıkış Yap';logout.onclick=q19Logout;profile.append(title,info,note,document.createElement('br'),logout);el('q20Cloud').hidden=false}else{entry.innerHTML='<h2>✨ Quizloria’ya Katıl</h2><p>Hesabını oluştur, kendi kullanıcı adını seç ve Quizloria deneyimini kişiselleştir.</p><div class="q19-buttons"><button type="button" onclick="q19Open(&#39;register&#39;)">✨ Kayıt Ol</button><button type="button" class="q19-outline" onclick="q19Open(&#39;login&#39;)">Giriş Yap</button></div>';el('q20Cloud').hidden=true;profile.innerHTML='<strong>👤 Henüz giriş yapmadın</strong><p>Hesabını oluştur veya giriş yap.</p><button type="button" onclick="q19Open(&#39;login&#39;)">Giriş Yap</button>'}}
 el('q19Form').addEventListener('submit',async e=>{e.preventDefault();const submit=el('q19Submit');submit.disabled=true;el('q19Error').textContent='';try{const a=auth(),email=el('q19Email').value.trim(),pass=el('q19Password').value;let user;if(mode==='register'){const name=el('q19Name').value.trim();if(name.length<2)throw Error('Kullanıcı adı en az 2 karakter olmalı.');if(a.currentUser?.isAnonymous){const credential=firebase.auth.EmailAuthProvider.credential(email,pass);user=(await a.currentUser.linkWithCredential(credential)).user}else{user=(await a.createUserWithEmailAndPassword(email,pass)).user}await user.updateProfile({displayName:name})}else{user=(await a.signInWithEmailAndPassword(email,pass)).user}q19Render(user);q19Close()}catch(err){const codes={'auth/email-already-in-use':'Bu e-posta zaten kayıtlı. Giriş yapmayı dene.','auth/invalid-email':'Geçerli bir e-posta yaz.','auth/weak-password':'Daha güçlü bir şifre belirle.','auth/operation-not-allowed':'Firebase panelinden E-posta/Şifre girişini etkinleştirmen gerekiyor.','auth/invalid-credential':'E-posta veya şifre hatalı.','auth/credential-already-in-use':'Bu hesap zaten kullanılıyor. Giriş yapmayı dene.'};el('q19Error').textContent=codes[err.code]||err.message||'Bir hata oluştu.'}finally{submit.disabled=false}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('q19Backdrop').hidden)q19Close()});
 function init(){try{auth().onAuthStateChanged(q19Render)}catch(e){q19Render(null);console.warn('Quizloria hesap sistemi:',e)}}
 if(document.readyState==='complete')init();else window.addEventListener('load',init);
+})();
+</script>
+<script>
+/* V20: Opt-in cloud history sync. Only the authenticated user's own path is used. */
+(function(){
+ const status=()=>document.getElementById('q20Status');
+ function dbUser(){
+  if(!window.firebase||!firebase.apps.length)return null;
+  const u=firebase.auth().currentUser;
+  if(!u||u.isAnonymous)return null;
+  return {user:u,ref:firebase.database().ref('userProfiles/'+u.uid+'/history')};
+ }
+ function recordKey(record){
+  const str=JSON.stringify([record.type,record.date||record.at||record.timestamp||'',record.points,record.profile||'',record.correct||'',record.total||'']);
+  let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return 'r'+(h>>>0).toString(16);
+ }
+ function normalized(list){return (Array.isArray(list)?list:[]).filter(x=>x&&typeof x.type==='string').slice(0,100).map(x=>({type:String(x.type).slice(0,50),date:String(x.date||'').slice(0,80),at:x.at||null,points:Number.isFinite(x.points)?x.points:null,profile:String(x.profile||'').slice(0,120),correct:Number.isFinite(x.correct)?x.correct:null,total:Number.isFinite(x.total)?x.total:null}));}
+ window.q20Sync=async function(){
+  const context=dbUser();if(!context){alert('Önce hesabına giriş yap.');return}
+  const box=status();box.textContent='⏳ Senkronize ediliyor...';
+  try{
+   const snapshot=await context.ref.once('value');
+   const remote=snapshot.val()||{};
+   const owner=localStorage.getItem('q20_history_owner');
+   const local=owner&&owner!==context.user.uid?[]:normalized(readTestHistory());
+   const merged={...remote};local.forEach(r=>{merged[recordKey(r)]=r});
+   const items=Object.entries(merged).filter(([k,v])=>v&&typeof v.type==='string').slice(-100);
+   const result=Object.fromEntries(items);
+   await context.ref.set(result);
+   const combined=Object.values(result).sort((a,b)=>Date.parse(b.date||b.at||0)-Date.parse(a.date||a.at||0)).slice(0,100);
+   localStorage.setItem(HISTORY_KEY,JSON.stringify(combined));
+   localStorage.setItem('q20_history_owner',context.user.uid);
+   renderTestStats();renderAwards();renderV8XP();
+   box.textContent='✅ '+combined.length+' sonuç eşitlendi. Bu cihazda da güncellendi.';
+  }catch(e){console.error('Quizloria V20 sync:',e);box.textContent='⚠️ Eşitleme başarısız. Firebase veritabanı kurallarını ve internet bağlantını kontrol et.'}
+ };
+ window.q20SaveResult=async function(record){
+  const context=dbUser();if(!context)return;
+  // Only save automatically after user explicitly opted into sync on this device.
+  if(localStorage.getItem('q20_sync_optin_'+context.user.uid)!=='yes')return;
+  if(localStorage.getItem('q20_history_owner')!==context.user.uid)return;
+  try{const r=normalized([record])[0];if(r)await context.ref.child(recordKey(r)).set(r)}catch(e){console.warn('Bulut kaydı başarısız:',e)}
+ };
+ const oldSync=window.q20Sync;
+ window.q20Sync=async function(){const context=dbUser();if(!context)return oldSync();await oldSync();if(status().textContent.startsWith('✅'))localStorage.setItem('q20_sync_optin_'+context.user.uid,'yes')};
 })();
 </script>
 </body>
