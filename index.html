@@ -465,6 +465,13 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 #qSocial #qsBadge:not(:empty){background:#ab65e8;color:white;border-radius:99px;font-size:12px;padding:3px 9px}
 @media(max-width:740px){#qSocial{padding:20px 15px;margin:6px 0 28px;border-radius:20px}#qSocial .qs-grid{grid-template-columns:1fr;gap:13px}#qSocial .qs-card{padding:20px 17px}#qSocial .qs-card:last-child{grid-column:auto}#qSocial .qs-card h3{font-size:18px}}
 </style>
+<style>
+#qSocial [hidden]{display:none!important}
+.qs-login-gate{margin-top:14px;padding:17px;border:1px solid #7858ad;border-radius:14px;background:#ffffff0b}
+.qs-login-gate p{color:#e1d4f5;margin:0 0 13px;line-height:1.5}
+.qs-login-actions{display:flex;gap:10px;flex-wrap:wrap}
+.qs-login-actions button{flex:1;min-width:110px}
+</style>
 </head>
 
 <body data-quizloria-view="home">
@@ -520,7 +527,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <h2>👥 Quizloria Sosyal</h2><p>Arkadaşlarını bul, istek gönder ve kendi arkadaş listeni oluştur. Arkadaşlık isteklerini yalnızca hesabınla görebilirsin.</p>
 <p id="qsStatus" class="qs-status" role="status"></p>
 <div class="qs-grid">
-<div class="qs-card"><h3>👤 Sosyal profilin</h3><div id="qsMe">Giriş yapman gerekiyor.</div><label for="qsNickname">Görünen kullanıcı adı</label><input id="qsNickname" maxlength="24" placeholder="Kullanıcı adın" autocomplete="off"><button type="button" onclick="qSocialSave()">Profili Kaydet</button><p class="qs-muted">E-posta adresin diğer kullanıcılara gösterilmez. Profilin, kullanıcı adınla aranabilir.</p></div>
+<div class="qs-card"><h3>👤 Sosyal profilin</h3><div id="qsMe">Hesap durumu kontrol ediliyor...</div><div id="qsLoginGate" class="qs-login-gate" hidden><p>Arkadaşlarını bulmak için hesabına giriş yap veya ücretsiz kayıt ol.</p><div class="qs-login-actions"><button type="button" onclick="q19Open('login')">Giriş Yap</button><button type="button" onclick="q19Open('register')">Kayıt Ol</button></div></div><label for="qsNickname">Görünen kullanıcı adı</label><input id="qsNickname" maxlength="24" placeholder="Kullanıcı adın" autocomplete="off"><button type="button" onclick="qSocialSave()">Profili Kaydet</button><p class="qs-muted">E-posta adresin diğer kullanıcılara gösterilmez. Profilin, kullanıcı adınla aranabilir.</p></div>
 <div class="qs-card"><h3>🔎 Arkadaş ara</h3><input id="qsSearch" maxlength="24" placeholder="Tam kullanıcı adını yaz" autocomplete="off"><button type="button" onclick="qSocialFind()">Ara</button><div id="qsSearchResult"></div></div>
 <div class="qs-card"><h3>🔔 Arkadaşlık istekleri <span id="qsBadge"></span></h3><div id="qsRequests" class="qs-muted">Henüz istek yok.</div></div>
 <div class="qs-card"><h3>🤝 Arkadaşlarım</h3><div id="qsFriends" class="qs-muted">Henüz arkadaş yok.</div></div>
@@ -2152,7 +2159,7 @@ line(root,esc(p.name),[['İstek Gönder',()=>send(uid,p.name)]]);
 }catch(e){status('⚠️ Arama yapılamadı: '+e.message)}};
 async function send(uid,name){const u=user();if(!u)return;try{if(!await getProfile(u.uid)){status('Önce sosyal profilini kaydet.');return}const already=await db().ref('socialFriends/'+u.uid+'/'+uid).once('value');if(already.exists()){status('Zaten arkadaşsınız.');return}const mine=await getProfile(u.uid);await db().ref('socialRequests/'+uid+'/'+u.uid).set({name:mine.name,status:'pending'});status(name+' kullanıcısına arkadaşlık isteği gönderildi.')}catch(e){status('⚠️ İstek gönderilemedi: '+e.message)}}
 window.qSocialRefresh=function(){if(!user())status('Sosyal özellikleri kullanmak için giriş yapmalısın.');else status('Arkadaşlarını kullanıcı adıyla bulabilirsin.')};
-function start(u){clearWatchers();current=u?.uid||null;socialData={};if(!u||u.isAnonymous){$('qsMe').textContent='Giriş yapman gerekiyor.';status('Sosyal özellikler için giriş yap.');return}
+function start(u){clearWatchers();current=u?.uid||null;socialData={};const loggedIn=!!(u&&!u.isAnonymous);const gate=$('qsLoginGate');if(gate)gate.hidden=loggedIn;const cards=document.querySelectorAll('#qSocial .qs-card');cards.forEach((card,index)=>{if(index>0)card.hidden=!loggedIn});const nameInput=$('qsNickname');if(nameInput){nameInput.hidden=!loggedIn;const label=document.querySelector('label[for="qsNickname"]');if(label)label.hidden=!loggedIn;const save=nameInput.nextElementSibling;if(save&&save.tagName==='BUTTON')save.hidden=!loggedIn;}if(!u||u.isAnonymous){$('qsMe').textContent='🔒 Giriş yapmadın';$('qsNickname').value='';status('');return}
 getProfile(u.uid).then(p=>{if(current!==u.uid)return;const name=p?.name||u.displayName||'';$('qsMe').textContent=p?'👤 '+name:'Henüz sosyal profil oluşturmadın.';$('qsNickname').value=name}).catch(e=>status(e.message));
 watch('socialRequests/'+u.uid,v=>{socialData.requests=v;draw()});watch('socialFriends/'+u.uid,v=>{socialData.friends=v;draw()});}
 window.addEventListener('load',()=>{try{const a=firebase.apps.length?firebase.app().auth():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG).auth();a.onAuthStateChanged(start)}catch(e){status('Firebase bağlantısı kurulamadı: '+e.message)}});
