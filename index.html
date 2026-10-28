@@ -13,7 +13,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quizloria V23 | Ücretsiz Testler ve Eğlenceli Quizler</title>
+<title>Quizloria V25 | Ücretsiz Testler ve Eğlenceli Quizler</title>
 <meta name="description" content="Quizloria'da kişilik, futbol, müzik, genel kültür ve daha birçok konuda 27 ücretsiz test keşfet! Eğlenceli quizleri çöz, puan kazan ve arkadaşlarınla yarış.">
 <meta name="application-name" content="Quizloria">
 <meta property="og:type" content="website">
@@ -1809,6 +1809,13 @@ if(document.readyState==='complete')init();else window.addEventListener('load',i
 })();
 </script>
 <section id="q22Admin" class="q22-admin" hidden aria-label="Yönetici paneli"><h2>🛡️ Quizloria Yönetici Paneli</h2><p>Bu sayfa yalnızca yönetici hesabına açıktır. Ana sayfaya dönmek için üst menüyü kullanabilirsin.</p><p>Gelen önerileri burada yönetebilirsin. Bu bölüm yalnızca Firebase'de yetki verilen yönetici hesabında çalışır.</p><div class="q22-admin-toolbar"><button type="button" onclick="q22RefreshAdmin()">🔄 Yenile</button><span id="q22AdminStatus" class="q22-admin-status" role="status">Öneriler yükleniyor...</span></div><div id="q22AdminList" class="q22-admin-list"></div></section>
+<div id="q25DeleteDialog" class="q25-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="q25DeleteTitle" onclick="if(event.target===this)q25CloseDelete()">
+ <div class="q25-dialog"><div class="q25-icon">🗑️</div><h2 id="q25DeleteTitle">Öneriyi silmek istiyor musun?</h2><p>Bu işlem geri alınamaz. Öneri kalıcı olarak silinecek.</p><div class="q25-actions"><button type="button" id="q25CancelDelete" onclick="q25CloseDelete()">Vazgeç</button><button type="button" class="q25-danger" onclick="q25DoDelete()">Evet, Sil</button></div></div>
+</div>
+<style>
+.q25-overlay{position:fixed;inset:0;z-index:13000;display:grid;place-items:center;background:#06030bba;padding:20px;backdrop-filter:blur(7px)}
+.q25-overlay[hidden]{display:none!important}.q25-dialog{width:min(100%,430px);padding:30px;text-align:center;background:linear-gradient(145deg,#2b203d,#171322);border:1px solid #9b70c8;border-radius:22px;box-shadow:0 30px 80px #000b}.q25-dialog h2{font-size:22px;margin:10px 0}.q25-dialog p{color:#c8bbd9;line-height:1.6}.q25-icon{font-size:38px}.q25-actions{display:flex;gap:12px;justify-content:center;margin-top:22px}.q25-actions button{flex:1}.q25-danger{background:#a33355!important}.q25-danger:hover{background:#c13f66!important}
+</style>
 <style>
 .q22-pass-wrap{position:relative}.q19-modal .q22-pass-wrap input{padding-right:115px}.q22-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);padding:9px 10px;background:#382750;border:1px solid #72539b;border-radius:8px;font-size:12px;white-space:nowrap}.q22-eye:hover{background:#523678}
 .q22-admin-nav[hidden],#q22Admin[hidden]{display:none!important}.q22-admin-nav{border:1px solid #a58ad5!important;background:#382251!important;color:#fff!important}.q22-admin{max-width:1080px;min-height:65vh;margin:32px auto;padding:23px;border-radius:20px;background:linear-gradient(130deg,#25183b,#151321);border:1px solid #8257bb}.q22-admin h2{margin-top:0}.q22-admin-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:18px}.q22-admin-list{display:grid;gap:12px}.q22-admin-item{padding:17px;background:#ffffff0b;border:1px solid #64458b;border-radius:13px;overflow-wrap:anywhere}.q22-admin-item.read{opacity:.72}.q22-admin-meta{font-size:12px;color:#c8b6df}.q22-admin-message{white-space:pre-wrap;line-height:1.6}.q22-admin-actions{display:flex;gap:8px;flex-wrap:wrap}.q22-admin-actions button{padding:9px 13px;font-size:13px}.q22-admin-danger{background:#87334d!important}.q22-admin-status{color:#d5c3ef}
@@ -1823,7 +1830,20 @@ function db(){return firebase.database()}
 function fmtTime(v){return typeof v==='number'?new Date(v).toLocaleString('tr-TR'):'Tarih bilinmiyor'}
 function status(t){el('q22AdminStatus').textContent=t}
 function detach(){if(adminRef&&adminListener)adminRef.off('value',adminListener);adminRef=null;adminListener=null;feedbackRows={}}
-function render(){const list=el('q22AdminList');list.replaceChildren();const rows=Object.entries(feedbackRows).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));status(rows.length+' öneri bulundu.');if(!rows.length){const p=document.createElement('p');p.textContent='Henüz öneri yok.';list.append(p);return}for(const [key,row] of rows){const card=document.createElement('article');card.className='q22-admin-item'+(row.read?' read':'');const meta=document.createElement('p');meta.className='q22-admin-meta';meta.textContent=(row.read?'✅ Okundu':'🟣 Yeni')+' · '+(row.type||'Öneri')+' · '+fmtTime(row.createdAt);const message=document.createElement('p');message.className='q22-admin-message';message.textContent=row.message||'(Boş mesaj)';const sender=document.createElement('p');sender.className='q22-admin-meta';sender.textContent='Gönderen UID: '+(row.uid||'Bilinmiyor');const actions=document.createElement('div');actions.className='q22-admin-actions';const mark=document.createElement('button');mark.textContent=row.read?'↩️ Okunmadı':'✓ Okundu';mark.onclick=()=>updateFeedback(key,{read:!row.read});const del=document.createElement('button');del.className='q22-admin-danger';del.textContent='🗑️ Sil';del.onclick=()=>{if(confirm('Bu öneriyi kalıcı olarak silmek istiyor musun?'))updateFeedback(key,null)};actions.append(mark,del);card.append(meta,message,sender,actions);list.append(card)}}
+function render(){const list=el('q22AdminList');list.replaceChildren();const rows=Object.entries(feedbackRows).sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));status(rows.length+' öneri bulundu.');if(!rows.length){const p=document.createElement('p');p.textContent='Henüz öneri yok.';list.append(p);return}for(const [key,row] of rows){const card=document.createElement('article');card.className='q22-admin-item'+(row.read?' read':'');const meta=document.createElement('p');meta.className='q22-admin-meta';meta.textContent=(row.read?'✅ Okundu':'🟣 Yeni')+' · '+(row.type||'Öneri')+' · '+fmtTime(row.createdAt);const message=document.createElement('p');message.className='q22-admin-message';message.textContent=row.message||'(Boş mesaj)';const sender=document.createElement('p');sender.className='q22-admin-meta';sender.textContent='Gönderen UID: '+(row.uid||'Bilinmiyor');const actions=document.createElement('div');actions.className='q22-admin-actions';const mark=document.createElement('button');mark.textContent=row.read?'↩️ Okunmadı':'✓ Okundu';mark.onclick=()=>updateFeedback(key,{read:!row.read});const del=document.createElement('button');del.className='q22-admin-danger';del.textContent='🗑️ Sil';del.onclick=()=>q25ConfirmDelete(key);actions.append(mark,del);card.append(meta,message,sender,actions);list.append(card)}}
+let q25PendingDelete=null;
+window.q25ConfirmDelete=function(key){
+ if(!adminUser)return;
+ q25PendingDelete=key;
+ el('q25DeleteDialog').hidden=false;
+ el('q25CancelDelete').focus();
+};
+window.q25CloseDelete=function(){q25PendingDelete=null;el('q25DeleteDialog').hidden=true};
+window.q25DoDelete=async function(){
+ const key=q25PendingDelete;
+ q25CloseDelete();
+ if(key)await updateFeedback(key,null);
+};
 async function updateFeedback(key,data){if(!adminUser)return;try{await db().ref('feedback/'+key)[data===null?'remove':'update'](...(data===null?[]:[data]));status('✅ İşlem tamamlandı.')}catch(e){status('⚠️ İşlem yapılamadı: '+(e.code||e.message))}}
 async function checkAdmin(user){detach();adminUser=null;el('q22AdminNav').hidden=true;el('q22Admin').hidden=true;if(!user||user.isAnonymous){if(typeof openV9Page==='function')openV9Page('home');return;}try{const snap=await db().ref('admins/'+user.uid).once('value');if(auth()?.currentUser?.uid!==user.uid||snap.val()!==true)return;adminUser=user;el('q22AdminNav').hidden=false;adminRef=db().ref('feedback');adminListener=snap=>{feedbackRows=snap.val()||{};render()};adminRef.on('value',adminListener,e=>status('⚠️ Öneriler okunamadı: '+(e.code||e.message)))}catch(e){console.info('Yönetici yetkisi yok veya kurallar henüz kurulmadı:',e.code||e.message)}}
 window.q22OpenAdmin=function(){
@@ -1836,6 +1856,7 @@ window.q22OpenAdmin=function(){
  window.scrollTo({top:0,behavior:'instant'});
 };
 window.q22RefreshAdmin=function(){if(!adminUser)return;status('Yenileniyor...');db().ref('feedback').once('value').then(s=>{feedbackRows=s.val()||{};render()}).catch(e=>status('⚠️ '+(e.code||e.message)))};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('q25DeleteDialog').hidden)q25CloseDelete()});
 window.addEventListener('load',()=>{document.getElementById('q22AdminNav').hidden=true;document.getElementById('q22Admin').hidden=true;if(!auth())return;auth().onAuthStateChanged(checkAdmin)});
 })();
 </script>
