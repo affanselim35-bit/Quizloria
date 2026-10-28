@@ -972,6 +972,14 @@ function displayScoreRing(points){const ring=document.getElementById("scoreRing"
 function setResultSummary(items){const box=document.getElementById("resultSummary");box.replaceChildren();items.forEach(value=>{const span=document.createElement("span");span.className="result-chip";span.textContent=value;box.appendChild(span)});box.classList.remove("hidden")}
 // Sadece bağlantıyla açılan arkadaş testi; genel test listesine eklenmez.
 const KUZEY_TEST_KEY = 'kuzey-dalgic';
+const TALHA_TEST_KEY = 'talha-ozel';
+const TALHA_TEST_QUESTIONS = [
+  {q:'Affan eskiden Talha’yla futbol oynarken hangi terimi yanlış söylüyordu?',a:['Aut','Korner','Penaltı','Faul'],correct:1},
+  {q:'Eskiden aşağıya sadece iki kişi indiğimizde ne yapardık?',a:['Televizyon açardık','Havuza girerdik','Bahçede otururduk','Top oynardık'],correct:3},
+  {q:'Yaklaşık ne zamandır hep beraber aşağıya inmiyoruz?',a:['3 yıl','2 yıl','1 yıl','4 yıl'],correct:0},
+  {q:'Eskiden herkes çiğ köfte yerken Talha’nın bizi zorla götürttüğü yer neresiydi?',a:['Tavuk dönerci','Tostçu','Ev','Bakkal'],correct:0},
+  {q:'Affan eskiden maç yaparken hangi pozisyondaydı?',a:['Forvet','Orta saha','Kaleci','Defans'],correct:2}
+];
 const KUZEY_TEST_QUESTIONS = [
   {q:'Katil Paylaço oyununda genellikle ebe kim olur?',a:['Efe','Yahya','Affan','Kuzey'],correct:0},
   {q:'Kim 520’nin daha hızlı olduğunu düşünür?',a:['Affan','Talha','Kuzey','Ali Siraç'],correct:2},
@@ -980,8 +988,8 @@ const KUZEY_TEST_QUESTIONS = [
   {q:'Kaç tane asansör var? (Şaşırtmalı soru)',a:['3','Mal fiyap','5','Her zaman 1 tane çalışmayan vardır.'],correct:3}
 ];
 function openKuzeySpecialLink(){
-  if(new URLSearchParams(window.location.search).get('test') !== KUZEY_TEST_KEY) return;
-  startQuiz(KUZEY_TEST_KEY);
+  const key = new URLSearchParams(window.location.search).get('test');
+  if(key === KUZEY_TEST_KEY || key === TALHA_TEST_KEY) startQuiz(key);
 }
 window.addEventListener('load',()=>setTimeout(openKuzeySpecialLink,100));
 let activeQuiz = "personality";
@@ -1007,7 +1015,7 @@ function startQuiz(type = "personality") {
     pendingAnswer = null;
     // Her yeni denemede soruların sırası değişir, cevap anahtarları korunur.
     activeQuestionList = [...getQuestionBank(type)];
-    for (let i = type === KUZEY_TEST_KEY ? 0 : activeQuestionList.length - 1; i > 0; i--) {
+    for (let i = (type === KUZEY_TEST_KEY || type === TALHA_TEST_KEY) ? 0 : activeQuestionList.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [activeQuestionList[i], activeQuestionList[j]] = [activeQuestionList[j], activeQuestionList[i]];
     }
@@ -1018,6 +1026,7 @@ function startQuiz(type = "personality") {
 }
 function getQuestionBank(type = activeQuiz) {
     if (type === KUZEY_TEST_KEY) return KUZEY_TEST_QUESTIONS;
+    if (type === TALHA_TEST_KEY) return TALHA_TEST_QUESTIONS;
     if (V18_PERSONALITY[type]) return V18_PERSONALITY[type].questions;
     if (type === "football") return footballQuestions;
     if (type === "music") return musicQuestions;
@@ -1135,7 +1144,7 @@ function showResult() {
             history: "🏛️ Tarih Testi Sonucun",
             technology: "💻 Teknoloji Testi Sonucun",cars:"🏎️ Otomobil Testi Sonucun",animals:"🐾 Hayvanlar Testi Sonucun",sportsworld:"🏀 Spor Testi Sonucun",puzzles:"🧩 Bulmaca Testi Sonucun",mixed:"🧠 Karışık Test Sonucun"
         };
-        document.getElementById("resultTitle").textContent = activeQuiz === KUZEY_TEST_KEY ? "🎁 Kuzey Dalgıç’a Özel Test Tamamlandı!" : titles[activeQuiz];
+        document.getElementById("resultTitle").textContent = activeQuiz === KUZEY_TEST_KEY ? "🎁 Kuzey Dalgıç’a Özel Test Tamamlandı!" : activeQuiz === TALHA_TEST_KEY ? "🎁 Talha’ya Özel Test Tamamlandı!" : titles[activeQuiz];
         document.getElementById("resultText").textContent =
             total + " sorudan " + correctAnswers +
             " tanesini doğru cevapladın! Puanın: " + points + "/100 🏆";
@@ -1151,7 +1160,9 @@ function showResult() {
         else {const record=updatePersonalBest(activeQuiz,points);bestLine.textContent=(record.isNew?"🎉 Yeni kişisel rekor! ":"🥇 Kişisel rekorun: ")+record.best+"/100";bestLine.classList.remove("hidden");saveTestResult({type:activeQuiz,points,date:new Date().toISOString()})}
         refreshV5();
         document.getElementById("resultText").textContent = activeQuiz === KUZEY_TEST_KEY
-            ? `🎉 Kuzey Dalgıç! Bu test Quizloria’nın kurucusu tarafından sana özel hazırlandı. ${correctAnswers}/5 doğru • ${points}/100 puan!`
+            ? `🎉 Kuzey Dalgıç! Bu test Quizloria’nın kurucusu tarafından sana özel hazırlandı. ${correctAnswers}/${total} doğru • ${points}/100 puan!`
+            : activeQuiz === TALHA_TEST_KEY
+            ? `🎉 Talha! Bu test sana özel hazırlandı. ${correctAnswers}/${total} doğru • ${points}/100 puan!`
             : `✅ ${correctAnswers} doğru  •  ❌ ${wrongCount} yanlış  •  🏆 ${points}/100 puan`;
         const heading = document.createElement("h3");
         heading.textContent = "📋 Cevaplarını İncele";
