@@ -2182,7 +2182,7 @@ async function send(uid,name){
  }catch(e){
   const code=e?.code||'';
   if(stage==='istek kaydı'&&String(code).includes('PERMISSION_DENIED')){
-   status('⚠️ Firebase izin hatası (istek kaydı). Gönderen: '+u.uid.slice(0,6)+'… / Alıcı: '+String(uid).slice(0,6)+'… / Kuralların yayımlandığını ve socialRequests yazma iznini kontrol et.');
+   status('⚠️ İstek kaydı Firebase tarafından reddedildi. Gönderen UID: '+u.uid+' | Alıcı UID: '+String(uid)+' | Gönderilen ad: '+JSON.stringify(mine.name)+' ('+mine.name.length+' karakter) | Firebase hata kodu: '+String(code)+'. Bu bilgileri kopyalayıp paylaşabilirsin.');
   }else status('⚠️ '+stage+' aşamasında hata: '+(e?.message||e));
   console.error('Quizloria Sosyal - '+stage,e);
  }
