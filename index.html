@@ -399,6 +399,9 @@ html[data-v11-theme]:not([data-v11-theme="purple"]) .v8-status,html[data-v11-the
 .v17-select{display:block;width:100%;box-sizing:border-box;margin:8px 0 13px;padding:12px;border-radius:10px;background:#211832;color:white;border:1px solid #9172bb;font:inherit}.v17-pill{display:inline-block;background:#35214f;border:1px solid #8f67c5;border-radius:10px;padding:9px 12px;margin:8px 5px 8px 0}.v17-clock{font-size:22px;font-weight:800;color:#e8d3ff;margin:12px 0}.v17-clock.danger{color:#ff8c9c}
 .v18-personality-note{margin:15px auto;padding:13px;border:1px solid #7354a3;border-radius:12px;background:#292039;color:#e8dafa;font-size:14px}
 
+/* Ana sayfada yarım kalan test kutusunu gösterme */
+#v11Resume{display:none!important}
+
 /* Quizloria V19 — responsive account experience */
 .q19-entry{max-width:560px;margin:22px auto 0;padding:20px;border:1px solid #8b65c7;border-radius:20px;background:linear-gradient(130deg,#261b3e,#161321);box-shadow:0 14px 38px #0005;text-align:left}
 .q19-entry h2{margin:0 0 8px;font-size:21px}.q19-entry p{color:#c9bfda;font-size:14px;line-height:1.5;margin:5px 0 14px}.q19-buttons{display:flex;flex-wrap:wrap;gap:10px}.q19-buttons button{flex:1;min-width:115px}.q19-outline{background:transparent;border:1px solid #a884e6}.q19-outline:hover{background:#49356c}
@@ -1393,7 +1396,7 @@ function renderV9Missions(){
 
 // V9: Each navigation tab is a separate view, rather than an anchor scroll.
 const v9ViewGroups={
- home:['.hero','.daily-panel','#v11Resume'],
+ home:['.hero','.daily-panel'],
  tests:['#v9Tests','.v9-difficulty','.test-discovery','#testGrid','#noTests'],
  games:['#v9Games'],
  psychology:['#psyHub'],
