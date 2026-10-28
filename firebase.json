@@ -1,0 +1,7 @@
+{
+  "database": {
+    "instance": "quizora-b1497-default-rtdb",
+    "rules": "database.rules.json"
+  }
+}
+
