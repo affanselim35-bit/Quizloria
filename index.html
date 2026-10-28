@@ -13,7 +13,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quizloria | Ücretsiz Testler ve Eğlenceli Quizler</title>
+<title>Quizloria V23 | Ücretsiz Testler ve Eğlenceli Quizler</title>
 <meta name="description" content="Quizloria'da kişilik, futbol, müzik, genel kültür ve daha birçok konuda 27 ücretsiz test keşfet! Eğlenceli quizleri çöz, puan kazan ve arkadaşlarınla yarış.">
 <meta name="application-name" content="Quizloria">
 <meta property="og:type" content="website">
@@ -1826,7 +1826,7 @@ async function updateFeedback(key,data){if(!adminUser)return;try{await db().ref(
 async function checkAdmin(user){detach();adminUser=null;el('q22AdminNav').hidden=true;el('q22Admin').hidden=true;if(!user||user.isAnonymous)return;try{const snap=await db().ref('admins/'+user.uid).once('value');if(auth()?.currentUser?.uid!==user.uid||snap.val()!==true)return;adminUser=user;el('q22AdminNav').hidden=false;adminRef=db().ref('feedback');adminListener=snap=>{feedbackRows=snap.val()||{};render()};adminRef.on('value',adminListener,e=>status('⚠️ Öneriler okunamadı: '+(e.code||e.message)))}catch(e){console.info('Yönetici yetkisi yok veya kurallar henüz kurulmadı:',e.code||e.message)}}
 window.q22OpenAdmin=function(){if(!adminUser){alert('Yönetici yetkisi gerekli.');return}if(typeof openV9Page==='function')openV9Page('home');el('q22Admin').hidden=false;el('q22Admin').scrollIntoView({behavior:'smooth'})};
 window.q22RefreshAdmin=function(){if(!adminUser)return;status('Yenileniyor...');db().ref('feedback').once('value').then(s=>{feedbackRows=s.val()||{};render()}).catch(e=>status('⚠️ '+(e.code||e.message)))};
-window.addEventListener('load',()=>{if(!auth())return;auth().onAuthStateChanged(checkAdmin)});
+window.addEventListener('load',()=>{document.getElementById('q22AdminNav').hidden=true;document.getElementById('q22Admin').hidden=true;if(!auth())return;auth().onAuthStateChanged(checkAdmin)});
 })();
 </script>
 </body>
