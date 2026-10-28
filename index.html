@@ -966,6 +966,20 @@ function renderTestStats(){
 function clearTestHistory(){if(!confirm("Bu cihazdaki test geçmişini ve günlük görev XP ödüllerini silmek istiyor musun? Bulut geçmişi otomatik silinmez."))return;try{localStorage.removeItem(HISTORY_KEY);localStorage.removeItem(V9_BONUS_KEY)}catch(e){}renderTestStats();renderAwards();renderDailyChallenge();renderV9Missions();renderV8XP()}
 function displayScoreRing(points){const ring=document.getElementById("scoreRing");ring.classList.remove("hidden");ring.style.setProperty("--score",points);document.getElementById("scoreRingValue").innerHTML=points+"<small>/100</small>";document.getElementById("personalitySparkle").classList.add("hidden")}
 function setResultSummary(items){const box=document.getElementById("resultSummary");box.replaceChildren();items.forEach(value=>{const span=document.createElement("span");span.className="result-chip";span.textContent=value;box.appendChild(span)});box.classList.remove("hidden")}
+// Sadece bağlantıyla açılan arkadaş testi; genel test listesine eklenmez.
+const KUZEY_TEST_KEY = 'kuzey-dalgic';
+const KUZEY_TEST_QUESTIONS = [
+  {q:'Katil Paylaço oyununda genellikle ebe kim olur?',a:['Efe','Yahya','Affan','Kuzey'],correct:0},
+  {q:'Kim 520’nin daha hızlı olduğunu düşünür?',a:['Affan','Talha','Kuzey','Ali Siraç'],correct:2},
+  {q:'Kim aşağıya inmez?',a:['Kuzey','Affan','Talha','Efe'],correct:1},
+  {q:'Eskiden apartmanda gizlice girilen yer neresiydi?',a:['Kafe','Otopark','Çatı','Kat merdivenleri'],correct:2},
+  {q:'Kaç tane asansör var? (Şaşırtmalı soru)',a:['3','Mal fiyap','5','Her zaman 1 tane çalışmayan vardır.'],correct:3}
+];
+function openKuzeySpecialLink(){
+  if(new URLSearchParams(window.location.search).get('test') !== KUZEY_TEST_KEY) return;
+  startQuiz(KUZEY_TEST_KEY);
+}
+window.addEventListener('load',()=>setTimeout(openKuzeySpecialLink,100));
 let activeQuiz = "personality";
 let pendingAnswer = null;
 let activeQuestionList = [];
@@ -989,7 +1003,7 @@ function startQuiz(type = "personality") {
     pendingAnswer = null;
     // Her yeni denemede soruların sırası değişir, cevap anahtarları korunur.
     activeQuestionList = [...getQuestionBank(type)];
-    for (let i = activeQuestionList.length - 1; i > 0; i--) {
+    for (let i = type === KUZEY_TEST_KEY ? 0 : activeQuestionList.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [activeQuestionList[i], activeQuestionList[j]] = [activeQuestionList[j], activeQuestionList[i]];
     }
@@ -999,6 +1013,7 @@ function startQuiz(type = "personality") {
     showQuestion();
 }
 function getQuestionBank(type = activeQuiz) {
+    if (type === KUZEY_TEST_KEY) return KUZEY_TEST_QUESTIONS;
     if (V18_PERSONALITY[type]) return V18_PERSONALITY[type].questions;
     if (type === "football") return footballQuestions;
     if (type === "music") return musicQuestions;
@@ -1116,11 +1131,14 @@ function showResult() {
             history: "🏛️ Tarih Testi Sonucun",
             technology: "💻 Teknoloji Testi Sonucun",cars:"🏎️ Otomobil Testi Sonucun",animals:"🐾 Hayvanlar Testi Sonucun",sportsworld:"🏀 Spor Testi Sonucun",puzzles:"🧩 Bulmaca Testi Sonucun",mixed:"🧠 Karışık Test Sonucun"
         };
-        document.getElementById("resultTitle").textContent = titles[activeQuiz];
+        document.getElementById("resultTitle").textContent = activeQuiz === KUZEY_TEST_KEY ? "🎁 Kuzey Dalgıç’a Özel Test Tamamlandı!" : titles[activeQuiz];
         document.getElementById("resultText").textContent =
             total + " sorudan " + correctAnswers +
             " tanesini doğru cevapladın! Puanın: " + points + "/100 🏆";
         displayScoreRing(points);
+        if(activeQuiz === KUZEY_TEST_KEY){
+          document.getElementById("resultText").textContent = "Kuzey Dalgıç, bu test sana özel hazırlandı! 🎉";
+        }
         const wrongCount = total - correctAnswers;
         setResultSummary(["✅ "+correctAnswers+" doğru","❌ "+wrongCount+" yanlış","🏅 "+level]);
         v6WrongQuestions=getActiveQuestions().filter((item,i)=>selectedAnswers[i]!==item.correct);
@@ -1128,8 +1146,9 @@ function showResult() {
         if(v6Practice){bestLine.textContent="🧩 Yanlışları tekrar etme turu · Bu tur istatistiklerine eklenmez.";bestLine.classList.remove("hidden")}
         else {const record=updatePersonalBest(activeQuiz,points);bestLine.textContent=(record.isNew?"🎉 Yeni kişisel rekor! ":"🥇 Kişisel rekorun: ")+record.best+"/100";bestLine.classList.remove("hidden");saveTestResult({type:activeQuiz,points,date:new Date().toISOString()})}
         refreshV5();
-        document.getElementById("resultText").textContent =
-            `✅ ${correctAnswers} doğru  •  ❌ ${wrongCount} yanlış  •  🏆 ${points}/100 puan`;
+        document.getElementById("resultText").textContent = activeQuiz === KUZEY_TEST_KEY
+            ? `🎉 Kuzey Dalgıç! Bu test Quizloria’nın kurucusu tarafından sana özel hazırlandı. ${correctAnswers}/5 doğru • ${points}/100 puan!`
+            : `✅ ${correctAnswers} doğru  •  ❌ ${wrongCount} yanlış  •  🏆 ${points}/100 puan`;
         const heading = document.createElement("h3");
         heading.textContent = "📋 Cevaplarını İncele";
         review.appendChild(heading);
@@ -1845,7 +1864,7 @@ window.q25DoDelete=async function(){
  if(key)await updateFeedback(key,null);
 };
 async function updateFeedback(key,data){if(!adminUser)return;try{await db().ref('feedback/'+key)[data===null?'remove':'update'](...(data===null?[]:[data]));status('✅ İşlem tamamlandı.')}catch(e){status('⚠️ İşlem yapılamadı: '+(e.code||e.message))}}
-async function checkAdmin(user){detach();adminUser=null;el('q22AdminNav').hidden=true;el('q22Admin').hidden=true;if(!user||user.isAnonymous){if(typeof openV9Page==='function')openV9Page('home');return;}try{const snap=await db().ref('admins/'+user.uid).once('value');if(auth()?.currentUser?.uid!==user.uid||snap.val()!==true)return;adminUser=user;el('q22AdminNav').hidden=false;adminRef=db().ref('feedback');adminListener=snap=>{feedbackRows=snap.val()||{};render()};adminRef.on('value',adminListener,e=>status('⚠️ Öneriler okunamadı: '+(e.code||e.message)))}catch(e){console.info('Yönetici yetkisi yok veya kurallar henüz kurulmadı:',e.code||e.message)}}
+async function checkAdmin(user){detach();adminUser=null;el('q22AdminNav').hidden=true;el('q22Admin').hidden=true;if(!user||user.isAnonymous){if(typeof openV9Page==='function' && new URLSearchParams(location.search).get('test')!=='kuzey-dalgic')openV9Page('home');return;}try{const snap=await db().ref('admins/'+user.uid).once('value');if(auth()?.currentUser?.uid!==user.uid||snap.val()!==true)return;adminUser=user;el('q22AdminNav').hidden=false;adminRef=db().ref('feedback');adminListener=snap=>{feedbackRows=snap.val()||{};render()};adminRef.on('value',adminListener,e=>status('⚠️ Öneriler okunamadı: '+(e.code||e.message)))}catch(e){console.info('Yönetici yetkisi yok veya kurallar henüz kurulmadı:',e.code||e.message)}}
 window.q22OpenAdmin=function(){
  if(!adminUser||auth()?.currentUser?.uid!==adminUser.uid){alert('Yönetici yetkisi gerekli.');return}
  if(typeof showSection==='function')showSection('home');
