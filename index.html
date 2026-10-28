@@ -1686,8 +1686,8 @@ openV9Page("home");
   <select id="feedbackType"><option>💡 Yeni özellik önerisi</option><option>🧠 Yeni test isteği</option><option>🐛 Hata bildirimi</option><option>⭐ Genel değerlendirme</option></select>
   <label for="feedbackMessage">Mesajın</label>
   <textarea id="feedbackMessage" maxlength="1500" placeholder="Quizloria'da şunu görmek isterdim..."></textarea>
-  <button id="feedbackSend" class="feedback-send" type="button" disabled>🚀 Önerimi Gönder</button>
-  <p class="feedback-note" id="feedbackStatus" role="status">🛠️ Ön izleme: Gönderim henüz aktif değil. Google Forms bağlantısı eklendiğinde öneriler iletilebilecek.</p>
+  <button id="feedbackSend" class="feedback-send" type="button" onclick="sendQuizloriaFeedback()">🚀 Önerimi Gönder</button>
+  <p class="feedback-note" id="feedbackStatus" role="status">🔒 Öneri göndermek için Quizloria hesabınla giriş yapmalısın.</p>
  </section>
 </div>
 <script>
@@ -1695,6 +1695,34 @@ let feedbackPreviousFocus=null;
 function openFeedback(){feedbackPreviousFocus=document.activeElement;document.getElementById('feedbackBackdrop').hidden=false;document.getElementById('feedbackType').focus()}
 function closeFeedback(){document.getElementById('feedbackBackdrop').hidden=true;if(feedbackPreviousFocus)feedbackPreviousFocus.focus()}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.getElementById('feedbackBackdrop').hidden)closeFeedback()});
+// V21: Firebase Realtime Database üzerinden güvenli öneri gönderimi.
+let q21Sending=false;
+async function sendQuizloriaFeedback(){
+ const status=document.getElementById('feedbackStatus');
+ const button=document.getElementById('feedbackSend');
+ const message=document.getElementById('feedbackMessage').value.trim();
+ const type=document.getElementById('feedbackType').value;
+ if(q21Sending)return;
+ if(message.length<5){status.textContent='⚠️ Mesajın en az 5 karakter olmalı.';return}
+ if(!window.firebase||!firebase.apps.length){status.textContent='⚠️ Bağlantı kurulamadı. Sayfayı yenileyip tekrar dene.';return}
+ const user=firebase.auth().currentUser;
+ if(!user||user.isAnonymous){status.textContent='🔒 Öneri göndermek için önce hesabına giriş yap.';return}
+ q21Sending=true;button.disabled=true;status.textContent='⏳ Önerin gönderiliyor...';
+ try{
+  await firebase.database().ref('feedback').push().set({
+   uid:user.uid,
+   type:type,
+   message:message,
+   createdAt:firebase.database.ServerValue.TIMESTAMP
+  });
+  status.textContent='✅ Önerin başarıyla iletildi. Teşekkürler!';
+  document.getElementById('feedbackMessage').value='';
+ }catch(err){
+  console.error('Quizloria feedback:',err);
+  status.textContent=err.code==='PERMISSION_DENIED'||String(err.code).includes('permission-denied')?'⚠️ Firebase öneri kuralları henüz ayarlanmamış.':'⚠️ Gönderilemedi. İnternet bağlantını kontrol edip tekrar dene.';
+ }finally{q21Sending=false;button.disabled=false}
+}
+
 
 
 </script>
