@@ -2165,7 +2165,28 @@ window.qSocialFind=async function(){const u=user();if(!u){status('Önce giriş y
 try{const snap=await db().ref('socialNames/'+key).once('value'),uid=snap.val();if(!uid){root.textContent='Kullanıcı bulunamadı.';return}const p=await getProfile(uid);if(!p){root.textContent='Kullanıcı bulunamadı.';return}if(uid===u.uid){root.textContent='Bu senin profilin.';return}
 line(root,esc(p.name),[['İstek Gönder',()=>send(uid,p.name)]]);
 }catch(e){status('⚠️ Arama yapılamadı: '+e.message)}};
-async function send(uid,name){const u=user();if(!u)return;try{await ensureSocialProfile(u);const already=await db().ref('socialFriends/'+u.uid+'/'+uid).once('value');if(already.exists()){status('Zaten arkadaşsınız.');return}const mine=await getProfile(u.uid);await db().ref('socialRequests/'+uid+'/'+u.uid).set({name:mine.name,status:'pending'});status(name+' kullanıcısına arkadaşlık isteği gönderildi.')}catch(e){status('⚠️ İstek gönderilemedi: '+e.message)}}
+async function send(uid,name){
+ const u=user();if(!u){status('⚠️ İstek göndermek için giriş yap.');return}
+ let stage='başlangıç';
+ try{
+  stage='profil eşitleme';await ensureSocialProfile(u);
+  stage='arkadaşlık kontrolü';const already=await db().ref('socialFriends/'+u.uid+'/'+uid).once('value');
+  if(already.exists()){status('Zaten arkadaşsınız.');return}
+  stage='gönderen profili';const mine=await getProfile(u.uid);
+  if(!mine||!mine.name)throw Error('Sosyal profilin bulunamadı. Kullanıcı Adımı Eşitle butonuna bas.');
+  stage='alıcı profili';const recipient=await getProfile(uid);
+  if(!recipient)throw Error('Alıcının sosyal profili bulunamadı.');
+  stage='istek kaydı';
+  await db().ref('socialRequests/'+uid+'/'+u.uid).set({name:mine.name,status:'pending'});
+  status('✅ '+name+' kullanıcısına arkadaşlık isteği gönderildi.');
+ }catch(e){
+  const code=e?.code||'';
+  if(stage==='istek kaydı'&&String(code).includes('PERMISSION_DENIED')){
+   status('⚠️ Firebase izin hatası (istek kaydı). Gönderen: '+u.uid.slice(0,6)+'… / Alıcı: '+String(uid).slice(0,6)+'… / Kuralların yayımlandığını ve socialRequests yazma iznini kontrol et.');
+  }else status('⚠️ '+stage+' aşamasında hata: '+(e?.message||e));
+  console.error('Quizloria Sosyal - '+stage,e);
+ }
+}
 window.qSocialRefresh=function(){if(!user())status('Sosyal özellikleri kullanmak için giriş yapmalısın.');else status('Arkadaşlarını kullanıcı adıyla bulabilirsin.')};
 function start(u){clearWatchers();current=u?.uid||null;socialData={};const loggedIn=!!(u&&!u.isAnonymous);const gate=$('qsLoginGate');if(gate)gate.hidden=loggedIn;const cards=document.querySelectorAll('#qSocial .qs-card');cards.forEach((card,index)=>{if(index>0)card.hidden=!loggedIn});const nameInput=$('qsNickname');if(nameInput){nameInput.hidden=!loggedIn;const label=document.querySelector('label[for="qsNickname"]');if(label)label.hidden=!loggedIn;const save=nameInput.nextElementSibling;if(save&&save.tagName==='BUTTON')save.hidden=!loggedIn;}if(!u||u.isAnonymous){$('qsMe').textContent='🔒 Giriş yapmadın';$('qsNickname').value='';status('');return}
 ensureSocialProfile(u).then(p=>{if(current!==u.uid)return;$('qsMe').textContent='👤 '+p.name;$('qsNickname').value=p.name}).catch(e=>status('⚠️ Kullanıcı adı eşitlenemedi: '+e.message));
