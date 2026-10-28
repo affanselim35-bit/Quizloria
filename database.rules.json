@@ -88,7 +88,7 @@
       "$recipientUid": {
         ".read": "auth != null && auth.uid === $recipientUid",
         "$senderUid": {
-          ".write": "auth != null && ((auth.uid === $senderUid && auth.uid !== $recipientUid && !data.exists() && newData.exists() && newData.child('status').val() === 'pending') || (auth.uid === $recipientUid && !newData.exists()))",
+          ".write": "auth != null && ((auth.uid === $senderUid && auth.uid !== $recipientUid && (!data.exists() || (data.child('status').val() === 'pending' && newData.child('name').val() === data.child('name').val())) && newData.exists() && newData.child('status').val() === 'pending') || (auth.uid === $recipientUid && !newData.exists()))",
           ".validate": "newData.hasChildren(['name','status']) && newData.child('name').isString() && newData.child('name').val().length >= 3 && newData.child('name').val().length <= 24 && (newData.child('status').val() === 'pending' || newData.child('status').val() === 'accepted')",
           "status": {
             ".write": "auth != null && auth.uid === $recipientUid && data.val() === 'pending' && newData.val() === 'accepted'",
