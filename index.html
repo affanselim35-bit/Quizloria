@@ -472,6 +472,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 .qs-login-actions{display:flex;gap:10px;flex-wrap:wrap}
 .qs-login-actions button{flex:1;min-width:110px}
 </style>
+<style>.v14-score{flex-wrap:wrap;justify-content:flex-start}.v14-score span{flex:1 1 130px;overflow-wrap:anywhere}#qSocial button:disabled{opacity:.5;cursor:wait}</style>
 </head>
 
 <body data-quizloria-view="home">
@@ -495,13 +496,14 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <div id="v8WheelStatus" class="v8-status" aria-live="polite">Çark seni hangi teste götürecek?</div><div id="v8WheelResult" class="v8-wheel-result" hidden><span id="v8WheelPicked"></span><button id="v8PlayPicked" type="button" onclick="playV8Picked()">▶️ Teste Başla</button></div>
 <div class="v8-actions"><button id="v8SpinBtn" type="button" onclick="spinV8Wheel()">🎡 Şans Çarkını Çevir</button><button type="button" onclick="startMixedV8()">🧠 Karışık Test · 20 Soru</button></div>
 <div class="v6-mode-panel"><label for="quizMode"><strong>⚡ Oyun Modu</strong><br><small>Hız modunda her soru için 15 saniyen var.</small></label><select id="quizMode"><option value="normal">🌿 Normal Mod</option><option value="speed">⚡ Hız Modu · 15 sn</option></select></div>
-<div class="v13panel v14-lobby"><h2>🌐 Online Düello Odaları</h2><p>Arkadaşınla farklı bilgisayarlardan aynı anda yarış! Bir oda aç, altı haneli kodu paylaş veya arkadaşının kodunu gir.</p>
-<div id="v14SetupWarning" class="v14-notice">🌐 Online düello hazır! Oda oluştur veya kodla katıl. Firebase kuralları yayımlanmış olmalı.</div>
+<div class="v13panel v14-lobby"><h2>🌐 Online Düello Odaları</h2><p>2–5 kişi farklı cihazlardan aynı anda yarışın! Bir oda aç, altı haneli kodu paylaş; en az iki kişiyle başla.</p>
+<div id="v14SetupWarning" class="v14-notice">🌐 2–5 kişilik online yarışma hazır! Oda oluştur veya arkadaşının koduyla katıl.</div>
 <div class="v14-rooms"><div><h3>🏠 Oda Oluştur</h3><label for="v14HostName">Oyuncu adın</label><input id="v14HostName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname">
+<label for="vPartyCapacity">👥 Oda kapasitesi</label><select id="vPartyCapacity" class="v17-select"><option value="2">2 kişilik düello</option><option value="3">3 kişilik yarışma</option><option value="4">4 kişilik yarışma</option><option value="5" selected>5 kişilik yarışma</option></select>
 <label for="v17Test">🧠 Düello testi</label><select id="v17Test" class="v17-select"><option value="mixed">🎲 Rastgele karışık</option></select>
 <label for="v17Mode">⚡ Oyun modu</label><select id="v17Mode" class="v17-select" onchange="v17ModeChanged()"><option value="normal">🌿 Normal (süresiz)</option><option value="timed">⏱️ Süreli</option></select>
 <div id="v17TimeRow" hidden><label for="v17Time">⏳ Soru başına süre</label><select id="v17Time" class="v17-select"><option value="10">10 saniye</option><option value="15" selected>15 saniye</option><option value="20">20 saniye</option><option value="30">30 saniye</option></select></div><button id="v14CreateBtn" onclick="v14CreateRoom()">➕ Oda Oluştur</button></div><div><h3>🔑 Odaya Katıl</h3><label for="v14GuestName">Oyuncu adın</label><input id="v14GuestName" maxlength="24" placeholder="Oyuncu adın" autocomplete="nickname"><label for="v14RoomCode">6 haneli oda kodu</label><input id="v14RoomCode" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" placeholder="Örn. 482915"><button id="v14JoinBtn" onclick="v14JoinRoom()">🚀 Odaya Katıl</button></div></div>
-<p class="v14-hint">İki oyuncunun da internete bağlı olması gerekir. Oda kodunu yalnızca oynayacağın kişiyle paylaş.</p></div><hr style="border:0;border-top:1px solid #604c83;margin:22px 0">
+<p class="v14-hint">Tüm oyuncular internete bağlı olmalı. Oda kodunu yalnızca birlikte oynayacağın arkadaşlarınla paylaş. Oda sahibi ayrılırsa oyun kapanır.</p></div><hr style="border:0;border-top:1px solid #604c83;margin:22px 0">
 <h2>🏅 Quizloria Seviyen</h2><div id="v8XpLabel" aria-live="polite">Seviye 1 · 0 XP</div><div class="v8-xp-track"><div id="v8XpFill" class="v8-xp-fill" style="width:0%"></div></div><small id="v8XpNext">Sonraki seviyeye 100 XP</small>
 </section>
 
@@ -530,6 +532,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <div class="qs-card"><h3>👤 Sosyal profilin</h3><div id="qsMe">Hesap durumu kontrol ediliyor...</div><div id="qsLoginGate" class="qs-login-gate" hidden><p>Arkadaşlarını bulmak için hesabına giriş yap veya ücretsiz kayıt ol.</p><div class="qs-login-actions"><button type="button" onclick="q19Open('login')">Giriş Yap</button><button type="button" onclick="q19Open('register')">Kayıt Ol</button></div></div><input id="qsNickname" type="hidden"><button type="button" onclick="qSocialSave()">🔄 Kullanıcı Adımı Eşitle</button><p class="qs-muted">Kullanıcı adın kayıt olurken belirlediğin isimdir. E-posta adresin diğer kullanıcılara gösterilmez.</p></div>
 <div class="qs-card"><h3>🔎 Arkadaş ara</h3><input id="qsSearch" maxlength="24" placeholder="Tam kullanıcı adını yaz" autocomplete="off"><button type="button" onclick="qSocialFind()">Ara</button><div id="qsSearchResult"></div></div>
 <div class="qs-card"><h3>🔔 Arkadaşlık istekleri <span id="qsBadge"></span></h3><div id="qsRequests" class="qs-muted">Henüz istek yok.</div></div>
+<div class="qs-card"><h3>📤 Gönderilen istekler</h3><div id="qsSent" class="qs-muted">Bekleyen gönderilmiş isteğin yok.</div></div>
 <div class="qs-card"><h3>🤝 Arkadaşlarım</h3><div id="qsFriends" class="qs-muted">Henüz arkadaş yok.</div></div>
 <div class="qs-card"><h3>🏆 Arkadaş sıralaması</h3><p class="qs-muted">Şimdilik arkadaşlarını listeler. Doğrulanmış puan sistemi sonraki güncellemede eklenecek.</p><div id="qsLeaderboard"></div></div>
 </div></section><section id="qCustomBuilder" style="display:none" aria-label="Özel test oluşturucu"><h2>🎁 Arkadaşına Özel Test Oluştur</h2><p class="qc-muted">5–15 soru hazırla, her soru için dört şık ve doğru cevabı seç. Oluşturduğun test normal listede görünmez. Bağlantıyı alan herkes çözebilir.</p><label for="qcTitle">Testin adı</label><input id="qcTitle" maxlength="70" placeholder="Örn. Arkadaşım beni ne kadar tanıyor?"><label for="qcCount">Soru sayısı</label><select id="qcCount" onchange="qcBuild()"></select><div id="qcFields"></div><button type="button" id="qcPublish" onclick="qcPublish()">🔗 Özel Bağlantı Oluştur</button><div id="qcStatus" class="qc-status" role="status" aria-live="polite"></div></section><section id="psyHub" style="display:none" aria-label="Psikolojik farkındalık anketleri"><h2>🧠 Psikolojik Farkındalık</h2><p class="psy-muted">Psikoloji araştırmalarında incelenen konulara dayalı, özgün öz değerlendirme soruları. Bunlar klinik olarak doğrulanmış ölçekler değildir; tanı, risk tahmini veya tedavi önerisi sunmaz.</p><div id="psyContent"></div></section><section id="v13Builder" class="v13panel"><h2>✍️ Kendi Testini Oluştur</h2><p>Her soruya 4 seçenek ekle ve doğru cevabı belirle. Testlerin bu cihazda saklanır.</p><input id="v13Title" placeholder="Testin adı" maxlength="60"><input id="v13Q" placeholder="Soru" maxlength="200"><div class="v13options"><input class="v13A" placeholder="A seçeneği"><input class="v13A" placeholder="B seçeneği"><input class="v13A" placeholder="C seçeneği"><input class="v13A" placeholder="D seçeneği"></div><label>Doğru cevap: <select id="v13Correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label><button onclick="v13Add()">➕ Soru Ekle</button><p id="v13Count">0 soru</p><button onclick="v13Save()">💾 Testi Kaydet</button><button onclick="v13Draft=[];document.getElementById('v13Count').textContent='0 soru'">Taslağı Temizle</button><h3>Testlerim</h3><div id="v13List"></div></section><section id="v9Missions"  class="v9-missions" aria-label="Günlük görevler"><h2>🎯 Günlük Görevler</h2><p>Bugün test çözerek görevleri tamamla, bonus XP kazan. Görevler her gün yenilenir.</p><div id="v9MissionGrid" class="v9-mission-grid"></div><p id="v9MissionStatus" role="status" style="margin-top:13px"></p></section>
@@ -1572,157 +1575,8 @@ function openV9Page(view='home'){
 // Online odalar için Firebase yapılandırması burada etkinleştirilecek.
 // Firebase proje bilgileri herkese açık istemci ayarlarıdır; özel anahtar veya servis hesabı eklemeyin.
 const QUIZORA_FIREBASE_CONFIG = {"apiKey": "AIzaSyBHG6jgn5Et-hkwgfX7z6mmKjIlboMW1CY", "authDomain": "quizora-b1497.firebaseapp.com", "databaseURL": "https://quizora-b1497-default-rtdb.europe-west1.firebasedatabase.app", "projectId": "quizora-b1497", "storageBucket": "quizora-b1497.firebasestorage.app", "messagingSenderId": "780622338323", "appId": "1:780622338323:web:253a7f97b252da6b2fe2e6", "measurementId": "G-35PRTR2B96"};
-let v14Db=null,v14Auth=null,v14Session=null,v14RoomRef=null,v14RoomListener=null,v14Snapshot=null,v14Chosen=null,v14Submitting=false,v14LastIndex=-1;
-let v17Deadline=0,v17TimerId=null,v17TimedOut=false;
 function v17ModeChanged(){document.getElementById('v17TimeRow').hidden=document.getElementById('v17Mode').value!=='timed'}
 function v17InitOptions(){const el=document.getElementById('v17Test');if(!el||el.options.length>1)return;V8_TYPES.forEach(type=>{const opt=document.createElement('option');opt.value=type;opt.textContent=quizNames[type]||type;el.append(opt)})}
-function v17ResetTimer(){if(v17TimerId)clearInterval(v17TimerId);v17TimerId=null;v17Deadline=0;v17TimedOut=false}
-function v17StartTimer(){v17ResetTimer();const r=v14Snapshot;if(!r||r.mode!=='timed'||r.status!=='playing')return;v17Deadline=Date.now()+Number(r.seconds||15)*1000;v17TimerId=setInterval(v17Tick,250);v17Tick()}
-function v17Tick(){const r=v14Snapshot,s=v14Session;if(!r||!s||r.status!=='playing'||r.mode!=='timed'||!v17Deadline)return;const seconds=Math.max(0,Math.ceil((v17Deadline-Date.now())/1000));const clock=document.getElementById('v17Clock');if(clock){clock.textContent='⏱️ Kalan süre: '+seconds+' sn';clock.classList.toggle('danger',seconds<=5)}if(seconds===0&&!v17TimedOut){v17TimedOut=true;const answers=r.answers&&r.answers[r.index]||{};if(!Number.isInteger(answers[s.uid]))v17SubmitTimeout();}}
-async function v17SubmitTimeout(){if(!v14RoomRef||!v14Session||!v14Snapshot)return;const index=v14Snapshot.index,uid=v14Session.uid;try{await v14RoomRef.child('answers/'+index+'/'+uid).transaction(x=>x===null?-1:undefined,undefined,false)}catch(e){v14Error(e)}}
-
-function v14Notice(message){const el=document.getElementById('v14SetupWarning');if(el)el.textContent=message}
-function v14Error(err){const msg=err&&err.message?err.message:String(err);v11Toast('⚠️ '+msg.slice(0,140));console.warn('Online düello:',err)}
-async function v14Init(){
- if(!QUIZORA_FIREBASE_CONFIG){v14Notice('⚙️ Oda sistemi hazır. Gerçek çevrim içi bağlantı için Firebase kurulumu gerekiyor.');return false}
- if(!window.firebase){v14Notice('⚠️ Firebase yüklenemedi. İnternet bağlantını veya engelleyicileri kontrol et.');return false}
- try{
-  const app=firebase.apps.length?firebase.app():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG);
-  v14Auth=app.auth();v14Db=app.database();
-  if(!v14Auth.currentUser)await v14Auth.signInAnonymously();
-  v14Notice('🌐 Firebase bağlantısı kuruldu. Oda oluşturabilir veya katılabilirsin.');return true;
- }catch(e){v14Notice('⚠️ Bağlantı kurulamadı: '+e.message);v14Error(e);return false}
-}
-function v14SetBusy(busy){document.getElementById('v14CreateBtn').disabled=busy;document.getElementById('v14JoinBtn').disabled=busy}
-function v14SafeName(id){return(document.getElementById(id).value.trim()||'Oyuncu').slice(0,24)}
-function v14Code(){const bytes=new Uint32Array(1);crypto.getRandomValues(bytes);return String(100000+bytes[0]%900000)}
-async function v14CreateRoom(){
- v14SetBusy(true);
- try{
-  if(!await v14Init())return;
-  const name=v14SafeName('v14HostName'),uid=v14Auth.currentUser.uid;
-  const test=document.getElementById('v17Test').value,mode=document.getElementById('v17Mode').value,seconds=Number(document.getElementById('v17Time').value);
-  const bank=test==='mixed'?buildMixedV8():getQuestionBank(test);
-  const shuffled=[...bank];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
-  if(shuffled.length<10)throw new Error('Bu testte düello için yeterli soru yok.');
-  const questions=shuffled.slice(0,10).map(q=>({q:q.q,a:q.a,correct:q.correct}));
-  for(let attempt=0;attempt<6;attempt++){
-   const code=v14Code(),ref=v14Db.ref('rooms/'+code);
-   const initial={hostUid:uid,hostName:name,status:'waiting',createdAt:firebase.database.ServerValue.TIMESTAMP,index:0,questions,test,mode,seconds:mode==='timed'?seconds:0};
-   // Firebase transaction requires read permission, but a new room is not readable
-   // under the secure rules until it exists. Creation needs only a guarded write.
-   try{
-    await ref.set(initial);
-    v14Connect(ref,code,'host');
-    return;
-   }catch(err){
-    if(err && err.code==='PERMISSION_DENIED')continue;
-    throw err;
-   }
-  }
-  throw new Error('Oda kodu oluşturulamadı. Tekrar dene.');
- }catch(e){v14Error(e)}finally{v14SetBusy(false)}
-}
-async function v14JoinRoom(){
- v14SetBusy(true);
- try{
-  if(!await v14Init())return;
-  const code=document.getElementById('v14RoomCode').value.trim();
-  if(!/^\d{6}$/.test(code))throw new Error('Altı haneli oda kodu gir.');
-  const ref=v14Db.ref('rooms/'+code),uid=v14Auth.currentUser.uid,name=v14SafeName('v14GuestName');
-  const room=(await ref.once('value')).val();
-  if(!room)throw new Error('Oda bulunamadı. Kodu kontrol et.');
-  if(room.status!=='waiting')throw new Error('Bu odada oyun başlamış.');
-  if(room.hostUid===uid)throw new Error('Kendi odana ikinci oyuncu olarak katılamazsın.');
-  if(room.guestUid)throw new Error('Bu oda dolu.');
-  const result=await ref.child('guestUid').transaction(current=>current===null?uid:undefined,undefined,false);
-  if(!result.committed)throw new Error('Odaya başka biri katıldı.');
-  await ref.child('guestName').set(name);
-  v14Connect(ref,code,'guest');
- }catch(e){v14Error(e)}finally{v14SetBusy(false)}
-}
-function v14Connect(ref,code,role){
- v14Disconnect();v14RoomRef=ref;v14Session={code,role,uid:v14Auth.currentUser.uid};v14Chosen=null;v14LastIndex=-1;v17ResetTimer();
- showSection('v14OnlineScreen');
- v14RoomListener=ref.on('value',snapshot=>{
-  if(!v14Session||v14RoomRef!==ref)return;
-  const previous=v14Snapshot;v14Snapshot=snapshot.val();if(v14Snapshot&&v14Snapshot.status==='playing'&&(!previous||previous.status!=='playing'||previous.index!==v14Snapshot.index))v17StartTimer();if(v14Snapshot&&v14Snapshot.status==='finished')v17ResetTimer();v14Render();
- },v14Error);
-}
-function v14Disconnect(){
- v17ResetTimer();
- if(v14RoomRef&&v14RoomListener)v14RoomRef.off('value',v14RoomListener);
- v14RoomRef=null;v14RoomListener=null;v14Session=null;v14Snapshot=null;v14Chosen=null;v14LastIndex=-1;
-}
-function v14Leave(){v14Disconnect();openV9Page('games')}
-function v14El(tag,text,cls){const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el}
-function v14Button(label,fn,disabled=false){const btn=v14El('button',label);btn.type='button';btn.disabled=disabled;btn.onclick=fn;return btn}
-function v14Render(){
- const box=document.getElementById('v14ArenaContent');box.replaceChildren();
- const r=v14Snapshot,s=v14Session;if(!s)return;
- if(!r){box.append(v14El('h2','Oda artık bulunamıyor.'));return}
- if(r.status==='waiting'){
-  box.append(v14El('p','🧠 '+(r.test==='mixed'?'Rastgele karışık':(quizNames[r.test]||'Karışık'))+' · '+(r.mode==='timed'?'⏱️ '+r.seconds+' sn':'🌿 Normal'),'v17-pill'));
-  box.append(v14El('h2','🏠 Oda hazır!'),v14El('p','Oda kodu:'),v14El('div',s.code,'v14-code'));
-  box.append(v14Button('📋 Oda Kodunu Kopyala',async()=>{try{await navigator.clipboard.writeText(s.code);v11Toast('Oda kodu kopyalandı!')}catch(e){v11Toast('Oda kodunu elle paylaşabilirsin.')}}));
-  box.append(v14El('p','🔵 '+r.hostName+' · '+(r.guestUid?'🟢 '+(r.guestName||'Arkadaşın'):'⏳ İkinci oyuncu bekleniyor...'),'v14-wait'));
-  if(s.role==='host'&&r.guestUid&&r.guestName)box.append(v14Button('▶️ İki Oyuncuyla Başlat',()=>v14RoomRef.child('status').set('playing').catch(v14Error)));
-  else box.append(v14El('p',s.role==='guest'?'Oda sahibinin başlatması bekleniyor.':'Arkadaşın kendi bilgisayarından oda kodunu girsin.'));
-  return;
- }
- const index=r.index||0,questions=r.questions||[],host=r.hostUid,guest=r.guestUid;
- box.append(v14El('p','🧠 '+(r.test==='mixed'?'Rastgele karışık':(quizNames[r.test]||'Karışık'))+' · '+(r.mode==='timed'?'⏱️ '+r.seconds+' sn':'🌿 Normal'),'v17-pill'));
- const allScores=[0,0];
- for(let i=0;i<questions.length;i++){
-  const a=r.answers&&r.answers[i];if(!a)continue;
-  if(a[host]===questions[i].correct)allScores[0]++;
-  if(a[guest]===questions[i].correct)allScores[1]++;
- }
- const score=v14El('div',undefined,'v14-score');score.append(v14El('span','🔵 '+r.hostName+': '+allScores[0]),v14El('span','🟢 '+(r.guestName||'Rakip')+': '+allScores[1]));box.append(score);
- if(r.status==='finished'||index>=questions.length){
-  const result=allScores[0]===allScores[1]?'🤝 Berabere!':'🏆 Kazanan: '+(allScores[0]>allScores[1]?r.hostName:r.guestName);
-  box.append(v14El('h2',result),v14El('p','Final skoru: '+allScores[0]+' - '+allScores[1]));return;
- }
- if(v14LastIndex!==index){v14Chosen=null;v14LastIndex=index;if(r.mode==='timed'&&!v17Deadline)v17StartTimer()}
- const q=questions[index],ans=r.answers&&r.answers[index]||{},mine=ans[s.uid],otherUid=s.role==='host'?guest:host,other=ans[otherUid];
- const mineDone=Number.isInteger(mine),otherDone=Number.isInteger(other),both=mineDone&&otherDone;
- box.append(v14El('p','Soru '+(index+1)+' / '+questions.length),v14El('h2',q.q));if(r.mode==='timed'){const clock=v14El('div','','v17-clock');clock.id='v17Clock';box.append(clock)}
- const options=v14El('div',undefined,'v14-answers');
- q.a.forEach((label,i)=>{
-  const btn=v14Button(label,()=>{if(mineDone||v14Submitting||v17TimedOut)return;v14Chosen=i;v14Render()},mineDone||v14Submitting||v17TimedOut);
-  if((mineDone&&mine===i)||(!mineDone&&v14Chosen===i))btn.classList.add('v14-picked');
-  if(both&&i===q.correct)btn.classList.add('v14-right');
-  if(both&&mine===i&&mine!==q.correct)btn.classList.add('v14-wrong');
-  options.append(btn);
- });box.append(options);
- if(!mineDone){if(v17TimedOut)box.append(v14El('p','⌛ Süre doldu, cevabın boş sayılıyor.','v14-feedback'));box.append(v14Button('✔️ Cevabı Onayla',v14Submit,v14Chosen===null||v14Submitting||v17TimedOut));}
- else if(!both){box.append(v14El('p','⏳ Cevabın kaydedildi. Rakibinin cevabı bekleniyor...','v14-feedback'));}
- if(r.mode==='timed'&&v17Deadline){const clock=document.getElementById('v17Clock');if(clock){const left=Math.max(0,Math.ceil((v17Deadline-Date.now())/1000));clock.textContent='⏱️ Kalan süre: '+left+' sn';clock.classList.toggle('danger',left<=5)}}
- if(both){
-  box.append(v14El('p',(mine===-1?'⌛ Süre doldu!':mine===q.correct?'✅ Doğru cevap!':'❌ Yanlış cevap!')+' Doğru cevap: '+q.a[q.correct],'v14-feedback'));
-  if(s.role==='host')box.append(v14Button(index===questions.length-1?'🏁 Sonuçları Göster':'Sonraki Soru →',v14Next));
-  else box.append(v14El('p','⏳ Oda sahibinin sonraki soruya geçmesi bekleniyor.'));
- }
-}
-async function v14Submit(){
- const r=v14Snapshot,s=v14Session;if(!r||!s||v14Chosen===null||v14Submitting||v17TimedOut)return;
- const index=r.index,answer=v14Chosen;
- v14Submitting=true;v14Render();
- try{
-  const ref=v14RoomRef.child('answers/'+index+'/'+s.uid);
-  const result=await ref.transaction(current=>current===null?answer:undefined,undefined,false);
-  if(!result.committed)v11Toast('Bu soruya zaten cevap verdin.');
- }catch(e){v14Error(e)}finally{v14Submitting=false;v14Render()}
-}
-async function v14Next(){
- const r=v14Snapshot,s=v14Session;if(!r||!s||s.role!=='host')return;
- const a=r.answers&&r.answers[r.index]||{};
- if(!Number.isInteger(a[r.hostUid])||!Number.isInteger(a[r.guestUid]))return;
- try{
-  if(r.index+1>=r.questions.length)await v14RoomRef.child('status').set('finished');
-  else await v14RoomRef.child('index').transaction(current=>current===r.index?current+1:undefined);
- }catch(e){v14Error(e)}
-}
 
 const V13_KEY='testlab_v13_custom';let v13Draft=[],v13Duel=null;
 function v13Read(){try{return JSON.parse(localStorage.getItem(V13_KEY)||'[]')}catch(e){return []}}
@@ -2125,74 +1979,8 @@ function qPersonaRender(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPersonaClose()});
 </script>
 
-<script>
-/* Quizloria Sosyal 1.0 — requires matching Firebase RTDB rules. */
-(function(){
-const $=id=>document.getElementById(id);let current=null,watchers=[],socialData={};
-const esc=s=>String(s||'').slice(0,80);
-function status(msg){$('qsStatus').textContent=msg}
-function db(){return firebase.database()}
-function user(){const u=firebase.auth().currentUser;return u&&!u.isAnonymous?u:null}
-function clearWatchers(){watchers.forEach(([r,fn])=>r.off('value',fn));watchers=[]}
-function watch(path,cb){const r=db().ref(path),fn=s=>cb(s.val()||{});r.on('value',fn,e=>status('⚠️ Veriler okunamadı: '+(e.code||e.message)));watchers.push([r,fn])}
-function safeName(s){return String(s||'').trim().replace(/\s+/g,' ').slice(0,24)}
-function keyName(s){return safeName(s).toLocaleLowerCase('tr-TR').replace(/[^a-z0-9çğıöşü_-]/g,'');}
-function line(root,name,buttons){const row=document.createElement('div');row.className='qs-row';const span=document.createElement('span');span.textContent=name;row.append(span);buttons.forEach(([label,fn])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;row.append(b)});root.append(row)}
-function draw(){const u=user();if(!u)return;const data=socialData,req=data.requests||{},friends=data.friends||{};
-$('qsRequests').replaceChildren();$('qsFriends').replaceChildren();$('qsLeaderboard').replaceChildren();
-const pending=Object.entries(req).filter(([,v])=>v&&v.status==='pending');$('qsBadge').textContent=pending.length?'('+pending.length+')':'';
-if(!pending.length)$('qsRequests').textContent='Yeni istek yok.';
-pending.forEach(([uid,r])=>line($('qsRequests'),esc(r.name||'Kullanıcı'),[['Kabul et',()=>accept(uid,r)],['Reddet',()=>decline(uid)]]));
-const fs=Object.entries(friends).filter(([,v])=>v);if(!fs.length){$('qsFriends').textContent='Henüz arkadaşın yok.';$('qsLeaderboard').textContent='Önce arkadaş ekle.'}
-fs.forEach(([uid,v],i)=>{line($('qsFriends'),esc(v.name||'Kullanıcı'),[]);line($('qsLeaderboard'),(i+1)+'. '+esc(v.name||'Kullanıcı'),[])})
-}
-async function getProfile(uid){const s=await db().ref('socialProfiles/'+uid).once('value');return s.val()}
-async function accept(uid,req){const u=user();if(!u)return;try{const mine=await getProfile(u.uid),other=await getProfile(uid);if(!other)throw Error('Bu profil artık bulunamıyor.');const updates={};updates['socialFriends/'+u.uid+'/'+uid]={name:other.name};updates['socialFriends/'+uid+'/'+u.uid]={name:mine?.name||u.displayName||'Kullanıcı'};await db().ref('socialRequests/'+u.uid+'/'+uid+'/status').set('accepted');await db().ref().update(updates);status('Arkadaşlık isteği kabul edildi.')}catch(e){status('⚠️ '+e.message)}}
-async function decline(uid){const u=user();if(!u)return;try{await db().ref('socialRequests/'+u.uid+'/'+uid).remove();status('İstek reddedildi.')}catch(e){status('⚠️ '+e.message)}}
-async function ensureSocialProfile(u){
- const name=safeName(u.displayName||'');const key=keyName(name);
- if(name.length<3||key.length<3)throw Error('Hesabındaki kullanıcı adı en az 3 harf olmalı.');
- const old=await getProfile(u.uid);
- if(old?.name===name&&old?.key===key)return old;
- const owner=await db().ref('socialNames/'+key).once('value');
- if(owner.exists()&&owner.val()!==u.uid)throw Error('Bu kullanıcı adı başka bir hesapta kullanılıyor.');
- const updates={};updates['socialNames/'+key]=u.uid;updates['socialProfiles/'+u.uid]={name,key};
- if(old?.key&&old.key!==key)updates['socialNames/'+old.key]=null;
- await db().ref().update(updates);return {name,key};
-}
-window.qSocialSave=async function(){const u=user();if(!u)return;try{const p=await ensureSocialProfile(u);$('qsMe').textContent='👤 '+p.name;status('Hesap kullanıcı adın eşitlendi.')}catch(e){status('⚠️ '+e.message)}};
-window.qSocialFind=async function(){const u=user();if(!u){status('Önce giriş yap.');return}const key=keyName($('qsSearch').value),root=$('qsSearchResult');root.replaceChildren();if(key.length<3){status('Tam kullanıcı adını yaz.');return}
-try{const snap=await db().ref('socialNames/'+key).once('value'),uid=snap.val();if(!uid){root.textContent='Kullanıcı bulunamadı.';return}const p=await getProfile(uid);if(!p){root.textContent='Kullanıcı bulunamadı.';return}if(uid===u.uid){root.textContent='Bu senin profilin.';return}
-line(root,esc(p.name),[['İstek Gönder',()=>send(uid,p.name)]]);
-}catch(e){status('⚠️ Arama yapılamadı: '+e.message)}};
-async function send(uid,name){
- const u=user();if(!u){status('⚠️ İstek göndermek için giriş yap.');return}
- let stage='başlangıç',mine=null;
- try{
-  stage='profil eşitleme';await ensureSocialProfile(u);
-  stage='arkadaşlık kontrolü';const already=await db().ref('socialFriends/'+u.uid+'/'+uid).once('value');
-  if(already.exists()){status('Zaten arkadaşsınız.');return}
-  stage='gönderen profili';mine=await getProfile(u.uid);
-  if(!mine||!mine.name)throw Error('Sosyal profilin bulunamadı. Kullanıcı Adımı Eşitle butonuna bas.');
-  stage='alıcı profili';const recipient=await getProfile(uid);
-  if(!recipient)throw Error('Alıcının sosyal profili bulunamadı.');
-  stage='istek kaydı';
-  await db().ref('socialRequests/'+uid+'/'+u.uid).set({name:mine.name,status:'pending'});
-  status('✅ '+name+' kullanıcısına arkadaşlık isteği gönderildi.');
- }catch(e){
-  const code=e?.code||'';
-  if(stage==='istek kaydı'&&String(code).includes('PERMISSION_DENIED')){
-   status('⚠️ İstek kaydı Firebase tarafından reddedildi. Gönderen UID: '+u.uid+' | Alıcı UID: '+String(uid)+' | Gönderilen ad: '+JSON.stringify(mine.name)+' ('+mine.name.length+' karakter) | Firebase hata kodu: '+String(code)+'. Bu bilgileri kopyalayıp paylaşabilirsin.');
-  }else status('⚠️ '+stage+' aşamasında hata: '+(e?.message||e));
-  console.error('Quizloria Sosyal - '+stage,e);
- }
-}
-window.qSocialRefresh=function(){if(!user())status('Sosyal özellikleri kullanmak için giriş yapmalısın.');else status('Arkadaşlarını kullanıcı adıyla bulabilirsin.')};
-function start(u){clearWatchers();current=u?.uid||null;socialData={};const loggedIn=!!(u&&!u.isAnonymous);const gate=$('qsLoginGate');if(gate)gate.hidden=loggedIn;const cards=document.querySelectorAll('#qSocial .qs-card');cards.forEach((card,index)=>{if(index>0)card.hidden=!loggedIn});const nameInput=$('qsNickname');if(nameInput){nameInput.hidden=!loggedIn;const label=document.querySelector('label[for="qsNickname"]');if(label)label.hidden=!loggedIn;const save=nameInput.nextElementSibling;if(save&&save.tagName==='BUTTON')save.hidden=!loggedIn;}if(!u||u.isAnonymous){$('qsMe').textContent='🔒 Giriş yapmadın';$('qsNickname').value='';status('');return}
-ensureSocialProfile(u).then(p=>{if(current!==u.uid)return;$('qsMe').textContent='👤 '+p.name;$('qsNickname').value=p.name}).catch(e=>status('⚠️ Kullanıcı adı eşitlenemedi: '+e.message));
-watch('socialRequests/'+u.uid,v=>{socialData.requests=v;draw()});watch('socialFriends/'+u.uid,v=>{socialData.friends=v;draw()});}
-window.addEventListener('load',()=>{try{const a=firebase.apps.length?firebase.app().auth():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG).auth();a.onAuthStateChanged(start)}catch(e){status('Firebase bağlantısı kurulamadı: '+e.message)}});
-})();
-</script>
+<script src="party.js?v=2"></script>
+<script src="social.js?v=2"></script>
 </body>
 </html>
+
