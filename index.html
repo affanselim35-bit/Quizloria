@@ -1740,7 +1740,7 @@ if(document.readyState==='complete')init();else window.addEventListener('load',i
   if(!window.firebase||!firebase.apps.length)return null;
   const u=firebase.auth().currentUser;
   if(!u||u.isAnonymous)return null;
-  return {user:u,ref:firebase.database().ref('userProfiles/'+u.uid+'/history')};
+  return {user:u,ref:firebase.database().ref('profiles/'+u.uid+'/history')};
  }
  function recordKey(record){
   const str=JSON.stringify([record.type,record.date||record.at||record.timestamp||'',record.points,record.profile||'',record.correct||'',record.total||'']);
