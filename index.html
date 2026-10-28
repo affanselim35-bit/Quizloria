@@ -447,7 +447,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
     <div class="header-actions"><span>Keşfet • Eğlen • Paylaş</span><button class="feedback-open" type="button" onclick="openFeedback()">💬 Öneri Gönder</button></div>
 </header>
 
-<nav class="v9-nav" aria-label="Site bölümleri"><a href="#home" data-view="home" onclick="openV9Page('home');return false">🏠 Ana Sayfa</a><a href="#v9Tests" data-view="tests" onclick="openV9Page('tests');return false">🧠 Testler</a><a href="#psyHub" data-view="psychology" onclick="openV9Page('psychology');return false">🧠 Psikoloji</a><a href="#v9Games" data-view="games" onclick="openV9Page('games');return false">🎮 Oyun Modları</a><a href="#qCustomBuilder" data-view="custom" onclick="openV9Page('custom');return false">🎁 Özel Test Oluştur</a><a href="#v13Builder" data-view="builder" onclick="openV9Page('builder');return false">✍️ Test Oluştur</a><a href="#v9Profile" data-view="profile"  onclick="openV9Page('profile');return false">🏆 Profilim</a><a href="#v9Missions" data-view="missions" onclick="openV9Page('missions');return false">🎯 Görevler</a><a href="#v11Settings" data-view="settings" onclick="openV9Page('settings');return false">⚙️ Ayarlar</a><a href="#" onclick="openFeedback();return false">💬 Öneri Gönder</a><a href="#q22Admin" id="q22AdminNav" class="q22-admin-nav" hidden onclick="q22OpenAdmin();return false">🛡️ Yönetici</a></nav>
+<nav class="v9-nav" aria-label="Site bölümleri"><a href="#home" data-view="home" onclick="openV9Page('home');return false">🏠 Ana Sayfa</a><a href="#v9Tests" data-view="tests" onclick="openV9Page('tests');return false">🧠 Testler</a><a href="#psyHub" data-view="psychology" onclick="openV9Page('psychology');return false">🧠 Psikoloji</a><a href="#v9Games" data-view="games" onclick="openV9Page('games');return false">🎮 Oyun Modları</a><a href="#qCustomBuilder" data-view="custom" onclick="openV9Page('custom');return false">🎁 Özel Test Oluştur</a><a href="#v13Builder" data-view="builder" onclick="openV9Page('builder');return false">✍️ Test Oluştur</a><a href="#v9Profile" data-view="profile"  onclick="openV9Page('profile');return false">🏆 Profilim</a><a href="#qSocial" data-view="social" onclick="openV9Page('social');return false">👥 Sosyal</a><a href="#v9Missions" data-view="missions" onclick="openV9Page('missions');return false">🎯 Görevler</a><a href="#v11Settings" data-view="settings" onclick="openV9Page('settings');return false">⚙️ Ayarlar</a><a href="#" onclick="openFeedback();return false">💬 Öneri Gönder</a><a href="#q22Admin" id="q22AdminNav" class="q22-admin-nav" hidden onclick="q22OpenAdmin();return false">🛡️ Yönetici</a></nav>
 <section id="home"><section id="v11Resume" class="v11-box" hidden><h2>🔖 Yarım Kalan Testin</h2><p id="v11ResumeInfo"></p><div class="v8-actions"><button onclick="v11Resume()">▶️ Devam Et</button><button onclick="v11Discard()">🗑️ Baştan Başla</button></div></section>
 <section id="v11Settings" class="v11-box"><h2>⚙️ Ayarlar</h2><p>Quizloria'yı kendine göre özelleştir. Tercihlerin bu tarayıcıda saklanır.</p>
 <div class="v11-setting"><label for="v11Theme">🎨 Renk teması</label><select id="v11Theme" onchange="v11SaveSettings()"><option value="purple">💜 Mor (Varsayılan)</option><option value="blue">💙 Mavi</option><option value="green">💚 Yeşil</option><option value="pink">🩷 Pembe</option><option value="black">🌑 Siyah</option></select></div>
@@ -489,7 +489,16 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
           <div class="v13panel"><h3>🔥 Günlük Seri</h3><p id="v13Streak"></p><h3>📈 Gelişim Grafiği</h3><canvas id="v13Chart" width="650" height="250" style="width:100%;max-width:650px"></canvas><p id="v13ChartCaption"></p></div><h3 class="recent-title">🕘 Son Sonuçlarım</h3><div id="historyList" class="history-list"><p class="history-empty">Henüz tamamlanmış test yok.</p></div>
         </section>
 
-        <section id="qCustomBuilder" style="display:none" aria-label="Özel test oluşturucu"><h2>🎁 Arkadaşına Özel Test Oluştur</h2><p class="qc-muted">5–15 soru hazırla, her soru için dört şık ve doğru cevabı seç. Oluşturduğun test normal listede görünmez. Bağlantıyı alan herkes çözebilir.</p><label for="qcTitle">Testin adı</label><input id="qcTitle" maxlength="70" placeholder="Örn. Arkadaşım beni ne kadar tanıyor?"><label for="qcCount">Soru sayısı</label><select id="qcCount" onchange="qcBuild()"></select><div id="qcFields"></div><button type="button" id="qcPublish" onclick="qcPublish()">🔗 Özel Bağlantı Oluştur</button><div id="qcStatus" class="qc-status" role="status" aria-live="polite"></div></section><section id="psyHub" style="display:none" aria-label="Psikolojik farkındalık anketleri"><h2>🧠 Psikolojik Farkındalık</h2><p class="psy-muted">Psikoloji araştırmalarında incelenen konulara dayalı, özgün öz değerlendirme soruları. Bunlar klinik olarak doğrulanmış ölçekler değildir; tanı, risk tahmini veya tedavi önerisi sunmaz.</p><div id="psyContent"></div></section><section id="v13Builder" class="v13panel"><h2>✍️ Kendi Testini Oluştur</h2><p>Her soruya 4 seçenek ekle ve doğru cevabı belirle. Testlerin bu cihazda saklanır.</p><input id="v13Title" placeholder="Testin adı" maxlength="60"><input id="v13Q" placeholder="Soru" maxlength="200"><div class="v13options"><input class="v13A" placeholder="A seçeneği"><input class="v13A" placeholder="B seçeneği"><input class="v13A" placeholder="C seçeneği"><input class="v13A" placeholder="D seçeneği"></div><label>Doğru cevap: <select id="v13Correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label><button onclick="v13Add()">➕ Soru Ekle</button><p id="v13Count">0 soru</p><button onclick="v13Save()">💾 Testi Kaydet</button><button onclick="v13Draft=[];document.getElementById('v13Count').textContent='0 soru'">Taslağı Temizle</button><h3>Testlerim</h3><div id="v13List"></div></section><section id="v9Missions"  class="v9-missions" aria-label="Günlük görevler"><h2>🎯 Günlük Görevler</h2><p>Bugün test çözerek görevleri tamamla, bonus XP kazan. Görevler her gün yenilenir.</p><div id="v9MissionGrid" class="v9-mission-grid"></div><p id="v9MissionStatus" role="status" style="margin-top:13px"></p></section>
+        <section id="qSocial" style="display:none" aria-label="Quizloria Sosyal">
+<h2>👥 Quizloria Sosyal</h2><p>Arkadaşlarını bul, istek gönder ve kendi arkadaş listeni oluştur. Arkadaşlık isteklerini yalnızca hesabınla görebilirsin.</p>
+<p id="qsStatus" class="qs-status" role="status"></p>
+<div class="qs-grid">
+<div class="qs-card"><h3>👤 Sosyal profilin</h3><div id="qsMe">Giriş yapman gerekiyor.</div><label for="qsNickname">Görünen kullanıcı adı</label><input id="qsNickname" maxlength="24" placeholder="Kullanıcı adın" autocomplete="off"><button type="button" onclick="qSocialSave()">Profili Kaydet</button><p class="qs-muted">E-posta adresin diğer kullanıcılara gösterilmez. Profilin, kullanıcı adınla aranabilir.</p></div>
+<div class="qs-card"><h3>🔎 Arkadaş ara</h3><input id="qsSearch" maxlength="24" placeholder="Tam kullanıcı adını yaz" autocomplete="off"><button type="button" onclick="qSocialFind()">Ara</button><div id="qsSearchResult"></div></div>
+<div class="qs-card"><h3>🔔 Arkadaşlık istekleri <span id="qsBadge"></span></h3><div id="qsRequests" class="qs-muted">Henüz istek yok.</div></div>
+<div class="qs-card"><h3>🤝 Arkadaşlarım</h3><div id="qsFriends" class="qs-muted">Henüz arkadaş yok.</div></div>
+<div class="qs-card"><h3>🏆 Arkadaş sıralaması</h3><p class="qs-muted">Şimdilik arkadaşlarını listeler. Doğrulanmış puan sistemi sonraki güncellemede eklenecek.</p><div id="qsLeaderboard"></div></div>
+</div></section><section id="qCustomBuilder" style="display:none" aria-label="Özel test oluşturucu"><h2>🎁 Arkadaşına Özel Test Oluştur</h2><p class="qc-muted">5–15 soru hazırla, her soru için dört şık ve doğru cevabı seç. Oluşturduğun test normal listede görünmez. Bağlantıyı alan herkes çözebilir.</p><label for="qcTitle">Testin adı</label><input id="qcTitle" maxlength="70" placeholder="Örn. Arkadaşım beni ne kadar tanıyor?"><label for="qcCount">Soru sayısı</label><select id="qcCount" onchange="qcBuild()"></select><div id="qcFields"></div><button type="button" id="qcPublish" onclick="qcPublish()">🔗 Özel Bağlantı Oluştur</button><div id="qcStatus" class="qc-status" role="status" aria-live="polite"></div></section><section id="psyHub" style="display:none" aria-label="Psikolojik farkındalık anketleri"><h2>🧠 Psikolojik Farkındalık</h2><p class="psy-muted">Psikoloji araştırmalarında incelenen konulara dayalı, özgün öz değerlendirme soruları. Bunlar klinik olarak doğrulanmış ölçekler değildir; tanı, risk tahmini veya tedavi önerisi sunmaz.</p><div id="psyContent"></div></section><section id="v13Builder" class="v13panel"><h2>✍️ Kendi Testini Oluştur</h2><p>Her soruya 4 seçenek ekle ve doğru cevabı belirle. Testlerin bu cihazda saklanır.</p><input id="v13Title" placeholder="Testin adı" maxlength="60"><input id="v13Q" placeholder="Soru" maxlength="200"><div class="v13options"><input class="v13A" placeholder="A seçeneği"><input class="v13A" placeholder="B seçeneği"><input class="v13A" placeholder="C seçeneği"><input class="v13A" placeholder="D seçeneği"></div><label>Doğru cevap: <select id="v13Correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label><button onclick="v13Add()">➕ Soru Ekle</button><p id="v13Count">0 soru</p><button onclick="v13Save()">💾 Testi Kaydet</button><button onclick="v13Draft=[];document.getElementById('v13Count').textContent='0 soru'">Taslağı Temizle</button><h3>Testlerim</h3><div id="v13List"></div></section><section id="v9Missions"  class="v9-missions" aria-label="Günlük görevler"><h2>🎯 Günlük Görevler</h2><p>Bugün test çözerek görevleri tamamla, bonus XP kazan. Görevler her gün yenilenir.</p><div id="v9MissionGrid" class="v9-mission-grid"></div><p id="v9MissionStatus" role="status" style="margin-top:13px"></p></section>
 <section class="daily-panel" aria-label="Günün testi">
           <div><h2>🎯 Günün Meydan Okuması</h2><p id="dailyName">Bugünün testi hazırlanıyor...</p><p id="dailyStatus">Her gün yeni bir test!</p></div>
           <button type="button" onclick="startDailyQuiz()">Meydan Okumayı Başlat →</button>
@@ -1496,6 +1505,7 @@ const v9ViewGroups={
  builder:['#v13Builder'],
  custom:['#qCustomBuilder'],
  profile:['#v9Profile','.awards-panel'],
+ social:['#qSocial'],
  missions:['#v9Missions'],
  settings:['#v11Settings']
 };
@@ -1514,6 +1524,7 @@ function openV9Page(view='home'){
    if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
  });
  if(view==='profile'){renderTestStats();refreshV5();v13Stats()}
+ if(view==='social' && window.qSocialRefresh)qSocialRefresh();
  if(view==='builder')v13List();
  if(view==='missions'){renderV9Missions();renderV8XP()}
  if(view==='tests')filterTests();
@@ -2080,5 +2091,45 @@ function qPersonaRender(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPersonaClose()});
 </script>
 
+<script>
+/* Quizloria Sosyal 1.0 — requires matching Firebase RTDB rules. */
+(function(){
+const $=id=>document.getElementById(id);let current=null,watchers=[],socialData={};
+const esc=s=>String(s||'').slice(0,80);
+function status(msg){$('qsStatus').textContent=msg}
+function db(){return firebase.database()}
+function user(){const u=firebase.auth().currentUser;return u&&!u.isAnonymous?u:null}
+function clearWatchers(){watchers.forEach(([r,fn])=>r.off('value',fn));watchers=[]}
+function watch(path,cb){const r=db().ref(path),fn=s=>cb(s.val()||{});r.on('value',fn,e=>status('⚠️ Veriler okunamadı: '+(e.code||e.message)));watchers.push([r,fn])}
+function safeName(s){return String(s||'').trim().replace(/\s+/g,' ').slice(0,24)}
+function keyName(s){return safeName(s).toLocaleLowerCase('tr-TR').replace(/[^a-z0-9çğıöşü_-]/g,'');}
+function line(root,name,buttons){const row=document.createElement('div');row.className='qs-row';const span=document.createElement('span');span.textContent=name;row.append(span);buttons.forEach(([label,fn])=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.onclick=fn;row.append(b)});root.append(row)}
+function draw(){const u=user();if(!u)return;const data=socialData,req=data.requests||{},friends=data.friends||{};
+$('qsRequests').replaceChildren();$('qsFriends').replaceChildren();$('qsLeaderboard').replaceChildren();
+const pending=Object.entries(req).filter(([,v])=>v&&v.status==='pending');$('qsBadge').textContent=pending.length?'('+pending.length+')':'';
+if(!pending.length)$('qsRequests').textContent='Yeni istek yok.';
+pending.forEach(([uid,r])=>line($('qsRequests'),esc(r.name||'Kullanıcı'),[['Kabul et',()=>accept(uid,r)],['Reddet',()=>decline(uid)]]));
+const fs=Object.entries(friends).filter(([,v])=>v);if(!fs.length){$('qsFriends').textContent='Henüz arkadaşın yok.';$('qsLeaderboard').textContent='Önce arkadaş ekle.'}
+fs.forEach(([uid,v],i)=>{line($('qsFriends'),esc(v.name||'Kullanıcı'),[]);line($('qsLeaderboard'),(i+1)+'. '+esc(v.name||'Kullanıcı'),[])})
+}
+async function getProfile(uid){const s=await db().ref('socialProfiles/'+uid).once('value');return s.val()}
+async function accept(uid,req){const u=user();if(!u)return;try{const mine=await getProfile(u.uid),other=await getProfile(uid);if(!other)throw Error('Bu profil artık bulunamıyor.');const updates={};updates['socialFriends/'+u.uid+'/'+uid]={name:other.name};updates['socialFriends/'+uid+'/'+u.uid]={name:mine?.name||u.displayName||'Kullanıcı'};updates['socialRequests/'+u.uid+'/'+uid]=null;await db().ref().update(updates);status('Arkadaşlık isteği kabul edildi.')}catch(e){status('⚠️ '+e.message)}}
+async function decline(uid){const u=user();if(!u)return;try{await db().ref('socialRequests/'+u.uid+'/'+uid).remove();status('İstek reddedildi.')}catch(e){status('⚠️ '+e.message)}}
+window.qSocialSave=async function(){const u=user();if(!u){status('Önce giriş yap.');return}const name=safeName($('qsNickname').value),key=keyName(name);if(name.length<3||key.length<3){status('En az 3 karakterli bir kullanıcı adı seç.');return}
+try{const old=await getProfile(u.uid);const owner=await db().ref('socialNames/'+key).once('value');if(owner.exists()&&owner.val()!==u.uid){status('Bu kullanıcı adı kullanılıyor.');return}
+const updates={};updates['socialNames/'+key]=u.uid;updates['socialProfiles/'+u.uid]={name,key};if(old?.key&&old.key!==key)updates['socialNames/'+old.key]=null;
+await db().ref().update(updates);$('qsMe').textContent='👤 '+name;status('Sosyal profilin kaydedildi.')}catch(e){status('⚠️ Profil kaydedilemedi. Firebase kurallarını kontrol et: '+e.message)}};
+window.qSocialFind=async function(){const u=user();if(!u){status('Önce giriş yap.');return}const key=keyName($('qsSearch').value),root=$('qsSearchResult');root.replaceChildren();if(key.length<3){status('Tam kullanıcı adını yaz.');return}
+try{const snap=await db().ref('socialNames/'+key).once('value'),uid=snap.val();if(!uid){root.textContent='Kullanıcı bulunamadı.';return}const p=await getProfile(uid);if(!p){root.textContent='Kullanıcı bulunamadı.';return}if(uid===u.uid){root.textContent='Bu senin profilin.';return}
+line(root,esc(p.name),[['İstek Gönder',()=>send(uid,p.name)]]);
+}catch(e){status('⚠️ Arama yapılamadı: '+e.message)}};
+async function send(uid,name){const u=user();if(!u)return;try{if(!await getProfile(u.uid)){status('Önce sosyal profilini kaydet.');return}const already=await db().ref('socialFriends/'+u.uid+'/'+uid).once('value');if(already.exists()){status('Zaten arkadaşsınız.');return}const mine=await getProfile(u.uid);await db().ref('socialRequests/'+uid+'/'+u.uid).set({name:mine.name,status:'pending'});status(name+' kullanıcısına arkadaşlık isteği gönderildi.')}catch(e){status('⚠️ İstek gönderilemedi: '+e.message)}}
+window.qSocialRefresh=function(){if(!user())status('Sosyal özellikleri kullanmak için giriş yapmalısın.');else status('Arkadaşlarını kullanıcı adıyla bulabilirsin.')};
+function start(u){clearWatchers();current=u?.uid||null;socialData={};if(!u||u.isAnonymous){$('qsMe').textContent='Giriş yapman gerekiyor.';status('Sosyal özellikler için giriş yap.');return}
+getProfile(u.uid).then(p=>{if(current!==u.uid)return;const name=p?.name||u.displayName||'';$('qsMe').textContent=p?'👤 '+name:'Henüz sosyal profil oluşturmadın.';$('qsNickname').value=name}).catch(e=>status(e.message));
+watch('socialRequests/'+u.uid,v=>{socialData.requests=v;draw()});watch('socialFriends/'+u.uid,v=>{socialData.friends=v;draw()});}
+window.addEventListener('load',()=>{try{const a=firebase.apps.length?firebase.app().auth():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG).auth();a.onAuthStateChanged(start)}catch(e){status('Firebase bağlantısı kurulamadı: '+e.message)}});
+})();
+</script>
 </body>
 </html>
