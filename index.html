@@ -2167,12 +2167,12 @@ line(root,esc(p.name),[['İstek Gönder',()=>send(uid,p.name)]]);
 }catch(e){status('⚠️ Arama yapılamadı: '+e.message)}};
 async function send(uid,name){
  const u=user();if(!u){status('⚠️ İstek göndermek için giriş yap.');return}
- let stage='başlangıç';
+ let stage='başlangıç',mine=null;
  try{
   stage='profil eşitleme';await ensureSocialProfile(u);
   stage='arkadaşlık kontrolü';const already=await db().ref('socialFriends/'+u.uid+'/'+uid).once('value');
   if(already.exists()){status('Zaten arkadaşsınız.');return}
-  stage='gönderen profili';const mine=await getProfile(u.uid);
+  stage='gönderen profili';mine=await getProfile(u.uid);
   if(!mine||!mine.name)throw Error('Sosyal profilin bulunamadı. Kullanıcı Adımı Eşitle butonuna bas.');
   stage='alıcı profili';const recipient=await getProfile(uid);
   if(!recipient)throw Error('Alıcının sosyal profili bulunamadı.');
