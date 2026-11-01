@@ -1,3 +1,5 @@
+> Current status: Premium promotion/sales are paused. All authored tests are free under the public access policy. See [FREE_CATALOG.md](FREE_CATALOG.md). The paid-mode sections below document the parked implementation.
+
 # Premium research forms and character results
 
 ## What is implemented
