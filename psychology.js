@@ -103,11 +103,63 @@ const tests=[
   ['Bir şey yolunda gitmediğinde farklı bir yol denemek senin için nasıldır?',['Yeni bir yaklaşımı denemeye açığım.','Güvendiğim birinin fikriyle deneyebilirim.','Yanlış yapmaktan çekinip bildiğim yolda kalırım.','Başka bir yol olabileceğini görmekte zorlanırım.']]
  ]]
 ];
+const interpretations=[
+ [
+  ['Endişeyle başa çıkma yolların öne çıkıyor','Cevaplarının çoğunda, endişe yaşasan da dikkatini yönlendirebildiğini veya küçük adımlarla ilerleyebildiğini anlattın. Bu özet, seçtiğin başa çıkma yollarını öne çıkarıyor.'],
+  ['Endişenin zorladığı anlar öne çıkıyor','Cevaplarının çoğunda, endişelerin odağını, kararlarını veya günlük planlarını zorlayabildiğini belirttin. Bu başlık, bu deneyimleri anlatan seçimlerinin daha fazla olmasından kaynaklanıyor.'],
+  ['Endişeye yaklaşımın duruma göre değişiyor','Bazı cevaplarında endişeyle ilerleyebildiğini, bazılarında ise zorlandığını anlattın. İki yöndeki cevapların eşit olduğu için tek bir yaklaşımı baskın göstermiyoruz.']
+ ],
+ [
+  ['Sana iyi gelen deneyimler öne çıkıyor','Cevaplarında keyif, yakınlık, enerji veya anlam bulabildiğini anlatan seçimler daha fazla. Sonuç, bu ankette yaşamının sana iyi gelen yönlerini daha çok işaretlemene dayanıyor.'],
+  ['İyi hissetmekte zorlandığın alanlar öne çıkıyor','Cevaplarında keyif bulmak, enerji toplamak veya hislerini tarif etmek konusunda güçlük ya da belirsizlik anlatan seçimler daha fazla. Bu özet, seçtiğin deneyimleri görünür kılıyor.'],
+  ['İyi oluş deneyimin farklı yönler taşıyor','Hem sana iyi gelen deneyimleri hem de zorlandığın veya belirsiz hissettiğin alanları eşit sayıda işaretledin. Bu yüzden sonuç iki tarafı birlikte yansıtıyor.']
+ ],
+ [
+  ['Sorumluluklarını yönetme yolların öne çıkıyor','Çoğu cevabında öncelik koyma, mola verme, yardım isteme veya planını düzenleme gibi yolları seçtin. Sonuç, yükünle başa çıkabildiğini anlattığın cevapların daha fazla olmasına dayanıyor.'],
+  ['Günlük yükün zorladığı anlar öne çıkıyor','Çoğu cevabında birikmiş işler, zaman baskısı veya kendine alan açmakta zorlanma anlattın. Sonuç başlığı bu seçimlerinin ortak yönünü özetliyor.'],
+  ['Günlük yükünü yönetirken farklı deneyimler yaşıyorsun','Bazı alanlarda işleri yönetebildiğini, bazılarında ise yük altında zorlandığını eşit sayıda belirttin. Bu özet, tek bir etiket yerine bu farklılığı gösteriyor.']
+ ],
+ [
+  ['Düşüncelerinden uzaklaşabilme yolların öne çıkıyor','Cevaplarının çoğunda düşünceleri değerlendirdikten sonra ara verebildiğini veya bir sonraki adıma geçebildiğini anlattın. Sonuç bu seçimlerin ortak yönünden oluşuyor.'],
+  ['Aynı düşüncelere dönme deneyimin öne çıkıyor','Çoğu cevabında geçmiş konuşmaları, olasılıkları veya kararları tekrar ele aldığını ve bırakmakta zorlanabildiğini anlattın. Bu başlık, seçtiğin bu deneyimleri özetliyor.'],
+  ['Düşüncelerle ilişkin duruma göre değişiyor','Bazı cevapların düşüncelerden uzaklaşabildiğini, bazıları aynı konulara döndüğünü anlatıyor. Bu iki tür seçimin eşit olduğu için karma bir yanıt örüntüsü görünüyor.']
+ ],
+ [
+  ['Duygularını tanımlayabilmen öne çıkıyor','Cevaplarında duygularını adlandırabildiğini, değişimleri fark edebildiğini veya düşünce ile duyguyu ayırabildiğini anlatan seçimler daha fazla. Sonucun bu ortak anlatımdan oluşuyor.'],
+  ['Duygularını netleştirmekte zorlandığın alanlar öne çıkıyor','Cevaplarında hislerini adlandırmak, nedenlerini ayırt etmek veya birine anlatmak konusunda güçlük belirten seçimler daha fazla. Bu özet bu alanları görünür kılıyor.'],
+  ['Bazı duyguların net, bazıları daha karışık geliyor','Duygularını ayırt edebildiğini ve zorlandığını anlatan cevapları eşit sayıda seçtin. Sonuç bu farklı durumları birlikte yansıtıyor.']
+ ],
+ [
+  ['Kendine anlayışla yaklaşman öne çıkıyor','Çoğu cevabında hata ve güçlükler karşısında kendine alan tanımayı, daha dengeli konuşmayı veya güçlü yanlarını hatırlamayı seçtin. Bu başlık bu cevaplarının ortak temasını anlatıyor.'],
+  ['Kendine yüklenme eğilimini anlatan cevapların öne çıkıyor','Çoğu cevabında hatalar, karşılaştırmalar veya kötü günler karşısında kendine sert yaklaşabildiğini anlattın. Sonuç bu seçimlerinin ortak yönüne dayanıyor; seni bütünüyle tanımlamıyor.'],
+  ['Kendine yaklaşımın duruma göre değişiyor','Bazı cevaplarında anlayışlı, bazılarında daha sert bir iç konuşma anlattın. İki yöndeki seçimlerin eşit olduğu için sonuç bu değişkenliği öne çıkarıyor.']
+ ],
+ [
+  ['Sosyal ortamlara katılabilmen öne çıkıyor','Çoğu cevabında heyecan veya çekingenlik olsa bile konuşmaya ve insanlarla iletişime katılabildiğini belirttin. Bu başlık bu seçimlerinin daha fazla olmasından doğuyor.'],
+  ['Sosyal durumlarda çekindiğin anlar öne çıkıyor','Cevaplarında değerlendirilme endişesi, söz almaktan kaçınma veya konuşmaları tekrar düşünme anlatan seçimler daha fazla. Sonuç bu belirttiğin deneyimlere dayanıyor.'],
+  ['Sosyal rahatlığın duruma göre değişiyor','İletişime katılabildiğin ve daha çok çekindiğin durumları eşit sayıda işaretledin. Bu yüzden sonuç tek bir sosyal özellik yerine farklı deneyimlerini birlikte gösteriyor.']
+ ],
+ [
+  ['Duygularına alan açma yolların öne çıkıyor','Cevaplarında mola verme, destek alma veya duygularını anlamaya çalışma gibi yolları seçmen daha sık. Sonuç bu ankette başvurabildiğini anlattığın yolları vurguluyor.'],
+  ['Yoğun duygularla başa çıkmakta zorlandığın anlar öne çıkıyor','Çoğu cevabında durmak, sakinleşmek veya uygun bir başa çıkma yolu bulmak konusunda güçlük belirttin. Bu başlık bu deneyimlerini anlatan seçimlerinin ortak yönünü özetliyor.'],
+  ['Duygularını yönetirken farklı yollar ve güçlükler yaşıyorsun','Hem başvurabildiğin yolları hem de zorlandığın anları eşit sayıda seçtin. Sonuç bu iki tarafı birlikte ele alıyor.']
+ ],
+ [
+  ['Dinlenmeyi destekleyen deneyimlerin öne çıkıyor','Çoğu cevabında uykuya geçiş, günlük enerji, düzen veya mola verme konusunda daha rahat deneyimler anlattın. Sonucun bu seçimlerin ortak yönünden oluşuyor.'],
+  ['Uyku ve dinlenmede zorlandığın alanlar öne çıkıyor','Cevaplarında uykuya geçiş, dinlenmiş uyanma, dikkat veya molaya alan açma konusunda güçlük anlatan seçimler daha fazla. Bu özet hangi alanları işaretlediğini görünür kılıyor.'],
+  ['Uyku ve dinlenme deneyimin farklı yönler taşıyor','Daha rahat dinlendiğin ve zorlandığın durumları eşit sayıda belirttin. Bu nedenle sonuç tüm uyku deneyimini tek bir başlıkla değerlendirmiyor.']
+ ],
+ [
+  ['Zorluklar karşısında kullanabildiğin kaynaklar öne çıkıyor','Cevaplarında alternatif arama, destek isteme, küçük adımları görme veya önceki deneyimlerinden yararlanma anlatan seçimler daha fazla. Sonuç bu belirttiğin kaynakları öne çıkarıyor.'],
+  ['Zorluklar karşısında ilerlemekte güçlük yaşadığın alanlar öne çıkıyor','Çoğu cevabında yeni bir yol bulmak, destek istemek veya ilerlediğini fark etmek konusunda zorlandığını anlattın. Bu özet, bu seçimlerinin daha fazla olmasına dayanıyor.'],
+  ['Bazı durumlarda kaynaklarına ulaşabiliyor, bazılarında zorlanıyorsun','Kullanabildiğin yolları ve güçlük yaşadığın alanları eşit sayıda seçtin. Sonuç bu farklı deneyimleri birlikte yansıtıyor.']
+ ]
+];
 let current=-1,step=0,answers=[];
 const root=()=>document.getElementById('psyContent');
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
 function button(text,action,cls){const b=node('button',text,cls);b.type='button';b.onclick=action;return b}
-function focusQuestion(){const q=root().querySelector('.psy-question');if(q)q.focus({preventScroll:true});const p=root().querySelector('.psy-panel');if(p){const nav=document.querySelector('.v9-nav');window.scrollTo({top:Math.max(0,p.getBoundingClientRect().top+scrollY-(nav?.getBoundingClientRect().height||0)-16),behavior:'instant'})}}
+function focusQuestion(){const q=root().querySelector('.psy-question,.psy-result-title');if(q)q.focus({preventScroll:true});const p=root().querySelector('.psy-panel');if(p){const nav=document.querySelector('.v9-nav');window.scrollTo({top:Math.max(0,p.getBoundingClientRect().top+scrollY-(nav?.getBoundingClientRect().height||0)-16),behavior:'instant'})}}
 function list(){current=-1;step=0;answers=[];const grid=node('div',undefined,'psy-grid');tests.forEach((t,i)=>{const card=node('article',undefined,'psy-card');card.append(node('h3',t[1]+' '+t[0]),node('p',t[2]+' · '+t[3].length+' soru'),button('Değerlendirmeye Başla →',()=>{current=i;step=0;answers=[];draw();focusQuestion()}));grid.append(card)});root().replaceChildren(grid)}
 function draw(){
  const t=tests[current],question=t[3][step],panel=node('div',undefined,'psy-panel');
@@ -124,10 +176,24 @@ function draw(){
 }
 function finish(){
  const t=tests[current],panel=node('div',undefined,'psy-panel psy-result');
- panel.append(node('h2',t[1]+' '+t[0]+' · Yanıt özeti'),node('p',t[3].length+' soruyu tamamladın. Seçtiğin cevapları aşağıda gözden geçirebilirsin.','psy-muted'));
- const listEl=node('ol',undefined,'psy-review');t[3].forEach((question,i)=>{const item=node('li');item.append(node('h3',question[0]),node('p',String.fromCharCode(65+answers[i])+') '+question[1][answers[i]]));listEl.append(item)});panel.append(listEl);
- panel.append(node('p','Bu cevaplardan klinik puan, tanı veya hastalık şiddeti çıkarılmaz. Bu özet, deneyimlerini kendi kelimelerinle düşünmene yardımcı olmak içindir.','psy-warning'));
- const actions=node('div',undefined,'psy-actions');actions.append(button('← Yanıtlarımı düzenle',()=>{step=t[3].length-1;draw();focusQuestion()}),button('Anketlere dön',list));panel.append(actions);root().replaceChildren(panel);panel.scrollIntoView({block:'start'});
+ const easier=answers.filter(a=>a<2).length,harder=answers.length-easier,kind=easier>harder?0:harder>easier?1:2;
+ const [title,explanation]=interpretations[current][kind],hero=node('section',undefined,'psy-result-hero');
+ hero.dataset.pattern=['resources','difficulties','mixed'][kind];
+ hero.append(node('p',t[1]+' '+t[0]+' · Sonucun','psy-result-kicker'));
+ const heading=node('h2',title,'psy-result-title');heading.tabIndex=-1;hero.append(heading,node('p',explanation,'psy-result-description'));panel.append(hero);
+ const why=node('section',undefined,'psy-result-why');why.append(node('h3','Bu sonuç neden çıktı?'));
+ const method=kind===2
+  ?'8 cevabının 4’ünde daha rahat ilerlediğin, 4’ünde ise zorlandığın veya belirsiz kaldığın deneyimleri seçtin. Sayılar eşit olduğu için sonuç her iki yönü de içeriyor.'
+  :'8 cevabının '+(kind===0?easier:harder)+' tanesinde '+(kind===0?'daha rahat ilerlediğin veya başvurabildiğin yolları anlatan':'zorlandığın ya da belirsiz kaldığın deneyimleri anlatan')+' seçenekleri işaretledin. Başlık, daha çok seçtiğin bu cevapların ortak temasını özetliyor.';
+ why.append(node('p',method),node('p','Sonuca yansıyan cevaplarından örnekler:','psy-muted'));
+ const evidence=node('ul',undefined,'psy-result-evidence');
+ const matching=answers.map((answer,i)=>({answer,i})).filter(({answer})=>kind===2?true:kind===0?answer<2:answer>=2);
+ const examples=kind===2?[...matching.filter(x=>x.answer<2).slice(0,2),...matching.filter(x=>x.answer>=2).slice(0,2)]:matching.slice(0,3);
+ examples.forEach(({answer,i})=>{const item=node('li');item.append(node('strong',t[3][i][0]),node('p','“'+t[3][i][1][answer]+'”'));evidence.append(item)});why.append(evidence);panel.append(why);
+ panel.append(node('p','Bu sonuç bir klinik puan veya tanı değildir. Yalnızca seçtiğin cevapların betimleyici bir özetidir; kalıcı bir kişilik özelliği ya da hastalık şiddeti göstermez. Yanıtların kaydedilmez.','psy-warning'));
+ const review=node('details',undefined,'psy-result-details');review.append(node('summary','Tüm soruları ve cevaplarımı gör'));
+ const listEl=node('ol',undefined,'psy-review');t[3].forEach((question,i)=>{const item=node('li');item.append(node('h3',question[0]),node('p',String.fromCharCode(65+answers[i])+') '+question[1][answers[i]]));listEl.append(item)});review.append(listEl);panel.append(review);
+ const actions=node('div',undefined,'psy-actions');actions.append(button('← Yanıtlarımı düzenle',()=>{step=t[3].length-1;draw();focusQuestion()}),button('Anketlere dön',list));panel.append(actions);root().replaceChildren(panel);focusQuestion();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',list);else list();
 })();

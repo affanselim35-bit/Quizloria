@@ -35,14 +35,32 @@ async function main(){
     if(i===0&&j===0){await page.getByRole('button',{name:'← Önceki soru',exact:true}).click();assert.equal(await page.locator('.psy-choice').nth(selection).getAttribute('aria-pressed'),'true');await page.getByRole('button',{name:'Sonraki soru →',exact:true}).click()}
    }
    assert.deepEqual(await page.locator('.psy-review li p').allTextContents(),expected);
+   assert.equal(await page.locator('.psy-result-hero').getAttribute('data-pattern'),'mixed');
+   assert.ok((await page.locator('.psy-result-title').textContent()).length>15);
+   const resultTitle=await page.locator('.psy-result-title').boundingBox(),nav=await page.locator('.v9-nav').boundingBox();assert.ok(resultTitle.y>=nav.y+nav.height,'result heading must not be hidden under navigation');assert.ok(resultTitle.y<900,'result heading should appear immediately');
+   assert.equal(await page.locator('.psy-result-evidence li').count(),4);
+   for(const quote of await page.locator('.psy-result-evidence li p').allTextContents())assert.ok(expected.some(answer=>'“'+answer.slice(3)+'”'===quote),'reason must quote an actual chosen answer');
+   await page.getByText('Bu sonuç neden çıktı?',{exact:true}).waitFor();
    await page.getByRole('button',{name:'← Yanıtlarımı düzenle',exact:true}).click();await page.locator('.psy-choice').first().click();
    const changed=await page.locator('.psy-choice').first().textContent();await page.getByRole('button',{name:'Yanıt özetini gör →',exact:true}).click();assert.equal(await page.locator('.psy-review li p').last().textContent(),changed);
+   assert.equal(await page.locator('.psy-result-hero').getAttribute('data-pattern'),'resources');
+   assert.ok((await page.locator('.psy-result-why>p').first().textContent()).includes('5 tanesinde'));
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+   await page.getByRole('button',{name:'Anketlere dön',exact:true}).click();
+   await page.locator('.psy-card').nth(i).getByRole('button').click();
+   for(let j=0;j<8;j++){await page.locator('.psy-choice').nth(3).click();await page.getByRole('button',{name:j===7?'Yanıt özetini gör →':'Sonraki soru →',exact:true}).click();questions++}
+   assert.equal(await page.locator('.psy-result-hero').getAttribute('data-pattern'),'difficulties');
+   assert.ok((await page.locator('.psy-result-why>p').first().textContent()).includes('8 tanesinde'));
+   assert.equal(await page.locator('.psy-result-evidence li').count(),3);
+   const allChosen=await page.locator('.psy-review li p').allTextContents();
+   for(const quote of await page.locator('.psy-result-evidence li p').allTextContents())assert.ok(allChosen.some(answer=>'“'+answer.slice(3)+'”'===quote));
+   if(width===390&&i===0){await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:path.join(process.env.QUIZLORIA_SCREENSHOTS||root,'psychology-result-mobile.png'),fullPage:true})}
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
    await page.getByRole('button',{name:'Anketlere dön',exact:true}).click();
   }
   assert.equal(sets.size,80);await page.close();
  }
- assert.deepEqual(errors,[]);console.log(questions+' question screens passed: four visible unique choices, selection, navigation and editable summaries at mobile and desktop widths.');
+ assert.deepEqual(errors,[]);console.log(questions+' question screens passed; all ten tests have verified mixed, resource and difficulty summaries with correct counts, actual answer evidence, and editable results on mobile and desktop.');
 }
 main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
 
