@@ -1,3 +1,5 @@
+> Current status: Premium promotion/sales are paused. All authored tests are free under the public access policy. See [FREE_CATALOG.md](FREE_CATALOG.md). The paid-mode sections below document the parked implementation.
+
 # Premium character and entertainment pack
 
 Release content: **24 new story quizzes, 12 scenarios each, eight outcomes each** (288 question screens and 192 editorial outcomes). The six existing free character quizzes remain free. Checkout remains disabled until a payment provider is configured.

@@ -278,7 +278,7 @@
     },
     "premiumTests": {
       "$test": {
-        ".read": "auth != null && (root.child('admins').child(auth.uid).val() === true || (root.child('memberships').child(auth.uid).child('plan').val() === 'premium' && root.child('memberships').child(auth.uid).child('expiresAt').val() > now))",
+        ".read": "root.child('siteAccess').child('freeTests').val() === true || (auth != null && (root.child('admins').child(auth.uid).val() === true || (root.child('memberships').child(auth.uid).child('plan').val() === 'premium' && root.child('memberships').child(auth.uid).child('expiresAt').val() > now)))",
         ".write": "auth != null && root.child('admins').child(auth.uid).val() === true",
         ".validate": "newData.hasChildren(['title','questions'])",
         "title": {
@@ -340,7 +340,7 @@
     },
     "premiumAssessments": {
       "$test": {
-        ".read": "auth != null && (root.child('admins').child(auth.uid).val() === true || (root.child('memberships').child(auth.uid).child('plan').val() === 'premium' && root.child('memberships').child(auth.uid).child('expiresAt').val() > now))",
+        ".read": "root.child('siteAccess').child('freeTests').val() === true || (auth != null && (root.child('admins').child(auth.uid).val() === true || (root.child('memberships').child(auth.uid).child('plan').val() === 'premium' && root.child('memberships').child(auth.uid).child('expiresAt').val() > now)))",
         ".write": "auth != null && root.child('admins').child(auth.uid).val() === true",
         ".validate": "newData.hasChildren(['title','facet','version','items','higher','lower','reflection'])",
         "title": {
@@ -386,7 +386,7 @@
     },
     "premiumStories": {
       "$test": {
-        ".read": "auth != null && (root.child('admins').child(auth.uid).val() === true || (root.child('memberships').child(auth.uid).child('plan').val() === 'premium' && root.child('memberships').child(auth.uid).child('expiresAt').val() > now))",
+        ".read": "root.child('siteAccess').child('freeTests').val() === true || (auth != null && (root.child('admins').child(auth.uid).val() === true || (root.child('memberships').child(auth.uid).child('plan').val() === 'premium' && root.child('memberships').child(auth.uid).child('expiresAt').val() > now)))",
         ".write": "auth != null && root.child('admins').child(auth.uid).val() === true",
         ".validate": "newData.hasChildren(['title','intro','icon','questions','results'])",
         "title": {
@@ -446,6 +446,13 @@
         "$other": {
           ".validate": false
         }
+      }
+    },
+    "siteAccess": {
+      "freeTests": {
+        ".read": true,
+        ".write": false,
+        ".validate": "newData.isBoolean()"
       }
     }
   }

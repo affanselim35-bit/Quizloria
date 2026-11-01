@@ -5,13 +5,13 @@ const choices=['Beni hiç tanımlamıyor','Beni pek tanımlamıyor','Ne tanıml�
 let session=null,previousFocus=null;
 const node=(tag,text,cls)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;if(cls)el.className=cls;return el};
 const button=(label,fn)=>{const el=node('button',label);el.type='button';el.onclick=fn;return el};
-function allowed(){const m=window.quizloriaMembership,u=window.firebase?.auth().currentUser;return !!(m?.ready&&m.active&&u&&m.uid===u.uid&&session?.uid===u.uid)}
+function allowed(){const m=window.quizloriaMembership,u=window.firebase?.auth().currentUser;return !!(session&&(m?.accessReady&&m.freeTests?(session.uid===(u?.uid||null)):(m?.ready&&m.active&&u&&m.uid===u.uid&&session.uid===u.uid)))}
 function close(){session=null;document.getElementById('qResearchOverlay')?.remove();previousFocus?.focus();previousFocus=null}
 function sources(parent){
  const details=node('details',undefined,'q-research-sources');details.append(node('summary','Araştırma, puanlama ve kullanım sınırları'));
  details.append(node('p','Bu form, Goldberg’in (1999) IPIP kişilik boyutlarından birinin on maddeli Türkçe uyarlamasıdır. Yirmi form yirmi ayrı boyutu ele alır; tam IPIP-NEO envanterini oluşturmaz. Bu Türkçe çevirinin ve boyutların ayrı uygulanmasının geçerlik, güvenirlik veya Türkiye norm çalışması yapılmamıştır.'));
  details.append(node('p','Olumlu maddelerde yanıt 1–5; ters maddelerde 6 − yanıt olarak puanlanır. On madde toplanır (10–50) ve ortalama için ona bölünür. Buradaki 3, yanıt ölçeğinin orta noktasıdır; klinik eşik veya toplum ortalaması değildir. Puan bir yüzdelik dilim, doğru cevap sayısı, tanı veya kesin kişilik hükmü değildir.'));
- details.append(node('p','IPIP maddeleri kamu malıdır ve ücretsiz kaynaklardan da edinilebilir. Premium; reklamsız deneyim, Türkçe sunum ve açıklamalı sonuç hizmeti içindir. Yanıtlar bu akışta sunucuya veya tarayıcı depolamasına kaydedilmez; ekranı kapatınca silinir.'));
+ details.append(node('p','IPIP maddeleri kamu malıdır ve ücretsiz kaynaklardan da edinilebilir. Yanıtlar bu akışta sunucuya veya tarayıcı depolamasına kaydedilmez; ekranı kapatınca silinir.'));
  for(const [title,url] of [
   ['Goldberg (1999), özgün çalışma','https://www.ipip.ori.org/A%20broad-bandwidth%20inventory.pdf'],
   ['Resmî IPIP maddeleri ve puan anahtarları','https://ipip.ori.org/newNEOKey.htm'],
@@ -22,7 +22,7 @@ function sources(parent){
 }
 function show(){
  if(!allowed()){close();return}const s=session,root=document.getElementById('qResearchBody');root.replaceChildren();
- const heading=node('h2','👑 '+s.test.title);heading.tabIndex=-1;root.append(heading);
+ const heading=node('h2',(window.quizloriaMembership?.freeTests?'📚 ':'👑 ')+s.test.title);heading.tabIndex=-1;root.append(heading);
  if(s.stage==='intro'){
   root.append(node('p','Araştırma temelli öz değerlendirme · IPIP '+s.test.facet+' · 10 madde · Yaklaşık 3–5 dakika','q-research-kicker'));
   root.append(node('p','Her ifadenin seni genel olarak ne kadar tanımladığını seç. İdealindeki kişiyi değil, genellikle nasıl davrandığını düşün. Doğru veya yanlış cevap yoktur. Sana uymayan bir madde varsa devam etmek yerine formu kapatabilirsin.'));
@@ -51,14 +51,14 @@ function show(){
 }
 window.qResearchOpen=function(test,id){
  const member=window.quizloriaMembership,u=firebase.auth().currentUser;
- if(!member?.active||!u||member.uid!==u.uid)throw Error('Aktif Premium üyeliği gerekiyor.');
+ if(!(member?.accessReady&&member.freeTests)&&(!member?.active||!u||member.uid!==u.uid))throw Error('Test erişimi gerekiyor.');
  if(!test||!/^([EOAC][1-6])$/.test(test.facet)||!Array.isArray(test.items)||test.items.length!==10||test.items.some(i=>typeof i.q!=='string'||!i.q||typeof i.reverse!=='boolean')||['title','higher','lower','reflection'].some(key=>typeof test[key]!=='string'))throw Error('Araştırma formu şu anda açılamıyor.');
  if(session)close();previousFocus=document.activeElement;stopV6Timer();openV9Page('tests');
- session={test,id,uid:u.uid,stage:'intro',index:0,answers:[]};
+ session={test,id,uid:u?.uid||null,stage:'intro',index:0,answers:[]};
  const overlay=node('div');overlay.id='qResearchOverlay';const panel=node('div');panel.className='q-research-panel';panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label',test.title);
  const exit=button('✕ Kapat',close);exit.className='q-research-close';const body=node('div');body.id='qResearchBody';panel.append(exit,body);overlay.append(panel);document.body.append(overlay);show();
 };
-window.addEventListener('quizloria:membership',()=>{if(session&&!allowed()){close();v11Toast('Premium erişimin sona erdi veya hesabın değişti.')}});
+window.addEventListener('quizloria:membership',()=>{if(session&&!allowed()){close();v11Toast(window.quizloriaMembership?.freeTests?'Hesabın değiştiği için test kapatıldı.':'Premium erişimin sona erdi veya hesabın değişti.')}});
 document.addEventListener('keydown',event=>{if(!session)return;if(event.key==='Escape'){event.preventDefault();close()}else if(event.key==='Tab'){const focusable=[...document.querySelectorAll('#qResearchOverlay button:not(:disabled),#qResearchOverlay a,#qResearchOverlay summary')].filter(el=>el.getClientRects().length);const first=focusable[0],last=focusable.at(-1);if(event.shiftKey&&(document.activeElement===first||document.activeElement.tagName==='H2')){event.preventDefault();last?.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus()}}});
 })();
 

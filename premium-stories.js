@@ -5,7 +5,7 @@ const themes=['Analiz ve planlama','Bağ kurma ve destek','Kararlılık ve harek
 let session=null,priorFocus=null;
 const el=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e};
 const button=(text,fn)=>{const b=el('button',text);b.type='button';b.onclick=fn;return b};
-function allowed(){const m=window.quizloriaMembership,u=window.firebase?.auth().currentUser;return !!(session&&m?.ready&&m.active&&u&&m.uid===u.uid&&session.uid===u.uid)}
+function allowed(){const m=window.quizloriaMembership,u=window.firebase?.auth().currentUser;return !!(session&&(m?.accessReady&&m.freeTests?(session.uid===(u?.uid||null)):(m?.ready&&m.active&&u&&m.uid===u.uid&&session.uid===u.uid)))}
 function close(){session=null;document.getElementById('qStoryOverlay')?.remove();priorFocus?.focus({preventScroll:true});priorFocus=null}
 function rank(story,answers){
  const counts=[0,0,0,0];story.questions.forEach((q,i)=>counts[q.traits[answers[i]]]++);
@@ -15,7 +15,7 @@ function rank(story,answers){
 function render(){
  if(!allowed()){close();return}const s=session,root=document.getElementById('qStoryBody');root.replaceChildren();const h=el('h2',s.story.icon+' '+s.story.title);h.tabIndex=-1;root.append(h);
  if(s.stage==='intro'){
-  root.append(el('p','👑 Premium · 12 senaryo · 8 farklı sonuç','q-research-kicker'),el('p',s.story.intro),el('p','Karakter profilleri yaratıcı yorumdur. Bu test eğlence amaçlıdır; bilimsel kişilik ölçümü, tanı veya zekâ değerlendirmesi değildir. Cevapların bu akışta kaydedilmez.','q-research-note'));
+  root.append(el('p',(window.quizloriaMembership?.freeTests?'12 senaryo · 8 farklı sonuç':'👑 Premium · 12 senaryo · 8 farklı sonuç'),'q-research-kicker'),el('p',s.story.intro),el('p','Karakter profilleri yaratıcı yorumdur. Bu test eğlence amaçlıdır; bilimsel kişilik ölçümü, tanı veya zekâ değerlendirmesi değildir. Cevapların bu akışta kaydedilmez.','q-research-note'));
   root.append(button('Hikâyeye başla →',()=>{s.stage='questions';render()}));
  }else if(s.stage==='questions'){
   const q=s.story.questions[s.index];root.append(el('p','Senaryo '+(s.index+1)+' / 12','q-research-kicker'),el('h3',q.q,'q-story-question'));
@@ -42,8 +42,8 @@ function render(){
  h.focus({preventScroll:true});document.getElementById('qStoryOverlay').scrollTop=0;
 }
 function valid(story){return story&&typeof story.title==='string'&&typeof story.intro==='string'&&typeof story.icon==='string'&&Array.isArray(story.questions)&&story.questions.length===12&&story.questions.every(q=>typeof q.q==='string'&&q.q.length>0&&Array.isArray(q.a)&&q.a.length===4&&q.a.every(a=>typeof a==='string'&&a.length>0)&&new Set(q.a).size===4&&Array.isArray(q.traits)&&q.traits.length===4&&new Set(q.traits).size===4&&q.traits.every(t=>Number.isInteger(t)&&t>=0&&t<4))&&Array.isArray(story.results)&&story.results.length===8&&new Set(story.results.map(r=>r.name)).size===8&&story.results.every(r=>typeof r.name==='string'&&typeof r.description==='string'&&Array.isArray(r.weights)&&r.weights.length===4&&r.weights.every(w=>Number.isInteger(w)&&w>=0&&w<=10)&&r.weights.reduce((a,b)=>a+b,0)===10)}
-window.qStoryOpen=function(story,id){const m=window.quizloriaMembership,u=firebase.auth().currentUser;if(!m?.ready||!m.active||!u||m.uid!==u.uid)throw Error('Aktif Premium üyeliği gerekiyor.');if(!valid(story))throw Error('Hikâye testi şu anda açılamıyor.');if(session)close();priorFocus=document.activeElement;stopV6Timer();openV9Page('tests');session={story,id,uid:u.uid,index:0,answers:[],stage:'intro'};const overlay=el('div');overlay.id='qStoryOverlay';const panel=el('div',undefined,'q-research-panel');panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label',story.title);const exit=button('✕ Kapat',close);exit.className='q-research-close';const body=el('div');body.id='qStoryBody';panel.append(exit,body);overlay.append(panel);document.body.append(overlay);render()};
-window.addEventListener('quizloria:membership',()=>{if(session&&!allowed()){close();v11Toast('Premium erişimin sona erdi veya hesabın değişti.')}});
+window.qStoryOpen=function(story,id){const m=window.quizloriaMembership,u=firebase.auth().currentUser;if(!(m?.accessReady&&m.freeTests)&&(!m?.ready||!m.active||!u||m.uid!==u.uid))throw Error('Test erişimi gerekiyor.');if(!valid(story))throw Error('Hikâye testi şu anda açılamıyor.');if(session)close();priorFocus=document.activeElement;stopV6Timer();openV9Page('tests');session={story,id,uid:u?.uid||null,index:0,answers:[],stage:'intro'};const overlay=el('div');overlay.id='qStoryOverlay';const panel=el('div',undefined,'q-research-panel');panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-label',story.title);const exit=button('✕ Kapat',close);exit.className='q-research-close';const body=el('div');body.id='qStoryBody';panel.append(exit,body);overlay.append(panel);document.body.append(overlay);render()};
+window.addEventListener('quizloria:membership',()=>{if(session&&!allowed()){close();v11Toast(window.quizloriaMembership?.freeTests?'Hesabın değiştiği için test kapatıldı.':'Premium erişimin sona erdi veya hesabın değişti.')}});
 document.addEventListener('keydown',e=>{if(!session)return;if(e.key==='Escape'){e.preventDefault();close()}else if(e.key==='Tab'){const items=[...document.querySelectorAll('#qStoryOverlay button:not(:disabled),#qStoryOverlay summary')].filter(x=>x.getClientRects().length);if(e.shiftKey&&(document.activeElement===items[0]||document.activeElement.tagName==='H2')){e.preventDefault();items.at(-1)?.focus()}else if(!e.shiftKey&&document.activeElement===items.at(-1)){e.preventDefault();items[0]?.focus()}}});
 })();
 
