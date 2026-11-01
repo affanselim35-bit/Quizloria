@@ -32,4 +32,9 @@ Optional environment variables: `QUIZLORIA_BROWSER` selects a browser executable
 
 With Playwright installed, `node tests/psychology.cjs` checks all 80 questions at mobile and desktop widths, including 320 question screens and all ten questionnaires' mixed, resource-focused, and difficulty-focused summaries. It verifies four visible, distinct, question-specific choices, explicit selection before continuing, back navigation, accurate counts, evidence quoted from actual selections, editable results, result headings clear of navigation, and no horizontal overflow. This suite uses a local page fixture, never signs in, and never writes to Firebase; running emulators are not required.
 
+## Immediate knowledge-answer feedback
+
+`node tests/answer-feedback.cjs` checks normal quiz feedback at mobile and desktop widths: hidden answers before confirmation, correct/wrong styling and text, locked choices, score consistency, restoring a revealed answer after reload, last-question review before results, wrong-answer practice, unchanged personality navigation, mixed tests, timer expiry and paused timers while reading feedback. It uses only a local fixture and never signs in or writes to Firebase. Explanations appear when question content supplies one or a matching built-in explanation exists.
+
+
 

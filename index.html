@@ -494,6 +494,18 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 @media(max-width:600px){#psyHub .psy-result-hero{padding:20px 17px}#psyHub .psy-result-why{padding:18px 15px}#psyHub .psy-result-description{font-size:16px}}
 @media(max-width:600px){#psyHub{padding:18px 14px}#psyHub .psy-actions{display:grid;grid-template-columns:1fr 1fr}#psyHub .psy-actions button:last-child{grid-column:1/-1}#psyHub .psy-choice{font-size:15px;padding:14px}#psyHub .psy-question{font-size:20px;line-height:1.5}}
 </style>
+<style>
+#answers .answer:disabled{opacity:1;cursor:default}
+#answers .answer.answer-correct,#answers .answer.answer-correct:hover{background:#185339!important;color:#effff4!important;border:2px solid #65dc99;box-shadow:none}
+#answers .answer.answer-wrong,#answers .answer.answer-wrong:hover{background:#70283a!important;color:#fff1f3!important;border:2px solid #ff94a9;box-shadow:none}
+#questionFeedback[hidden]{display:none!important}
+.question-feedback{padding:18px 20px;margin-top:18px;border:1px solid #a88acb;border-radius:14px;background:#2b203a;color:#f3eaff;text-align:left;line-height:1.65;overflow-wrap:anywhere;scroll-margin-top:180px}
+.question-feedback>strong{font-size:19px;display:block}.question-feedback p{margin:10px 0 0;color:inherit}
+.question-feedback[data-outcome="correct"]{border-color:#65dc99;background:#123d2b}
+.question-feedback[data-outcome="wrong"]{border-color:#ff94a9;background:#48202e}
+.question-feedback .question-explanation{padding-top:12px;border-top:1px solid #ffffff30;font-size:15px}
+@media(max-width:600px){.question-feedback{padding:16px}.question-feedback>strong{font-size:17px}}
+</style>
 </head>
 
 <body data-quizloria-view="home">
@@ -754,10 +766,11 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
         <h2 class="question" id="question"></h2>
 
         <div id="answers"></div>
+        <div id="questionFeedback" class="question-feedback" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
 
         <div class="quiz-actions">
             <button onclick="goHome()">← Ana Sayfa</button>
-            <button id="nextQuestion" type="button" onclick="confirmAnswer()" disabled>Sonraki Soru →</button>
+            <button id="nextQuestion" type="button" onclick="confirmAnswer()" disabled>Cevabı Onayla</button>
         </div>
 
     </div>
@@ -1161,6 +1174,7 @@ function openKuzeySpecialLink(){
 window.addEventListener('load',()=>setTimeout(openKuzeySpecialLink,100));
 let activeQuiz = "personality";
 let pendingAnswer = null;
+let answerRevealed = false;
 let activeQuestionList = [];
 let v6Mode="normal", v6Practice=false, v6TimerId=null, v6Seconds=15;
 let v6WrongQuestions=[];
@@ -1225,9 +1239,13 @@ function getActiveQuestions() { return activeQuestionList; }
 
 function showQuestion() {
     pendingAnswer = null;
+    answerRevealed = false;
+    const feedback = document.getElementById("questionFeedback");
+    feedback.hidden = true;
+    feedback.replaceChildren();
     const nextButton = document.getElementById("nextQuestion");
     nextButton.disabled = true;
-    nextButton.textContent = currentQuestion === getActiveQuestions().length - 1 ? "Sonucu Gör →" : "Sonraki Soru →";
+    nextButton.textContent = isPersonalityQuiz(activeQuiz) ? (currentQuestion === getActiveQuestions().length - 1 ? "Sonucu Gör →" : "Sonraki Soru →") : "Cevabı Onayla";
     const list = getActiveQuestions();
     const item = list[currentQuestion];
     document.getElementById("progress").textContent =
@@ -1238,21 +1256,28 @@ function showQuestion() {
     document.getElementById("progressTrack").setAttribute("aria-valuenow", percentage);
     const answers = document.getElementById("answers");
     answers.innerHTML = "";
-    beginV6Timer();
     item.a.forEach((answer, index) => {
         const button = document.createElement("button");
         button.className = "answer";
         button.textContent = answer;
+        button.type = "button";
+        button.dataset.label = answer;
         button.setAttribute("aria-pressed", "false");
         button.onclick = () => selectAnswer(index);
         answers.appendChild(button);
     });
+    if (!isPersonalityQuiz(activeQuiz) && selectedAnswers.length > currentQuestion) {
+        pendingAnswer = selectedAnswers[currentQuestion];
+        answerRevealed = true;
+        showAnswerFeedback(item, pendingAnswer);
+    } else beginV6Timer();
 }
 
 let correctAnswers = 0;
 let selectedAnswers = [];
 
 function selectAnswer(index) {
+    if (answerRevealed) return;
     pendingAnswer = index;
     document.querySelectorAll("#answers .answer").forEach((button, i) => {
         const selected = i === index;
@@ -1265,17 +1290,69 @@ function selectAnswer(index) {
 }
 
 function confirmAnswer() {
+    if (answerRevealed) { advanceQuizQuestion(); return; }
     if (pendingAnswer === null) return;
     stopV6Timer();
     const index = pendingAnswer;
     v11SoundEffect(index===getActiveQuestions()[currentQuestion].correct?"correct":"next");
-    selectedAnswers.push(index);
+    selectedAnswers[currentQuestion] = index;
     if (isPersonalityQuiz(activeQuiz)) {
-        scores[index]++;
+        if (index >= 0) scores[index]++;
     } else if (index === getActiveQuestions()[currentQuestion].correct) {
         correctAnswers++;
     }
+    if (!isPersonalityQuiz(activeQuiz)) {
+        answerRevealed = true;
+        v11SaveProgress();
+        showAnswerFeedback(getActiveQuestions()[currentQuestion], index);
+        return;
+    }
+    advanceQuizQuestion();
+}
+
+const QUIZ_ANSWER_EXPLANATIONS = {
+    "Su hangi kimyasal formülle gösterilir?": "H₂O, bir su molekülünün iki hidrojen ve bir oksijen atomundan oluştuğunu gösterir.",
+    "Bir üçgenin iç açılarının toplamı kaç derecedir?": "Düzlem geometrisinde bir üçgenin üç iç açısının toplamı 180 derecedir.",
+    "Hangi elementin simgesi Au'dur?": "Altının simgesi Au, Latince adı olan aurumdan gelir.",
+    "Satrançta oyuna her oyuncu kaç taşla başlar?": "Her oyuncunun başlangıçta 8 piyonu, 2 kalesi, 2 atı, 2 fili, 1 veziri ve 1 şahı vardır: toplam 16 taş.",
+    "Dünyanın doğal uydusu hangisidir?": "Ay, Dünya'nın çevresinde dolanan doğal uydusudur; Güneş ise bir yıldızdır.",
+    "Ay'a ilk ayak basan insan kimdir?": "Neil Armstrong, 1969'daki Apollo 11 görevi sırasında Ay yüzeyine ilk adım atan insan oldu."
+};
+function showAnswerFeedback(item, selected) {
+    stopV6Timer();
+    const isCorrect = selected === item.correct;
+    document.querySelectorAll("#answers .answer").forEach((button, i) => {
+        button.disabled = true;
+        button.classList.remove("selected-answer");
+        button.classList.toggle("answer-correct", i === item.correct);
+        button.classList.toggle("answer-wrong", i === selected && !isCorrect);
+        const label = button.dataset.label;
+        button.textContent = i === item.correct ? "✓ Doğru cevap · " + label : i === selected ? "✗ Seçimin · " + label : label;
+    });
+    const feedback = document.getElementById("questionFeedback");
+    feedback.replaceChildren();
+    feedback.dataset.outcome = isCorrect ? "correct" : selected === -1 ? "timeout" : "wrong";
+    const title = document.createElement("strong");
+    title.textContent = isCorrect ? "✅ Doğru cevap!" : selected === -1 ? "⏱️ Süre doldu. Bu soru boş sayıldı." : "❌ Bu cevap doğru değil.";
+    const correct = document.createElement("p");
+    correct.textContent = "Doğru cevap: " + item.a[item.correct];
+    feedback.append(title, correct);
+    const explanation = typeof item.explanation === "string" ? item.explanation : QUIZ_ANSWER_EXPLANATIONS[item.q];
+    if (explanation) { const text = document.createElement("p"); text.className = "question-explanation"; text.textContent = explanation; feedback.append(text); }
+    feedback.hidden = false;
+    const next = document.getElementById("nextQuestion");
+    next.disabled = false;
+    next.textContent = currentQuestion === getActiveQuestions().length - 1 ? "Sonucu Gör →" : "Sonraki Soru →";
+    const percentage = Math.round(((currentQuestion + 1) / getActiveQuestions().length) * 100);
+    document.getElementById("progressFill").style.width = percentage + "%";
+    document.getElementById("progressTrack").setAttribute("aria-valuenow", percentage);
+    feedback.focus({preventScroll:true});
+    feedback.scrollIntoView({block:"nearest",behavior:"instant"});
+}
+function advanceQuizQuestion() {
     currentQuestion++;
+    pendingAnswer = null;
+    answerRevealed = false;
     if (currentQuestion < getActiveQuestions().length){v11SaveProgress();showQuestion();}
     else {v11ClearProgress();showResult();}
 }
@@ -1970,5 +2047,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script src="social.js?v=2"></script>
 </body>
 </html>
+
 
 
