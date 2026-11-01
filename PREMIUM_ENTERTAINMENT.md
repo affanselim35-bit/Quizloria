@@ -41,7 +41,7 @@ Results prominently show the character, its editorial interpretation, “Neden b
 
 Public `premiumCatalog` entries have `kind: story-persona`, `category: fun`, and `count: 12`. They appear in the common test grid with crown badges, search/category controls and a scenario-test filter.
 
-Actual questions and outcomes live in the protected `premiumStories/{id}` bank. Reads require active server-owned Premium membership; writes require the trusted admin role. Rules enforce twelve complete scenarios, four choices and a permutation of theme IDs, eight complete profiles and integer profile weights summing to ten. Unknown fields and invalid array keys are rejected.
+Actual questions and outcomes live in the protected `premiumStories/{id}` bank. Reads require active server-owned Premium membership or an existing trusted administrator role; writes require the trusted admin role. Rules enforce twelve complete scenarios, four choices and a permutation of theme IDs, eight complete profiles and integer profile weights summing to ten. Unknown fields and invalid array keys are rejected.
 
 The public renderer (`premium-stories.js`) contains no authored bank. The private seed and authoring generator stay outside this public repository. Answers remain in memory and are not uploaded, saved as quiz progress, added to leaderboards or written to localStorage. Closing or losing membership/account access removes the overlay and its session. Local browser checks use a fake ad SDK only.
 
