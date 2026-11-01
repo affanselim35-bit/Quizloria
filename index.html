@@ -473,6 +473,16 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 .qs-login-actions button{flex:1;min-width:110px}
 </style>
 <style>.v14-score{flex-wrap:wrap;justify-content:flex-start}.v14-score span{flex:1 1 130px;overflow-wrap:anywhere}#qSocial button:disabled{opacity:.5;cursor:wait}</style>
+<style>
+#psyHub .psy-choice{display:block;width:100%;box-sizing:border-box;min-height:52px;padding:16px 18px;margin:0;color:#fff;background:#29223d;border:1px solid #8b71ad;text-align:left;white-space:normal;overflow-wrap:anywhere;line-height:1.55;font-size:16px}
+#psyHub .psy-choice[aria-pressed="true"]{background:#59338b;border:2px solid #d8b4fe;box-shadow:0 0 0 2px #a78bfa33}
+#psyHub .psy-choice:focus-visible{outline:3px solid #e4d2ff;outline-offset:3px}
+#psyHub .psy-selection{min-height:24px;color:#e0cefa;font-weight:600}
+#psyHub .psy-actions button{min-height:48px;white-space:normal}
+#psyHub .psy-actions button:disabled{opacity:.5;cursor:not-allowed}
+#psyHub .psy-review{padding-left:25px}#psyHub .psy-review li{padding:12px 0;border-bottom:1px solid #62487c}#psyHub .psy-review h3{font-size:17px;line-height:1.5}#psyHub .psy-review p{line-height:1.6;color:#e3d7ef}
+@media(max-width:600px){#psyHub{padding:18px 14px}#psyHub .psy-actions{display:grid;grid-template-columns:1fr 1fr}#psyHub .psy-actions button:last-child{grid-column:1/-1}#psyHub .psy-choice{font-size:15px;padding:14px}#psyHub .psy-question{font-size:20px;line-height:1.5}}
+</style>
 </head>
 
 <body data-quizloria-view="home">
@@ -1898,41 +1908,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('q25DeleteDialo
 window.addEventListener('load',()=>{document.getElementById('q22AdminNav').hidden=true;document.getElementById('q22Admin').hidden=true;if(!auth())return;auth().onAuthStateChanged(checkAdmin)});
 })();
 </script>
-<script>
-
-// Özgün psikolojik farkındalık anketleri. Klinik ölçek veya tanı aracı değildir.
-const PSY_TESTS=[
- ['Kaygı ve Endişe','🧠','Son 2 hafta','Günlük kaygı deneyimlerini fark et.',[
- 'Birden fazla konuda endişelenirken zihnini başka bir şeye yöneltmekte zorlandım.','Belirsiz durumlar hakkında uzun süre düşündüm.','Olabilecek olumsuz ihtimallere odaklandım.','Endişe nedeniyle yaptığım işe odaklanmakta zorlandım.','Gergin olduğum zamanlarda gevşemekte zorlandım.','Kaygı nedeniyle bir işi erteledim.','Küçük sorunlar gözümde büyüdü.','Endişelerim günlük planlarımı etkiledi.']],
- ['Duygusal İyi Oluş','🌤️','Son 2 hafta','Günlük ruh hâli ve keyif alma deneyimi.',[
- 'Gün içinde kendimi huzurlu hissettim.','İlgimi çeken etkinliklerden keyif aldım.','Günlük işlerime başlamak için istek duydum.','Yakınlarımla bağlantı kurmak bana iyi geldi.','Kendimi enerjik hissettim.','Gün içinde hoşuma giden küçük şeyleri fark ettim.','Gelecekle ilgili umutlu düşüncelerim oldu.','Günlük yaşamımda anlamlı bulduğum şeylere zaman ayırdım.']],
- ['Algılanan Stres','🌪️','Son 2 hafta','Günlük taleplerin üzerindeki etkisini incele.',[
- 'Yapmam gerekenler bana fazla geldi.','Beklenmedik bir durum beni zorladı.','Zamanımı yetiştirmekte zorlandım.','Gün içinde baskı altında hissettim.','Dinlenirken bile sorumluluklarımı düşündüm.','Birden fazla işi aynı anda yönetmek beni yordu.','Küçük aksiliklere karşı sabrım azaldı.','Günlük yükümlülüklerim yüzünden kendime zaman ayıramadım.']],
- ['Tekrarlayan Düşünceler','💭','Son 2 hafta','Zihnin aynı konulara dönme eğilimi.',[
- 'Geçmişte yaşadığım bir olayı tekrar tekrar düşündüm.','Bir konuşmadan sonra söylediklerimi uzun süre değerlendirdim.','Aklıma gelen bir düşünceyi bırakmakta zorlandım.','Olası sorunları zihnimde tekrar tekrar canlandırdım.','Aynı konuya dönmek günlük işlerimi aksattı.','Küçük kararlar üzerinde gereğinden uzun düşündüm.','Düşüncelerim uykuya hazırlanırken devam etti.','Bir sorunu çözmesem de onu düşünmeye devam ettim.']],
- ['Duygusal Farkındalık','❤️','Son 2 hafta','Duyguları ayırt etme ve adlandırma.',[
- 'Ne hissettiğimi kelimelerle ifade edebildim.','Duygularımın ne zaman değiştiğini fark ettim.','Bir duygunun hangi olaydan sonra ortaya çıktığını anlayabildim.','Aynı anda birden fazla duygu hissedebileceğimi fark ettim.','Duygularımı bedenimdeki değişikliklerle ilişkilendirebildim.','Zorlandığımda hangi duyguya sahip olduğumu ayırt edebildim.','Birine nasıl hissettiğimi açıklayabildim.','Duygularım ile düşüncelerimi birbirinden ayırabildim.']],
- ['Öz Şefkat','🪞','Son 2 hafta','Hatalar ve güçlükler karşısında kendine yaklaşım.',[
- 'Hata yaptığımda kendime anlayış gösterebildim.','Zorlandığımda bunun insan olmanın bir parçası olduğunu hatırladım.','Kendimle destekleyici bir dille konuştum.','Başarısızlık sonrası kendime toparlanma zamanı tanıdım.','Kendimi başkalarıyla kıyaslamadan değerlendirebildim.','Eksiklerimi fark ederken güçlü yanlarımı da gördüm.','Kötü geçen bir günün beni bütünüyle tanımlamadığını hatırladım.','Kendime bir arkadaşıma göstereceğim anlayışı gösterebildim.']],
- ['Sosyal Ortamlarda Kaygı','👥','Son 2 hafta','Başkalarının değerlendirmesine ilişkin endişeler.',[
- 'Kalabalıkta konuşurken gerildim.','Yeni insanlarla tanışmadan önce olumsuz ihtimalleri düşündüm.','Bir hata yaparsam insanların ne düşüneceğinden endişelendim.','Bir gruba katılmakta tereddüt ettim.','Söz almak istediğim hâlde çekindim.','Başkalarının beni izlediğini düşündüğümde rahatsız oldum.','Sosyal bir olaydan sonra davranışlarımı tekrar değerlendirdim.','Eleştirilme ihtimali nedeniyle bir etkinlikten kaçındım.']],
- ['Duygu Düzenleme','🧩','Son 2 hafta','Yoğun duygularla başa çıkma becerilerini fark et.',[
- 'Yoğun duygular yaşarken kısa bir mola verebildim.','Tepki vermeden önce ne hissettiğimi anlamaya çalıştım.','Zorlandığımda güvendiğim biriyle konuşabildim.','Duygularım yoğunken günlük işlerime yavaş da olsa devam edebildim.','Sakinleşmeme yardımcı olan bir yöntem kullanabildim.','Bir tartışma sonrası kendimi toparlayabildim.','Olumsuz duyguların zamanla değişebileceğini hatırladım.','Zor bir duygu yaşarken kendime zarar vermeyen bir başa çıkma yolu seçebildim.']],
- ['Uyku ve Dinlenme','🌙','Son 2 hafta','Uyku rutini ve dinlenmiş hissetme.',[
- 'Uykuya dalmakta zorlandım.','Gece uyanıp tekrar uyumakta zorlandım.','Sabah dinlenmemiş uyandım.','Gün içinde uykulu hissettim.','Uyku saatlerim günden güne çok değişti.','Yatmadan önce zihnimi sakinleştirmekte zorlandım.','Yetersiz uyku günlük dikkatimi etkiledi.','Gün içinde dinlenmeye ihtiyaç duydum.']],
- ['Psikolojik Dayanıklılık','🌱','Son 2 hafta','Zorluklara uyum ve destek kaynakları.',[
- 'Bir aksilikten sonra yeni bir çözüm arayabildim.','Zor bir durum karşısında yardım isteyebildim.','Değişen planlara uyum sağlayabildim.','Küçük de olsa ilerleme kaydettiğimi fark ettim.','Bir sorunu yönetilebilir parçalara ayırabildim.','Zor zamanlarda bana iyi gelen etkinliklere yer verdim.','Önceki zorluklardan öğrendiklerimi hatırladım.','Bir şey yolunda gitmediğinde farklı bir yol deneyebildim.']]
-];
-const PSY_POSITIVE=new Set([1,4,5,7,9]);
-let psyIndex=-1,psyStep=0,psyAnswers=[];
-function psyEl(){return document.getElementById('psyContent')}
-function psyList(){psyIndex=-1;const e=psyEl();if(!e)return;e.replaceChildren();const grid=document.createElement('div');grid.className='psy-grid';PSY_TESTS.forEach((t,i)=>{const c=document.createElement('article');c.className='psy-card';const h=document.createElement('h3');h.textContent=t[1]+' '+t[0];const p=document.createElement('p');p.textContent=t[3]+' • 8 soru';const b=document.createElement('button');b.textContent='Değerlendirmeye Başla →';b.onclick=()=>psyStart(i);c.append(h,p,b);grid.append(c)});e.append(grid)}
-function psyStart(i){psyIndex=i;psyStep=0;psyAnswers=[];psyDraw()}
-function psyDraw(){const t=PSY_TESTS[psyIndex],e=psyEl();e.replaceChildren();const panel=document.createElement('div');panel.className='psy-panel';const h=document.createElement('h2');h.textContent=t[1]+' '+t[0];const note=document.createElement('p');note.className='psy-warning';note.textContent='Bu, bilimsel kavramlardan esinlenen özgün bir farkındalık anketidir; doğrulanmış bir klinik ölçek değildir. Sonuçlar tanı veya hastalık şiddeti göstermez. Yanıtların kaydedilmez.';const progress=document.createElement('p');progress.className='psy-progress';progress.textContent='Soru '+(psyStep+1)+' / '+t[4].length+' · '+t[2];const q=document.createElement('div');q.className='psy-question';q.textContent=t[4][psyStep];const answers=document.createElement('div');answers.className='psy-answers';['Hiçbir zaman','Birkaç gün','Günlerin yarısından fazlasında','Neredeyse her gün'].forEach((a,v)=>{const b=document.createElement('button');b.textContent=a;b.onclick=()=>{psyAnswers.push(v);psyStep++;if(psyStep<t[4].length)psyDraw();else psyFinish()};answers.append(b)});const back=document.createElement('button');back.textContent='← Anketlere dön';back.style.marginTop='18px';back.onclick=psyList;panel.append(h,note,progress,q,answers,back);e.append(panel)}
-function psyFinish(){const t=PSY_TESTS[psyIndex],e=psyEl();e.replaceChildren();const panel=document.createElement('div');panel.className='psy-panel psy-result';const h=document.createElement('h2');h.textContent='🧠 '+t[0]+' · Yanıt Özeti';const counts=[0,0,0,0];psyAnswers.forEach(v=>counts[v]++);const p=document.createElement('p');p.className='psy-muted';p.textContent='8 ifadenin '+counts[0]+' tanesine “Hiçbir zaman”, '+counts[1]+' tanesine “Birkaç gün”, '+counts[2]+' tanesine “Günlerin yarısından fazlasında”, '+counts[3]+' tanesine “Neredeyse her gün” yanıtını verdin.';const p2=document.createElement('p');p2.className='psy-muted';p2.textContent=PSY_POSITIVE.has(psyIndex)?'Bu ifadeler, '+t[0].toLocaleLowerCase('tr-TR')+' konusundaki deneyimlerini fark etmen için hazırlanmıştır. Tek başına yüksek veya düşük yanıt sıklığı sağlık durumunu belirlemez.':'Bu ifadeler, '+t[0].toLocaleLowerCase('tr-TR')+' konusundaki deneyimlerini gözden geçirmen için hazırlanmıştır. Yanıt sıklığı tek başına bir bozukluk veya belirti şiddeti anlamına gelmez.';const p3=document.createElement('p');p3.className='psy-warning';p3.textContent='Bu anket tanı koymaz ve bilimsel olarak doğrulanmış bir puanlama içermez. Yaşadıkların günlük hayatını etkiliyorsa güvendiğin bir yetişkinle veya ruh sağlığı uzmanıyla görüşebilirsin. Yanıtların kaydedilmedi.';const b=document.createElement('button');b.textContent='← Diğer değerlendirmeler';b.onclick=psyList;panel.append(h,p,p2,p3,b);e.append(panel);psyAnswers=[]}
-document.addEventListener('DOMContentLoaded',psyList);
-
-</script>
+<script defer src="psychology.js?v=1"></script>
 <section id="qcPlay" class="qc-play" hidden aria-live="polite"></section>
 <script>
 /* Quizloria: Firebase tabanlı bağlantıya özel testler. */
@@ -1983,4 +1959,5 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script src="social.js?v=2"></script>
 </body>
 </html>
+
 
