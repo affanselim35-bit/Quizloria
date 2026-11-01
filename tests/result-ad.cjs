@@ -1,0 +1,39 @@
+// Fake SDK only. No real advertising requests, impressions or clicks.
+const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');const {chromium}=require('playwright');
+const root=path.resolve(__dirname,'..'),errors=[];let browser,server,checks=0;
+const fakeAds=`(function(){window.__adSlots=[];const queued=window.adsbygoogle||[];window.adsbygoogle={loaded:true,push:function(){const slot=document.querySelector('ins.adsbygoogle:not([data-adsbygoogle-status])');if(!slot||slot.getBoundingClientRect().width<=0)throw Error('Hidden or missing unit');window.__adSlots.push(slot.dataset.adSlot);slot.setAttribute('data-adsbygoogle-status','done');slot.setAttribute('data-ad-status','filled');slot.textContent='Reklam alanı · Yerleşim önizlemesi';slot.style.background='#27202f';slot.style.color='#cbbfda';slot.style.lineHeight=slot.getBoundingClientRect().height+'px';}};queued.forEach(()=>window.adsbygoogle.push({}));})();`;
+async function main(){
+ server=http.createServer(async(req,res)=>{try{
+  const pathname=new URL(req.url,'http://localhost').pathname;
+  if(pathname.startsWith('/sdk/')){const name=path.basename(pathname);res.setHeader('Content-Type','application/javascript');res.end(process.env.QUIZLORIA_SDK_DIR?fs.readFileSync(path.join(process.env.QUIZLORIA_SDK_DIR,name)):await(await fetch('https://www.gstatic.com/firebasejs/10.14.1/'+name)).text());return}
+  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','psychology.js','social.js','party.js','home-ad.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
+  let content=fs.readFileSync(path.join(root,name),'utf8');if(name==='index.html')content=content.replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
+  res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
+ }catch(e){res.writeHead(500);res.end(e.message)}});
+ await new Promise(r=>server.listen(8092,'127.0.0.1',r));browser=await chromium.launch({headless:true,...(process.env.QUIZLORIA_BROWSER?{executablePath:process.env.QUIZLORIA_BROWSER}:{})});
+ async function page(width,delay=0){const p=await browser.newPage({viewport:{width,height:700}});p.on('pageerror',e=>errors.push(e.message));await p.route('**/*',async route=>{const u=new URL(route.request().url());if(u.hostname==='127.0.0.1')return route.continue();if(u.hostname==='pagead2.googlesyndication.com'){if(delay)await new Promise(r=>setTimeout(r,delay));return route.fulfill({contentType:'application/javascript',body:fakeAds})}return route.abort()});await p.goto('http://127.0.0.1:8092/',{waitUntil:'domcontentloaded'});await p.evaluate(()=>new Promise(resolve=>{const off=firebase.auth().onAuthStateChanged(()=>{off();resolve()})}));return p}
+ for(const width of [390,768,1280]){
+  const p=await page(width),ad=p.locator('#qResultAd');assert.equal(await ad.isVisible(),false);checks++;
+  await p.evaluate(()=>{startQuiz('general');activeQuestionList=[generalQuestions[5]];showQuestion()});assert.equal(await ad.isVisible(),false);assert.equal(await p.locator('#qHomeAd').isVisible(),false);checks++;
+  await p.locator('#answers button').nth(2).click();await p.locator('#nextQuestion').click();assert.equal(await ad.isVisible(),false);checks++;
+  await p.locator('#nextQuestion').click();await ad.waitFor({state:'visible'});await ad.scrollIntoViewIfNeeded();await p.waitForFunction(()=>window.__adSlots?.includes('9467142425'));checks++;
+  const sizes=await p.locator('#qResultAd ins').boundingBox();assert.equal(sizes.height,width<500?100:width<800?60:90);assert.ok(sizes.width<=width);assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks++;
+  assert.equal(await p.evaluate(()=>document.getElementById('result').getBoundingClientRect().bottom<document.getElementById('qResultAd').getBoundingClientRect().top),true);checks++;
+  const resultRequests=()=>p.evaluate(()=>window.__adSlots.filter(x=>x==='9467142425').length);assert.equal(await resultRequests(),1);checks++;
+  if(width===390){await p.evaluate(()=>scrollTo(0,0));await p.screenshot({path:path.join(process.env.QUIZLORIA_SCREENSHOTS||root,'result-ad-mobile.png'),fullPage:true,animations:'disabled'})}
+  await p.evaluate(()=>openV9Page('home'));await ad.waitFor({state:'hidden'});await p.locator('#qHomeAd').scrollIntoViewIfNeeded();await p.waitForFunction(()=>window.__adSlots.includes('4266786630'));assert.equal(await resultRequests(),1);checks++;
+  await p.evaluate(()=>{startQuiz('personality');activeQuestionList=activeQuestionList.slice(0,1);showQuestion()});await p.locator('#answers button').first().click();await p.locator('#nextQuestion').click();await ad.waitFor({state:'visible'});await ad.scrollIntoViewIfNeeded();assert.equal(await resultRequests(),1);checks++;
+  await p.evaluate(()=>openV9Page('psychology'));await ad.waitFor({state:'hidden'});await p.locator('.psy-card').first().getByRole('button').click();
+  for(let i=0;i<8;i++){assert.equal(await ad.isVisible(),false);await p.locator('.psy-choice').first().click();await p.locator('.psy-actions button').nth(1).click()}
+  await ad.waitFor({state:'visible'});await ad.scrollIntoViewIfNeeded();assert.equal(await p.evaluate(()=>document.querySelector('.psy-result').getBoundingClientRect().bottom<document.getElementById('qResultAd').getBoundingClientRect().top),true);assert.equal(await resultRequests(),1);checks++;
+  await p.getByRole('button',{name:'← Yanıtlarımı düzenle',exact:true}).click();await ad.waitFor({state:'hidden'});checks++;
+  await p.locator('.psy-actions button').nth(1).click();await ad.waitFor({state:'visible'});await ad.scrollIntoViewIfNeeded();assert.equal(await resultRequests(),1);checks++;
+  await p.evaluate(()=>document.querySelector('#qResultAd ins').setAttribute('data-ad-status','unfilled'));await ad.waitFor({state:'hidden'});checks++;
+  await p.close();
+ }
+ // Reach results before the delayed SDK arrives: the hidden home unit must not steal the request.
+ const delayed=await page(390,1500);await delayed.evaluate(()=>{startQuiz('general');activeQuestionList=[generalQuestions[5]];showQuestion()});await delayed.locator('#answers button').nth(2).click();await delayed.locator('#nextQuestion').click();await delayed.locator('#nextQuestion').click();await delayed.locator('#qResultAd').scrollIntoViewIfNeeded();await delayed.waitForFunction(()=>window.__adSlots?.includes('9467142425'));assert.equal(await delayed.evaluate(()=>window.__adSlots[0]),'9467142425');checks++;await delayed.close();
+ assert.deepEqual(errors,[]);console.log(checks+' result ad checks passed: knowledge/personality/psychology results, hidden question screens, both SDK load orders, independent home slot, responsive sizes and no duplicate requests.');
+}
+main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
+

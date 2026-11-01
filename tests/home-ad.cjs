@@ -15,7 +15,7 @@ async function main(){
   const p=await browser.newPage({viewport:{width,height:700}});p.on('pageerror',e=>errors.push(e.message));
   await p.route('**/*',route=>{const url=new URL(route.request().url());if(url.hostname==='127.0.0.1')return route.continue();if(url.hostname==='pagead2.googlesyndication.com')return route.fulfill({contentType:'application/javascript',body:fakeAds});return route.abort()});
   await p.goto('http://127.0.0.1:8091/');await p.evaluate(()=>new Promise(resolve=>{const off=firebase.auth().onAuthStateChanged(()=>{off();resolve()})}));await p.evaluate(()=>openV9Page('home'));
-  const box=p.locator('#qHomeAd');assert.equal(await p.locator('ins.adsbygoogle').count(),1);checks++;
+  const box=p.locator('#qHomeAd');assert.equal(await p.locator('#qResultAd ins').count(),0);checks++;
   assert.equal(await p.locator('script[src*="pagead/js/adsbygoogle.js"]').count(),1);checks++;
   const correctPlace=await p.evaluate(()=>{const a=document.getElementById('qHomeAd');return a.previousElementSibling.classList.contains('daily-panel')&&!a.closest('.daily-panel,.hero,#q19Entry,#quiz,#psyHub')});assert.equal(correctPlace,true);checks++;
   await box.scrollIntoViewIfNeeded();await p.waitForFunction(()=>window.__adRequests===1);checks++;
@@ -32,4 +32,5 @@ async function main(){
  assert.deepEqual(errors,[]);console.log(checks+' manual ad layout checks passed; fake SDK only, four screen widths, no duplicate requests, no ads in quiz or other views, unfilled/ad-blocker handling.');
 }
 main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
+
 

@@ -42,6 +42,11 @@ With Playwright installed, `node tests/psychology.cjs` checks all 80 questions a
 
 The inline banner sizes follow Google's supported responsive-code modifications: https://support.google.com/adsense/answer/9183363?hl=en . The global AdSense loader remains included only once. Auto Ads must remain disabled in the AdSense account to preserve manual-only placement.
 
+## Result-screen ad
+
+`node tests/result-ad.cjs` uses a fake SDK to verify the separate test-result slot after knowledge, personality and psychology results, below all explanations and controls. It checks hidden question/edit screens, independent homepage and result slots, SDK loading before/after reaching results, responsive sizes, duplicate prevention and unfilled behavior. The shared controller detaches uninitialized units until the SDK and visible view are ready so a hidden unit cannot consume another slot's initialization.
+
+
 
 
 
