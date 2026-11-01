@@ -181,6 +181,7 @@ function finish(){
  hero.dataset.pattern=['resources','difficulties','mixed'][kind];
  hero.append(node('p',t[1]+' '+t[0]+' · Sonucun','psy-result-kicker'));
  const heading=node('h2',title,'psy-result-title');heading.tabIndex=-1;hero.append(heading,node('p',explanation,'psy-result-description'));panel.append(hero);
+ window.qAddResultCardControls?.(hero,{kind:'reflection',test:t[0],result:title,summary:explanation});
  const why=node('section',undefined,'psy-result-why');why.append(node('h3','Bu sonuç neden çıktı?'));
  const method=kind===2
   ?'8 cevabının 4’ünde daha rahat ilerlediğin, 4’ünde ise zorlandığın veya belirsiz kaldığın deneyimleri seçtin. Sayılar eşit olduğu için sonuç her iki yönü de içeriyor.'
@@ -197,4 +198,5 @@ function finish(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',list);else list();
 })();
+
 
