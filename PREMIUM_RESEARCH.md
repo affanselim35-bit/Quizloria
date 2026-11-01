@@ -48,7 +48,7 @@ Source checked 2026-11-01. Translation provenance: Quizloria draft `quizloria-tr
 
 ## Data and access
 
-Only public metadata belongs in `premiumCatalog`; it is shown alongside normal tests with a crown and Premium label. `premiumAssessments/{id}` contains private form content. It uses the same server-enforced active-membership access check as the knowledge test bank. Client users cannot grant memberships or write forms.
+Only public metadata belongs in `premiumCatalog`; it is shown alongside normal tests with a crown and Premium label. `premiumAssessments/{id}` contains private form content. It uses the same server-enforced active-membership or trusted-admin access check as the knowledge test bank. Client users cannot grant memberships or write forms.
 
 The content seed and authoring file are kept outside the public website checkout. Do not add either private seed to this public repository. The twenty forms are built in the private authoring environment. Publishing deploys the updated rules and imports matching private content as well as deploying the renderer; tests themselves never write to production.
 
@@ -75,4 +75,10 @@ The 36 existing `qplus_1` through `qplus_36` tests (18 subjects × İleri/Uzman,
 Legacy `startQuiz('qplus_N')` calls use the Premium fetch path. Old local progress records containing advanced question lists are discarded, and legacy favorites map to the new `premium:qplus_N` IDs. Daily challenges and free mixed/duel pools contain only free test IDs. Moved quizzes retain shuffled question order, normal/speed modes and correct-answer feedback. Membership revocation scrubs the active quiz. Prior public copies and repository history cannot be retroactively made private by this change.
 
 The separate private advanced-bank seed is outside the website checkout. `tests/advanced-premium-rules.cjs` validates all 36 banks against server rules; `tests/advanced-premium-browser.cjs` covers all legacy routes, private loading, scoring, old-progress cleanup, favorites, categories, free pools and revocation. Supply its location via `QUIZLORIA_ADVANCED_SEED`. Payment checkout remains closed until a provider is configured.
+
+## Trusted administrator access
+
+Existing `admins/{uid} === true` accounts can use all Premium content and the ad-free experience without a subscription. This is a server-checked role, not a locally stored flag. The UI waits for both membership and role reads before deciding ad eligibility, labels the access as administrator access without a false expiry date, and watches role removal/account changes. No administrator role or subscription is created by this feature.
+
+Local checks: `tests/admin-premium-rules.cjs` covers all three banks, true-only roles, blocked self-upgrade, revocation and ordinary subscriptions. `tests/admin-premium-browser.cjs` checks ad-free initial reload, knowledge/research/story access, expired subscription with valid admin role, revocation and sign-out.
 
