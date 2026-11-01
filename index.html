@@ -510,6 +510,11 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <style>
 #qHomeAd{width:100%;box-sizing:border-box;margin:36px auto;padding:14px 0 20px;text-align:center;clear:both}
 #qHomeAd[hidden]{display:none!important}#qHomeAd .q-ad-label{display:block;margin:0 0 10px;color:#b9b2c5;font-size:11px;letter-spacing:.5px;font-weight:400}
+#qResultAd{width:calc(100% - 40px);max-width:960px;box-sizing:border-box;margin:42px auto;padding:18px 0;text-align:center;clear:both}
+#qResultAd[hidden]{display:none!important}#qResultAd .q-ad-label{display:block;margin:0 0 10px;color:#b9b2c5;font-size:11px;letter-spacing:.5px;font-weight:400}
+.quizloria_result_banner{display:block;width:100%;max-width:320px;height:100px;margin:0 auto}
+@media(min-width:500px){.quizloria_result_banner{max-width:468px;height:60px}}
+@media(min-width:800px){.quizloria_result_banner{max-width:728px;height:90px}}
 .quizloria_home_banner{display:block;width:100%;max-width:320px;height:100px;margin:0 auto}
 @media(min-width:500px){.quizloria_home_banner{max-width:468px;height:60px}}
 @media(min-width:800px){.quizloria_home_banner{max-width:728px;height:90px}}
@@ -817,6 +822,10 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 
 </section>
 
+<aside id="qResultAd" aria-label="Test sonucu reklamı" hidden>
+  <span class="q-ad-label">Reklam</span>
+  <ins class="adsbygoogle quizloria_result_banner" data-ad-client="ca-pub-7873665910436939" data-ad-slot="9467142425"></ins>
+</aside>
 <footer>
     © 2026 Quizloria | Eğlence ve keşif dünyası
 </footer>
@@ -2057,9 +2066,10 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 
 <script src="party.js?v=2"></script>
 <script src="social.js?v=2"></script>
-<script defer src="home-ad.js?v=1"></script>
+<script defer src="home-ad.js?v=2"></script>
 </body>
 </html>
+
 
 
 
