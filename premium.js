@@ -17,13 +17,14 @@ function render(){
  list.querySelectorAll('.q-extra-test').forEach(card=>card.remove());Object.entries(catalog).forEach(([id,t])=>{
   quizNames['catalog:'+id]=t.title;quizNames['premium:'+id]=t.title;
   const assessment=t.kind==='ipip-facet',story=t.kind==='story-persona';const card=document.createElement('article');card.className='card q-extra-test '+(paid?'q-premium-card':'q-catalog-card');card.dataset.test=(free()?'catalog:':'premium:')+id;card.dataset.category=assessment?'personality':(['knowledge','sports','fun'].includes(t.category)?t.category:'knowledge');card.dataset.difficulty=assessment?'reflection':story?'story':'hard';
+  card.dataset.kind=assessment?'research':story?'character':'knowledge';
   const badge=document.createElement('span');badge.className='q-premium-badge';badge.textContent='👑 PREMIUM’A ÖZEL';
   const title=document.createElement('h3');title.textContent=t.title;const text=document.createElement('p');text.textContent=t.description+' · '+t.count+' soru';
   const b=document.createElement('button');b.type='button';b.className='q-extra-start';b.textContent=!member?.accessReady?'Yükleniyor…':canUse()?'Teste başla →':'🔒 Premium’u keşfet';b.disabled=busy||!member?.accessReady;b.onclick=()=>canUse()?window.qPremiumStart(id):openV9Page('premium');
   const level=document.createElement('span');level.className='v9-level-tag';level.textContent=assessment?'📚 Araştırma temelli · IPIP':story?'🎭 Karakter ve eğlence':'🔴 Zor';
   const favorite=document.createElement('button');favorite.type='button';favorite.className='favorite-btn';favorite.onclick=()=>toggleFavorite((free()?'catalog:':'premium:')+id);
   if(paid)card.append(badge);card.append(title,text,b,level,favorite);list.append(card);
- });renderFavorites();filterTests();
+ });window.qDiscoveryRefresh?.();renderFavorites();filterTests();
 }
 window.qPremiumStart=async function(id){
  if(busy)return;const member=window.quizloriaMembership,u=firebase.auth().currentUser;
