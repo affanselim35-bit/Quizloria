@@ -6,8 +6,14 @@ function init(){
   const container=document.getElementById(id),slot=container?.querySelector('ins.adsbygoogle');
   if(!slot)return null;slot.remove();return {container,slot,requested:false,unfilled:false};
  }).filter(Boolean);
- const loader=document.querySelector('script[src*="pagead/js/adsbygoogle.js"]');
+ let loader=document.querySelector('script[src*="pagead/js/adsbygoogle.js"]');
  let sdkLoaded=!!(window.adsbygoogle&&(window.adsbygoogle.loaded===true||!Array.isArray(window.adsbygoogle)));
+ let sdkRequested=!!loader;
+ function loadSDK(){
+  if(sdkRequested||!window.quizloriaMembership?.adsAllowed)return;
+  sdkRequested=true;loader=document.createElement('script');loader.async=true;loader.crossOrigin='anonymous';loader.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7873665910436939';
+  loader.addEventListener('load',()=>{sdkLoaded=true;sync()},{once:true});document.head.append(loader);
+ }
  function visibleResult(){return !!document.getElementById('result')?.getClientRects().length||!!document.querySelector('#psyContent .psy-result')?.getClientRects().length}
  function request(unit){
   const {container,slot}=unit,rect=container.getBoundingClientRect();
@@ -19,8 +25,9 @@ function init(){
   catch(e){console.warn('Quizloria reklam alanı yüklenemedi.',e);unit.unfilled=true;container.hidden=true}
  }
  function sync(){
+  loadSDK();
   for(const unit of units){
-   const hidden=unit.unfilled||(unit.container.id==='qResultAd'&&!visibleResult());
+   const hidden=unit.unfilled||!window.quizloriaMembership?.adsAllowed||(unit.container.id==='qResultAd'&&!visibleResult());
    if(unit.container.hidden!==hidden)unit.container.hidden=hidden;
    request(unit);
   }
@@ -32,9 +39,11 @@ function init(){
  if('IntersectionObserver' in window){const io=new IntersectionObserver(sync,{rootMargin:'100px 0px'});units.forEach(unit=>io.observe(unit.container))}
  else window.addEventListener('scroll',sync,{passive:true});
  loader?.addEventListener('load',()=>{sdkLoaded=true;sync()},{once:true});
+ window.addEventListener('quizloria:membership',sync);
  window.addEventListener('resize',sync,{passive:true});sync();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
+
 
 

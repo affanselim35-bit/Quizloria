@@ -3,6 +3,7 @@
 'use strict';
 const $=id=>document.getElementById(id),slots=['0','1','2','3','4'];
 let db,auth,session=null,room=null,ref=null,listener=null,presence=null,timer=null,offset=0,choice=null,busy=false,last=-1,timedOut=false,joining=false;
+let friends={},friendsRef=null,sentInvites={},notifiedRematch=null;
 const el=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e};
 const button=(text,fn,disabled=false)=>{const b=el('button',text);b.type='button';b.onclick=fn;b.disabled=disabled;return b};
 function error(e){v11Toast('⚠️ '+(e?.message||String(e)).slice(0,180));console.warn('Quizloria oda:',e)}
@@ -18,6 +19,21 @@ async function init(){
 }
 function name(id){return ($(id).value.trim()||auth.currentUser.displayName||'Oyuncu').slice(0,24)}
 function code(){const a=new Uint32Array(1);crypto.getRandomValues(a);return String(100000+a[0]%900000)}
+function settings(){return {test:$('v17Test').value,mode:$('v17Mode').value,seconds:$('v17Mode').value==='timed'?Number($('v17Time').value):0,maxPlayers:Number($('vPartyCapacity').value)}}
+async function buildRoom(config,playerName,previous=null){
+ const uid=auth.currentUser.uid,bank=config.test==='mixed'?buildMixedV8():getQuestionBank(config.test),list=[...bank];
+ for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]]}
+ if(list.length<10)throw Error('Bu testte en az 10 soru olmalı.');
+ const used=new Set(previous?.questions?.map(q=>q.q)||[]),ordered=[...list.filter(q=>!used.has(q.q)),...list.filter(q=>used.has(q.q))];
+ if(previous&&ordered.slice(0,10).every((q,i)=>q.q===previous.questions[i]?.q))ordered.push(ordered.shift());
+ const questions=ordered.slice(0,10).map(q=>({q:q.q,a:q.a,correct:q.correct}));
+ for(let attempt=0;attempt<6;attempt++){
+  const roomCode=code(),roomRef=db.ref('partyRooms/'+roomCode),value={hostUid:uid,status:'waiting',createdAt:firebase.database.ServerValue.TIMESTAMP,index:0,maxPlayers:config.maxPlayers,players:{0:{uid,name:playerName}},questions,test:config.test,mode:config.mode,seconds:config.seconds};
+  if(previous)value.previousRoom=session.code;
+  try{await roomRef.set(value);return {roomRef,roomCode}}catch(e){if(e.code!=='PERMISSION_DENIED')throw e}
+ }
+ throw Error('Oda oluşturulamadı. Sayfayı yenileyip tekrar dene.');
+}
 async function leaveCurrent(){
  if(!session)return;
  const oldRef=ref,oldSession=session,oldRoom=room;
@@ -53,45 +69,66 @@ window.v14CreateRoom=async function(){
  if(joining)return;setBusy(true);
  try{
   await init();await leaveCurrent();
-  const uid=auth.currentUser.uid,playerName=name('v14HostName');
-  const test=$('v17Test').value,mode=$('v17Mode').value,seconds=mode==='timed'?Number($('v17Time').value):0,maxPlayers=Number($('vPartyCapacity').value);
-  const bank=test==='mixed'?buildMixedV8():getQuestionBank(test),list=[...bank];
-  for(let i=list.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[list[i],list[j]]=[list[j],list[i]]}
-  if(list.length<10)throw Error('Bu testte en az 10 soru olmalı.');
-  const questions=list.slice(0,10).map(q=>({q:q.q,a:q.a,correct:q.correct}));
-  for(let attempt=0;attempt<6;attempt++){
-   const roomCode=code(),roomRef=db.ref('partyRooms/'+roomCode);
-   try{await roomRef.set({hostUid:uid,status:'waiting',createdAt:firebase.database.ServerValue.TIMESTAMP,index:0,maxPlayers,players:{0:{uid,name:playerName}},questions,test,mode,seconds})}
-   catch(e){if(e.code==='PERMISSION_DENIED')continue;throw e}
-   await connect(roomRef,roomCode,'host','0');return;
-  }
-  throw Error('Oda oluşturulamadı. Sayfayı yenileyip tekrar dene.');
+  const nextRoom=await buildRoom(settings(),name('v14HostName'));await connect(nextRoom.roomRef,nextRoom.roomCode,'host','0');
  }catch(e){error(e)}finally{setBusy(false)}
 };
+async function joinRoom(roomCode,playerName){
+ await init();if(!/^\d{6}$/.test(roomCode))throw Error('Altı haneli oda kodunu yaz.');
+ if(session?.code===roomCode){showSection('v14OnlineScreen');return}
+ if(session&&room?.status==='playing')throw Error('Önce devam eden maçından ayrılmalısın.');
+ await leaveCurrent();const roomRef=db.ref('partyRooms/'+roomCode),uid=auth.currentUser.uid;
+ let data;try{data=(await roomRef.once('value')).val()}catch(e){throw Error('Oda bulunamadı, başlamış veya erişime kapalı. Kodu kontrol et.')}
+ if(!data||data.status!=='waiting')throw Error('Bu oda katılıma açık değil.');
+ const existing=members(data).find(p=>p.uid===uid);
+ if(existing){if(existing.left&&uid!==data.hostUid)await roomRef.child('players/'+existing.slot).set({uid,name:playerName});await connect(roomRef,roomCode,uid===data.hostUid?'host':'guest',existing.slot);return}
+ for(let i=1;i<data.maxPlayers;i++){
+  const slot=String(i);if(data.players?.[slot]&&!data.players[slot].left)continue;
+  try{const result=await roomRef.child('players/'+slot).transaction(old=>old===null||old.left?{uid,name:playerName}:undefined,undefined,false);if(result.committed){await connect(roomRef,roomCode,'guest',slot);return}}
+  catch(e){if(e.code!=='PERMISSION_DENIED')throw e}
+ }
+ throw Error('Oda dolu veya oyun başladı. En fazla '+data.maxPlayers+' kişi katılabilir.');
+}
 window.v14JoinRoom=async function(){
  if(joining)return;setBusy(true);
  try{
-  await init();const roomCode=$('v14RoomCode').value.trim();if(!/^\d{6}$/.test(roomCode))throw Error('Altı haneli oda kodunu yaz.');
-  if(session?.code===roomCode){showSection('v14OnlineScreen');return}
-  await leaveCurrent();const roomRef=db.ref('partyRooms/'+roomCode),uid=auth.currentUser.uid,playerName=name('v14GuestName');
-  let data;
-  try{data=(await roomRef.once('value')).val()}catch(e){throw Error('Oda bulunamadı, başlamış veya erişime kapalı. Kodu kontrol et.')}
-  if(!data||data.status!=='waiting')throw Error('Bu oda katılıma açık değil.');
-  const existing=members(data).find(p=>p.uid===uid);
-  if(existing){
-   if(existing.left&&uid!==data.hostUid)await roomRef.child('players/'+existing.slot).set({uid,name:playerName});
-   await connect(roomRef,roomCode,uid===data.hostUid?'host':'guest',existing.slot);return;
-  }
-  for(let i=1;i<data.maxPlayers;i++){
-   const slot=String(i);if(data.players?.[slot]&&!data.players[slot].left)continue;
-   try{
-    const result=await roomRef.child('players/'+slot).transaction(old=>old===null||old.left?{uid,name:playerName}:undefined,undefined,false);
-    if(result.committed){await connect(roomRef,roomCode,'guest',slot);return}
-   }catch(e){if(e.code!=='PERMISSION_DENIED')throw e}
-  }
-  throw Error('Oda dolu veya oyun başladı. En fazla '+data.maxPlayers+' kişi katılabilir.');
+  await init();await joinRoom($('v14RoomCode').value.trim(),name('v14GuestName'));
  }catch(e){error(e)}finally{setBusy(false)}
 };
+window.qPartyInviteFriend=async function(uid){
+ if(joining)throw Error('Oda işleminin tamamlanmasını bekle.');setBusy(true);
+ try{
+  await init();const u=auth.currentUser;if(u.isAnonymous)throw Error('Davet göndermek için hesabına giriş yap.');
+  if(!(await db.ref('socialFriends/'+u.uid+'/'+uid).once('value')).exists())throw Error('Yalnızca arkadaşlarına davet gönderebilirsin.');
+  const profile=(await db.ref('socialProfiles/'+u.uid).once('value')).val();if(!profile?.name)throw Error('Önce sosyal profilini eşitle.');
+  if(session&&room?.status==='finished')await leaveCurrent();
+  if(session&&(session.role!=='host'||room?.status!=='waiting'))throw Error('Davet için bekleme odasının sahibi olmalısın.');
+  if(!session){const created=await buildRoom(settings(),profile.name);await connect(created.roomRef,created.roomCode,'host','0')}
+  const fresh=(await ref.once('value')).val();if(fresh?.status!=='waiting'||active(fresh).length>=fresh.maxPlayers)throw Error('Oda dolu veya başlamış.');
+  const now=Date.now()+offset;
+  await db.ref('duelInvites/'+uid+'/'+u.uid).set({code:session.code,senderName:profile.name,createdAt:firebase.database.ServerValue.TIMESTAMP,expiresAt:now+10*60*1000});
+  sentInvites[uid]=session.code;render();showSection('v14OnlineScreen');v11Toast('Düello daveti gönderildi.');
+ }finally{setBusy(false)}
+};
+window.qPartyAcceptInvite=async function(sender){
+ if(joining)throw Error('Oda işlemi sürüyor.');setBusy(true);
+ try{await init();const u=auth.currentUser,invRef=db.ref('duelInvites/'+u.uid+'/'+sender),inv=(await invRef.once('value')).val();
+  if(!inv||inv.expiresAt<=Date.now()+offset)throw Error('Bu davetin süresi dolmuş.');
+  await joinRoom(inv.code,(u.displayName||'Oyuncu').slice(0,24));await invRef.remove();
+ }finally{setBusy(false)}
+};
+async function rematch(){
+ if(joining||!session||room?.status!=='finished')return;setBusy(true);
+ try{
+  if(room.nextRoom){await joinRoom(room.nextRoom,(auth.currentUser.displayName||members().find(p=>p.uid===session.uid)?.name||'Oyuncu').slice(0,24));return}
+  if(session.role!=='host')return;
+  const old=room,oldRef=ref,hostName=members().find(p=>p.uid===session.uid).name;
+  const created=await buildRoom({test:old.test,mode:old.mode,seconds:old.seconds,maxPlayers:old.maxPlayers},hostName,old);
+  try{const linked=await oldRef.child('nextRoom').transaction(value=>value===null?created.roomCode:undefined,undefined,false);
+   if(!linked.committed){await created.roomRef.child('status').set('cancelled');await joinRoom(linked.snapshot.val(),hostName)}
+   else await connect(created.roomRef,created.roomCode,'host','0');
+  }catch(e){await created.roomRef.child('status').set('cancelled').catch(()=>{});throw e}
+ }catch(e){error(e)}finally{setBusy(false)}
+}
 window.v14Leave=async function(){try{await leaveCurrent();openV9Page('games')}catch(e){error(e);openV9Page('games')}};
 async function start(){
  if(!room||!session||session.role!=='host'||active().length<2)return;
@@ -129,6 +166,7 @@ function render(){
   box.append(button('📋 Oda Kodunu Kopyala',async()=>{try{await navigator.clipboard.writeText(session.code);v11Toast('Oda kodu kopyalandı!')}catch(e){v11Toast('Oda kodunu elle paylaşabilirsin.')}}));
   box.append(el('p',live.length+' / '+room.maxPlayers+' oyuncu · En az 2 kişiyle başlayabilirsiniz.','v14-wait'));
   people.forEach(p=>box.append(el('p',(p.slot==='0'?'👑 ':'🟢 ')+p.name+(p.left?' · Ayrıldı':''))));
+  if(session.role==='host'&&!auth.currentUser.isAnonymous){const invites=el('section',undefined,'q-party-invites');invites.append(el('h3','Arkadaşlarını davet et'));if(!Object.keys(friends).length)invites.append(el('p','Sosyal bölümünden arkadaş ekleyebilirsin.'));Object.entries(friends).filter(([uid])=>!people.some(p=>p.uid===uid&&!p.left)).forEach(([uid,p])=>invites.append(button((sentInvites[uid]===session.code?'✓ Davet gönderildi · ':'Davet et · ')+p.name,()=>qPartyInviteFriend(uid).catch(error),active().length>=room.maxPlayers||joining)));box.append(invites)}
   if(session.role==='host')box.append(button('▶️ '+live.length+' Kişiyle Başlat',start,live.length<2));
   else box.append(el('p','Oda sahibinin başlatması bekleniyor.'));
   return;
@@ -140,7 +178,9 @@ function render(){
   const eligible=scores.filter(p=>!p.left),best=eligible[0]?.score;
   const winners=eligible.filter(p=>p.score===best);
   box.append(el('h2',winners.length>1?'🤝 Berabere: '+winners.map(p=>p.name).join(', '):'🏆 Kazanan: '+(winners[0]?.name||scores[0].name)));
-  scores.forEach((p,i)=>box.append(el('p',(i+1)+'. '+p.name+' · '+p.score+' / 10 doğru'+(p.left?' · Ayrıldı':''))));return;
+  scores.forEach((p,i)=>box.append(el('p',(i+1)+'. '+p.name+' · '+p.score+' / 10 doğru'+(p.left?' · Ayrıldı':''))));
+  if(room.nextRoom)box.append(button('🔄 Rövanşa Katıl',rematch,joining));else if(session.role==='host')box.append(button('🔄 Rövanş Oluştur',rematch,joining));else box.append(el('p','Oda sahibi rövanş açtığında buradan katılabilirsin.'));
+  return;
  }
  const q=questions[index];if(!q)return;
  const own=answers[session.uid],done=Number.isInteger(own),allDone=complete(),answered=people.filter(p=>p.left||Number.isInteger(answers[p.uid])).length;
@@ -160,6 +200,11 @@ function render(){
  }
 }
 authChange();
-function authChange(){window.addEventListener('load',()=>{if(window.firebase&&firebase.apps.length)firebase.auth().onAuthStateChanged(u=>{if(session&&u?.uid!==session.uid){detach();openV9Page('games')}})})}
+function authChange(){window.addEventListener('load',()=>{if(window.firebase&&firebase.apps.length)firebase.auth().onAuthStateChanged(u=>{
+ if(friendsRef)friendsRef.off();friendsRef=null;friends={};sentInvites={};
+ if(u&&!u.isAnonymous){friendsRef=firebase.database().ref('socialFriends/'+u.uid);friendsRef.on('value',s=>{friends=s.val()||{};if(session)render()},()=>{})}
+ if(session&&u?.uid!==session.uid){detach();openV9Page('games')}
+})})}
 })();
+
 

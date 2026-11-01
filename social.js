@@ -1,6 +1,6 @@
 (function(){
 'use strict';
-const $=id=>document.getElementById(id);let current=null,watchers=[],requestWatches=[],data={},search=null,searchVersion=0,loading=false;
+const $=id=>document.getElementById(id);let current=null,watchers=[],requestWatches=[],data={},search=null,searchVersion=0,loading=false,seenInvites=new Set();
 const db=()=>firebase.database(),user=()=>{const u=firebase.auth().currentUser;return u&&!u.isAnonymous?u:null};
 function status(text){$('qsStatus').textContent=text}
 const safeName=s=>String(s||'').trim().replace(/\s+/g,' ').slice(0,24);
@@ -39,7 +39,12 @@ function draw(){
  outgoing.forEach(([uid,p])=>{const r=data.sentRequests?.[uid];row(sent,p.name+' · '+(r?.status==='accepted'?'Kabul edildi':'Bekliyor'),[['İsteği iptal et',()=>cancel(uid),r?.status==='accepted']])});
  const list=Object.entries(data.friends||{}).filter(([,p])=>p);
  if(!list.length){friends.textContent='Henüz arkadaşın yok.';board.textContent='Önce arkadaş ekle.'}
- list.forEach(([uid,p],i)=>{row(friends,p.name,[['Arkadaşlıktan çıkar',()=>removeFriend(uid,p.name)]]);row(board,(i+1)+'. '+p.name)});
+ list.forEach(([uid,p],i)=>{row(friends,p.name,[['Düelloya davet et',()=>qPartyInviteFriend(uid)],['Arkadaşlıktan çıkar',()=>removeFriend(uid,p.name)]]);row(board,(i+1)+'. '+p.name)});
+ const invites=$('qsDuelInvites');invites.replaceChildren();const now=window.quizloriaMembership?.now()||Date.now();
+ const pending=Object.entries(data.duelInvites||{}).filter(([,r])=>r.expiresAt>now);
+ $('qsDuelNavBadge').textContent=pending.length?' ('+pending.length+')':'';
+ if(!pending.length)invites.textContent='Bekleyen düello davetin yok.';
+ pending.forEach(([uid,r])=>row(invites,r.senderName+' · Düelloya davet ediyor',[['Odaya katıl',()=>qPartyAcceptInvite(uid)],['Reddet',()=>db().ref('duelInvites/'+current+'/'+uid).remove()]]));
  redrawSearch();
 }
 function watchOutgoing(outgoing){
@@ -102,13 +107,16 @@ async function refresh(){if(!user()){status('Sosyal özellikler için giriş yap
 window.qSocialFind=find;window.qSocialRefresh=refresh;
 window.qSocialSave=()=>act(async()=>{const u=user();if(!u)return;const p=await ensure(u);$('qsMe').textContent='👤 '+p.name;status('Hesap kullanıcı adın eşitlendi.')});
 function start(u){
- clear(watchers);clear(requestWatches);current=u&&!u.isAnonymous?u.uid:null;data={};search=null;searchVersion++;
+ clear(watchers);clear(requestWatches);current=u&&!u.isAnonymous?u.uid:null;data={};search=null;searchVersion++;seenInvites=new Set();
  const logged=!!current;$('qsLoginGate').hidden=logged;document.querySelectorAll('#qSocial .qs-card').forEach((card,i)=>{if(i>0)card.hidden=!logged});
  $('qsNickname').hidden=true;$('qsNickname').nextElementSibling.hidden=!logged;
- if(!logged){$('qsMe').textContent='🔒 Giriş yapmadın';['qsRequests','qsSent','qsFriends','qsLeaderboard','qsSearchResult'].forEach(id=>$(id).replaceChildren());$('qsBadge').textContent='';status('');return}
+ if(!logged){$('qsMe').textContent='🔒 Giriş yapmadın';['qsRequests','qsSent','qsFriends','qsLeaderboard','qsSearchResult','qsDuelInvites'].forEach(id=>$(id).replaceChildren());$('qsBadge').textContent='';$('qsDuelNavBadge').textContent='';status('');return}
  ensure(u).then(p=>{if(current===u.uid)$('qsMe').textContent='👤 '+p.name}).catch(e=>{if(current===u.uid)status('⚠️ '+e.message)});
  watch('socialRequests/'+u.uid,r=>{data.requests=r||{};draw()});watch('socialFriends/'+u.uid,r=>{data.friends=r||{};draw()});watch('socialSent/'+u.uid,watchOutgoing);
+ watch('duelInvites/'+u.uid,r=>{data.duelInvites=r||{};for(const [sender,inv] of Object.entries(data.duelInvites)){const key=sender+':'+inv.code;if(inv.expiresAt>(window.quizloriaMembership?.now()||Date.now())&&!seenInvites.has(key)){seenInvites.add(key);v11Toast(inv.senderName+' seni düelloya davet etti. Sosyal bölümünden katıl.')}}draw()});
 }
+setInterval(()=>{if(current&&Object.keys(data.duelInvites||{}).length)draw()},30000);
 window.addEventListener('load',()=>{if(window.firebase){const app=firebase.apps.length?firebase.app():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG);app.auth().onAuthStateChanged(start)}});
 })();
+
 
