@@ -6,7 +6,7 @@ async function main(){
  server=http.createServer(async(req,res)=>{try{
   const pathname=new URL(req.url,'http://localhost').pathname;
   if(pathname.startsWith('/sdk/')){const name=path.basename(pathname);res.setHeader('Content-Type','application/javascript');res.end(process.env.QUIZLORIA_SDK_DIR?fs.readFileSync(path.join(process.env.QUIZLORIA_SDK_DIR,name)):await(await fetch('https://www.gstatic.com/firebasejs/10.14.1/'+name)).text());return}
-  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','psychology.js','social.js','party.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
+  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','psychology.js','social.js','party.js','home-ad.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
   let content=fs.readFileSync(path.join(root,name),'utf8');
   if(name==='index.html')content=content.replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
   res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
@@ -63,4 +63,5 @@ async function main(){
  assert.deepEqual(errors,[]);console.log(questions+' question screens passed; all ten tests have verified mixed, resource and difficulty summaries with correct counts, actual answer evidence, and editable results on mobile and desktop.');
 }
 main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
+
 

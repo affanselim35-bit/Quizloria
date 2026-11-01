@@ -8,7 +8,7 @@ async function main(){
  server=http.createServer(async(req,res)=>{try{
   const pathname=new URL(req.url,'http://localhost').pathname;
   if(pathname.startsWith('/sdk/')){const name=path.basename(pathname);res.setHeader('Content-Type','application/javascript');res.end(sdkDir?fs.readFileSync(path.join(sdkDir,name)):await (await fetch('https://www.gstatic.com/firebasejs/10.14.1/'+name)).text());return}
-  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','party.js','social.js','psychology.js','favicon.svg'].includes(name)){res.statusCode=404;res.end();return}
+  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','party.js','home-ad.js','social.js','psychology.js','favicon.svg'].includes(name)){res.statusCode=404;res.end();return}
   let content=fs.readFileSync(path.join(root,name),'utf8');
   if(name==='index.html')content=content.replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
   res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
@@ -19,6 +19,7 @@ async function main(){
  for(let i=0;i<6;i++){
   const context=await browser.newContext({viewport:{width:i===0?390:1280,height:900}}),p=await context.newPage();pages.push(p);
   p.on('pageerror',e=>errors.push(e.message));
+  await p.route('**/*',route=>new URL(route.request().url()).hostname==='127.0.0.1'?route.continue():route.abort());
   await p.goto('http://127.0.0.1:8088/');await p.waitForFunction(()=>window.firebase&&window.qSocialSave);
   await p.evaluate(async i=>{const c=await firebase.auth().createUserWithEmailAndPassword('player'+i+'-'+Date.now()+'@example.test','LocalTest123!');await c.user.updateProfile({displayName:'Player'+i});await qSocialSave();openV9Page('social')},i);
   await p.waitForFunction(()=>document.getElementById('qsMe').textContent.includes('Player'));
@@ -73,5 +74,6 @@ async function main(){
  console.log(checks+' browser flows passed: five-player full match, social lifecycle, timed two-player mode, disconnect and host departure.');
 }
 main().catch(e=>{console.error(e);console.error('Page errors:',errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
+
 
 
