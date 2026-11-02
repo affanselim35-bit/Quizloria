@@ -629,7 +629,6 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <button type="button" class="q-kind-tile" data-test-kind="character" aria-pressed="false" onclick="qChooseTestKind('character')"><span aria-hidden="true">🎭</span><strong>Karakter ve eğlence</strong><small>Hikâyeni seç, karakterini keşfet</small><b data-kind-count="character">Yükleniyor…</b></button>
 <button type="button" class="q-kind-tile" data-test-kind="personality" aria-pressed="false" onclick="qChooseTestKind('personality')"><span aria-hidden="true">✨</span><strong>Kendini tanı</strong><small>Tercihlerini ve tarzını düşün</small><b data-kind-count="personality">Yükleniyor…</b></button>
 <button type="button" class="q-kind-tile" data-test-kind="research" aria-pressed="false" onclick="qChooseTestKind('research')"><span aria-hidden="true">🔬</span><strong>Araştırma temelli</strong><small>Kaynakları açıklanan öz değerlendirmeler</small><b data-kind-count="research">Yükleniyor…</b></button></div></section>
-<section id="qNewTests" class="q-new-section" hidden aria-label="Yeni eklenen testler"><div class="q-new-heading"><div><h2>✨ Yeni Eklenenler</h2><p>Son eklenen karakter maceralarını keşfet.</p></div><button id="qNewTestsAll" type="button" onclick="qShowLatestTests()">Tümünü gör</button></div><div id="qNewTestList" class="q-new-grid" tabindex="0" aria-label="Yeni testler; diğerlerini görmek için yatay kaydır"></div></section>
 
         <div class="v9-difficulty"><label for="v9Difficulty">🧠 Zorluk:</label><select id="v9Difficulty" onchange="filterTests()"><option value="all">Tüm seviyeler</option><option value="easy">🟢 Kolay</option><option value="medium">🟡 Orta</option><option value="hard">🔴 Zor</option><option value="reflection">📚 Öz değerlendirme</option><option value="story">🎭 Senaryo testleri</option></select></div><div class="test-discovery" aria-label="Testleri filtrele">
           <input id="testSearch" class="test-search" type="search" placeholder="🔎 Test ara..." aria-label="Test ara" oninput="filterTests()">
@@ -1609,7 +1608,7 @@ function filterTests(){
   const categoryMatch=selectedTestFilter==="all"||(selectedTestFilter==="favorites"?readFavorites().includes(card.dataset.test):card.dataset.category===selectedTestFilter);
   const searchMatch=card.textContent.toLocaleLowerCase("tr-TR").includes(query);
   const kindMatch=selectedTestKind==="all"||card.dataset.kind===selectedTestKind;
-  const collectionMatch=selectedTestCollection!=="latest"||card.dataset.recent==="true";
+  const collectionMatch=true;
   const visible=categoryMatch&&searchMatch&&difficultyMatch&&kindMatch&&collectionMatch;
   card.classList.toggle("hidden",!visible);
   if(visible)shown++;
@@ -1698,7 +1697,7 @@ function renderV9Missions(){
 // V9: Each navigation tab is a separate view, rather than an anchor scroll.
 const v9ViewGroups={
  home:['.hero','#qPremiumHome','.daily-panel','#qHomeAd'],
- tests:['#v9Tests','#qTestKinds','#qNewTests','.v9-difficulty','.test-discovery','#testGrid','#noTests'],
+ tests:['#v9Tests','#qTestKinds','.v9-difficulty','.test-discovery','#testGrid','#noTests'],
  games:['#v9Games'],
  psychology:['#psyHub'],
  builder:['#v13Builder'],
@@ -2115,7 +2114,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script defer src="research-tests.js?v=3"></script>
 <script defer src="persona-results.js?v=2"></script>
 <script defer src="premium-stories.js?v=3"></script>
-<script defer src="discovery.js?v=1"></script>
+<script defer src="discovery.js?v=2"></script>
 <script defer src="premium.js?v=8"></script>
 <script src="party.js?v=3"></script>
 <script src="social.js?v=3"></script>

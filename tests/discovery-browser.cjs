@@ -9,7 +9,7 @@ async function main(){
  server=http.createServer(async(req,res)=>{try{
   const pathname=new URL(req.url,'http://localhost').pathname;
   if(pathname.startsWith('/sdk/')){res.setHeader('Content-Type','application/javascript');res.end(fs.readFileSync(path.join(process.env.QUIZLORIA_SDK_DIR,path.basename(pathname))));return}
-  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','party.js','social.js','psychology.js','membership.js','premium.js','result-card.js','would-you-rather.js','discovery.js','premium-stories.js','research-tests.js','persona-results.js','home-ad.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
+  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','party.js','social.js','psychology.js','membership.js','premium.js','daily-mystery.js','daily-mystery-core.js','result-card.js','would-you-rather.js','discovery.js','premium-stories.js','research-tests.js','persona-results.js','home-ad.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
   let content=fs.readFileSync(path.join(root,name),'utf8');if(name==='index.html')content=content.replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
   res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
  }catch(e){res.writeHead(500);res.end(e.message)}});
@@ -22,25 +22,23 @@ async function main(){
  for(const width of [390,1280]){
   const {p}=await account('Guest',width);await p.evaluate(()=>openV9Page('tests'));await p.waitForFunction(()=>document.querySelectorAll('.q-catalog-card').length===83);
   const total=await p.locator('#testGrid .card').count();assert.equal(await p.locator('[data-test-kind]').count(),4);const counts=await p.evaluate(()=>{const all=[...document.querySelectorAll('#testGrid .card')];return Object.fromEntries(['knowledge','character','personality','research'].map(k=>[k,all.filter(c=>c.dataset.kind===k).length]))});assert.equal(Object.values(counts).reduce((a,b)=>a+b,0),total);assert.equal(counts.character,30);assert.equal(counts.research,20);checks++;
-  assert.equal(await p.locator('#qNewTests').isVisible(),true);assert.equal(await p.locator('#qNewTestList .q-new-test').count(),6);assert.equal(await p.locator('#qNewTestsAll').textContent(),'Tümünü gör (24)');checks++;
-  if(width===390){await p.locator('#qTestKinds').screenshot({path:path.join(process.env.QUIZLORIA_SCREENSHOTS||root,'discovery-mobile.png'),animations:'disabled'});await p.locator('#qNewTests').screenshot({path:path.join(process.env.QUIZLORIA_SCREENSHOTS||root,'new-tests-mobile.png'),animations:'disabled'})}
+  assert.equal(await p.locator('#qNewTests').count(),0);checks++;
   for(const kind of ['knowledge','character','personality','research']){
-   await p.locator('[data-test-kind='+kind+']').click();const values=await p.locator('#testGrid .card:not(.hidden)').evaluateAll(cards=>cards.map(c=>c.dataset.kind));assert.equal(values.length,counts[kind]);assert.ok(values.every(v=>v===kind));assert.equal(await p.locator('[data-test-kind='+kind+']').getAttribute('aria-pressed'),'true');assert.equal(await p.locator('#qNewTests').isVisible(),false);checks++;
+   await p.locator('[data-test-kind='+kind+']').click();const values=await p.locator('#testGrid .card:not(.hidden)').evaluateAll(cards=>cards.map(c=>c.dataset.kind));assert.equal(values.length,counts[kind]);assert.ok(values.every(v=>v===kind));assert.equal(await p.locator('[data-test-kind='+kind+']').getAttribute('aria-pressed'),'true');assert.equal(await p.locator('#qNewTests').count(),0);checks++;
   }
   await p.locator('#testGrid .card:not(.hidden)').first().getByRole('button',{name:'Teste başla →',exact:true}).click();await p.getByRole('button',{name:'Anladım, başlayalım →'}).waitFor();await p.keyboard.press('Escape');checks++;
-  await p.getByRole('button',{name:'Tüm testler / filtreleri temizle',exact:true}).click();assert.equal(await p.locator('#testGrid .card:not(.hidden)').count(),total);assert.equal(await p.locator('#qNewTests').isVisible(),true);checks++;
-  await p.locator('#qNewTestList button').first().click();await p.getByRole('button',{name:'Hikâyeye başla →'}).waitFor();await p.keyboard.press('Escape');checks++;
-  await p.locator('#qNewTestsAll').click();assert.equal(await p.locator('#testGrid .card:not(.hidden)').count(),24);assert.equal(await p.locator('#qDiscoverySelection').textContent(),'Yeni eklenen testleri görüyorsun.');assert.equal(await p.locator('#qNewTests').isVisible(),false);checks++;
+  await p.getByRole('button',{name:'Tüm testler / filtreleri temizle',exact:true}).click();assert.equal(await p.locator('#testGrid .card:not(.hidden)').count(),total);assert.equal(await p.locator('#qNewTests').count(),0);checks++;
+  await p.evaluate(()=>qShowLatestTests());assert.equal(await p.locator('#testGrid .card:not(.hidden)').count(),total);checks++;
   await p.locator('#testSearch').fill('Pokémon');assert.equal(await p.locator('#testGrid .card:not(.hidden)').count(),1);checks++;
   await p.locator('#testSearch').fill('zzzzxyxy-not-a-test');assert.equal(await p.locator('#testGrid .card:not(.hidden)').count(),0);assert.equal(await p.locator('#noTests').isVisible(),true);checks++;
   await p.getByRole('button',{name:'Tüm testler / filtreleri temizle',exact:true}).click();assert.equal(await p.locator('#noTests').isVisible(),false);checks++;
   await p.locator('[data-test-kind=knowledge]').click();await p.locator('[data-filter=sports]').click();const sports=await p.locator('#testGrid .card:not(.hidden)').evaluateAll(cards=>cards.map(c=>({kind:c.dataset.kind,category:c.dataset.category})));assert.ok(sports.length>0&&sports.every(c=>c.kind==='knowledge'&&c.category==='sports'));checks++;
   await p.getByRole('button',{name:'Tüm testler / filtreleri temizle',exact:true}).click();await p.evaluate(()=>{localStorage.setItem(FAVORITES_KEY,JSON.stringify(['catalog:story-anime-yolculugu']));setTestFilter('favorites')});assert.equal(await p.locator('#testGrid .card:not(.hidden)').count(),1);checks++;
   assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.equal(await p.locator('.q-premium-badge').count(),0);checks++;
-  await p.evaluate(()=>openV9Page('home'));assert.equal(await p.locator('#qNewTests').isVisible(),false);assert.equal(await p.locator('#qTestKinds').isVisible(),false);checks++;
+  await p.evaluate(()=>openV9Page('home'));assert.equal(await p.locator('#qNewTests').count(),0);assert.equal(await p.locator('#qTestKinds').isVisible(),false);checks++;
   await p.close();
  }
- assert.deepEqual(errors,[]);console.log(checks+' discovery browser checks passed at mobile/desktop widths (four kinds, latest 24, working previews, combined filters, empty state and reset).');
+ assert.deepEqual(errors,[]);console.log(checks+' discovery browser checks passed at mobile/desktop widths (four kinds, no latest section, all stories in the common catalog, combined filters, empty state and reset).');
 }
 main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
 
