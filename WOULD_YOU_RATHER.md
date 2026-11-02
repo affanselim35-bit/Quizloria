@@ -1,6 +1,6 @@
 # Hangisini seçerdin?
 
-Oyun Modları contains 40 permanent dilemmas across four categories. Guests play without any database writes, sign-in, or simulated statistics. Registered accounts may vote once per question, then see live real totals. This is entertainment, not a representative survey.
+The dedicated O mu Bu mu? tab contains 40 permanent dilemmas across four categories. Oyun Modları shows a routing card to this tab rather than a playable embedded game. Guests play without any database writes, sign-in, or simulated statistics. Registered accounts may vote once per question, then see live real totals. This is entertainment, not a representative survey.
 
 The published IDs w01–w40 and their choice meanings are immutable. Add new IDs and extend the server allowlist for future questions; never recycle an existing ID. Category order is shuffled with no repeats within each deck.
 
