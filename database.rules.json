@@ -464,6 +464,77 @@
         ".write": false,
         ".validate": "newData.isBoolean()"
       }
+    },
+    "mysterySeasons": {
+      ".read": true,
+      ".write": false
+    },
+    "mysteryCases": {
+      "$day": {
+        ".read": "data.child('opensAt').isNumber() && now >= data.child('opensAt').val()",
+        ".write": false
+      }
+    },
+    "mysteryKeys": {
+      "$day": {
+        ".read": "auth != null && auth.token.firebase.sign_in_provider !== 'anonymous' && root.child('mysteryAttempts').child($day).child(auth.uid).exists()",
+        ".write": false
+      }
+    },
+    "mysteryAttempts": {
+      "$day": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid && auth.token.firebase.sign_in_provider !== 'anonymous' && !data.exists() && newData.exists() && root.child('mysteryKeys').child($day).exists() && now >= root.child('mysteryKeys').child($day).child('opensAt').val() && now < root.child('mysteryKeys').child($day).child('closesAt').val()",
+          ".validate": "newData.hasChildren(['choice','at'])",
+          "choice": {
+            ".validate": "newData.isNumber() && (newData.val() === 0 || newData.val() === 1 || newData.val() === 2 || newData.val() === 3)"
+          },
+          "at": {
+            ".validate": "newData.isNumber() && newData.val() === now"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "mysteryScores": {
+      "$month": {
+        ".read": true,
+        "$uid": {
+          "$day": {
+            ".write": "auth != null && auth.uid === $uid && !data.exists() && newData.exists() && root.child('mysteryAttempts').child($day).child($uid).exists() && root.child('mysteryKeys').child($day).child('month').val() === $month",
+            ".validate": "newData.hasChildren(['points','at','name'])",
+            "points": {
+              ".validate": "newData.isNumber() && newData.val() === (root.child('mysteryAttempts').child($day).child($uid).child('choice').val() === root.child('mysteryKeys').child($day).child('correct').val() ? 100 : 0)"
+            },
+            "at": {
+              ".validate": "newData.isNumber() && newData.val() === root.child('mysteryAttempts').child($day).child($uid).child('at').val()"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 24 && ((root.child('socialProfiles').child($uid).child('name').isString() && newData.val() === root.child('socialProfiles').child($uid).child('name').val()) || newData.val() === 'Dedektif')"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        }
+      }
+    },
+    "mysteryAwards": {
+      ".read": true,
+      ".write": false
+    },
+    "mysteryEntitlements": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": false
+      }
+    },
+    "mysteryBonus": {
+      ".read": "auth != null && root.child('mysteryEntitlements').child(auth.uid).child('activeFrom').val() <= now && root.child('mysteryEntitlements').child(auth.uid).child('expiresAt').val() > now",
+      ".write": false
     }
   }
 }
