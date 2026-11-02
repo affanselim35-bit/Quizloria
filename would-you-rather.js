@@ -102,12 +102,12 @@ function init(){
  #qRather [hidden]{display:none!important}#qRatherStatus{min-height:3em}#qRather .qr-actions{display:flex;flex-wrap:wrap;gap:12px}#qRather .qr-actions button,#qRatherLogin{padding:12px 18px;border-radius:12px;border:1px solid #ad8cdb;background:#6533a0;color:white;cursor:pointer;font:inherit}
  #qRather .qr-note{color:#cbbbdc;font-size:13px;margin-bottom:0}@media(max-width:540px){#qRather .qr-choices{grid-template-columns:1fr}#qRather .qr-choice{min-height:112px;font-size:18px}}
  </style><div class="qr-top"><span>🤔 İKİ SEÇENEK, TEK KARAR</span><label>Kategori <select id="qRatherCategory"><option value="all">Hepsi</option>${[...new Set(rows.map(r=>r[0]))].map(c=>'<option>'+c+'</option>').join('')}</select></label></div>
- <h3 id="qRatherTitle">Hangisini seçerdin?</h3><p>Doğru cevap yok. İçinden geleni seç, diğer oyuncuların ne düşündüğünü keşfet.</p>
+ <h3 id="qRatherTitle">O mu Bu mu?</h3><p>Hangisini seçerdin? Doğru cevap yok. İçinden geleni seç, diğer oyuncuların ne düşündüğünü keşfet.</p>
  <p id="qRatherProgress"></p><div class="qr-choices"><button class="qr-choice" id="qRatherA" type="button" aria-pressed="false"></button><button class="qr-choice" id="qRatherB" type="button" aria-pressed="false"></button></div>
  <div id="qRatherResults" hidden><div class="qr-results"><div><strong id="qRatherPercentA"></strong><div class="qr-track"><div class="qr-fill" id="qRatherBarA"></div></div></div><div><strong id="qRatherPercentB"></strong><div class="qr-track"><div class="qr-fill" id="qRatherBarB"></div></div></div></div><p id="qRatherCount"></p></div>
  <p id="qRatherStatus" role="status" aria-live="polite"></p><div class="qr-actions"><button type="button" id="qRatherNext">Sıradaki →</button><button type="button" id="qRatherRetry">Tekrar dene</button><button type="button" id="qRatherLogin">Oy vermek için giriş yap</button></div>
  <p class="qr-note">40 ikilem · Her hesap her ikileme bir kez oy verir; oy değiştirilemez. Oranlar yalnızca oy veren hesaplara aittir, bilimsel bir anket değildir. Seçimlerin topluluk toplamlarına katılır; burada adın ve profilin gösterilmez.</p>`;
- const games=el('v9Games');games.insertBefore(host,games.children[2]);
+ const games=el('v9Games');games.insertAdjacentElement('afterend',host);host.style.display=document.body.dataset.quizloriaView==='rather'?'':'none';
  el('qRatherA').onclick=()=>vote(0);el('qRatherB').onclick=()=>vote(1);el('qRatherCategory').onchange=reset;el('qRatherRetry').onclick=()=>{if(!busy)render()};
  el('qRatherNext').onclick=()=>{if(busy)return;if(position+1<order.length){position++;render()}else{reset();message('Bu tur bitti! Yeni bir sırayla devam edebilirsin.')}};
  el('qRatherLogin').onclick=()=>window.q19Open?.('login');reset();

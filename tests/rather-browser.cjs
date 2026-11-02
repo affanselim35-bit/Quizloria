@@ -11,7 +11,7 @@ async function main(){
  browser=await chromium.launch({headless:true,executablePath:process.env.QUIZLORIA_BROWSER});
  const context=await browser.newContext({viewport:{width:390,height:900}});
  await context.route('**/*',r=>{const u=new URL(r.request().url());if(u.hostname==='127.0.0.1')return r.continue();if(u.hostname==='pagead2.googlesyndication.com')return r.fulfill({contentType:'application/javascript',body:'window.adsbygoogle={push(){}}'});return r.abort()});
- const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:8097/');await p.waitForFunction(()=>window.quizloriaMembership?.ready);await p.evaluate(()=>openV9Page('games'));
+ const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));await p.goto('http://127.0.0.1:8097/');await p.waitForFunction(()=>window.quizloriaMembership?.ready);await p.evaluate(()=>openV9Page('rather'));
  assert.ok(await p.locator('#qRather').isVisible());checks++;
  assert.equal(await p.locator('#qRatherCategory option').count(),5);checks++;
  await p.locator('#qRatherA').click();assert.equal(await p.locator('#qRatherA').getAttribute('aria-pressed'),'true');assert.equal(await p.locator('#qRatherResults').isVisible(),false);assert.equal(await admin('GET','ratherVotes'),null);checks++;
@@ -26,7 +26,7 @@ async function main(){
  await p.locator('#qRatherRetry').click();await p.waitForFunction(()=>document.getElementById('qRatherPercentA').textContent==='%50 · 1 oy'&&!document.getElementById('qRatherResults').hidden);assert.equal(await p.locator('#qRatherA').getAttribute('aria-pressed'),'true');checks++;
  await p.locator('#qRather').screenshot({path:path.join(process.env.QUIZLORIA_SCREENSHOTS||root,'rather-mobile.png')});assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);checks++;
  await p.evaluate(()=>firebase.auth().signOut());await p.waitForFunction(()=>!document.getElementById('qRatherLogin').hidden);assert.equal(await p.locator('#qRatherResults').isVisible(),false);await admin('PUT','ratherVotes/'+question+'/third-voter',1);assert.equal(await p.locator('#qRatherResults').isVisible(),false);checks++;
- await p.evaluate(()=>openV9Page('games'));await p.setViewportSize({width:1280,height:1000});assert.equal(await p.locator('#qRather .qr-choices').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),2);await p.locator('#qRather').screenshot({path:path.join(process.env.QUIZLORIA_SCREENSHOTS||root,'rather-desktop.png')});checks++;
+ await p.evaluate(()=>openV9Page('rather'));await p.setViewportSize({width:1280,height:1000});assert.equal(await p.locator('#qRather .qr-choices').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),2);await p.locator('#qRather').screenshot({path:path.join(process.env.QUIZLORIA_SCREENSHOTS||root,'rather-desktop.png')});checks++;
  assert.deepEqual(errors,[]);console.log(checks+' dilemma browser checks passed (guest, 40 questions, categories, real votes, account changes, reload recovery, responsive layouts).');
 }
 main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});

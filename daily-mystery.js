@@ -72,7 +72,7 @@ async function load(){
  }catch(e){if(v===version)status('Dosya yüklenemedi. Bağlantını kontrol edip Yenile’ye bas.')}
  finally{if(v===version){busy=false;controls()}}
 }
-function go(){openV9Page('games');const e=$('qMystery'),nav=document.querySelector('.v9-nav');window.scrollTo({top:scrollY+e.getBoundingClientRect().top-(nav?.offsetHeight||0)-18,behavior:'smooth'})}
+function go(){openV9Page('mystery');const e=$('qMystery'),nav=document.querySelector('.v9-nav');window.scrollTo({top:scrollY+e.getBoundingClientRect().top-(nav?.offsetHeight||0)-18,behavior:'smooth'})}
 function init(){
  const host=node('section');host.id='qMystery';host.setAttribute('aria-labelledby','qmTitle');host.innerHTML=`<style>
  #qMystery,#qmProfile{border:1px solid #8669a9;border-radius:24px;background:linear-gradient(140deg,#211b38,#101522);padding:clamp(18px,4vw,30px);margin:24px 0;color:#f5f0ff;text-align:left}#qMystery h3{font-size:clamp(24px,5vw,32px);margin:8px 0}#qMystery h4{font-size:21px;margin:18px 0 12px}#qMystery p,#qMystery li{line-height:1.7}#qMystery button,#qmProfile button{padding:12px 17px;border:1px solid #ae8bd7;border-radius:12px;color:white;background:#59378b;font:inherit;cursor:pointer}#qMystery button:disabled{opacity:.5;cursor:default}#qMystery [hidden]{display:none!important}#qMystery :focus-visible{outline:3px solid #ffe392;outline-offset:3px}
@@ -82,7 +82,7 @@ function init(){
  <aside class="qm-panel"><h4 id="qmMonth">Canlı aylık sıralama</h4><div id="qmBoard" aria-label="Aylık sıralama"></div><p class="qm-note">Doğru çözüm: 100 puan · Yanlış: 0 · Günde 1 cevap hakkı. İstanbul saatiyle 00.00’da yeni gün, ayın 1’inde yeni sezon başlar. Eşit puanda o puana önce ulaşan öndedir; tam eşitlikte sabit sıralama kullanılır.</p></aside></div>
  <details><summary>🏆 Ayın ödülü ve yarışma kuralları</summary><p>Ay birincisi, sonraki ay boyunca 👑 Ayın Baş Dedektifi unvanı, altın profil çerçevesi ve 3 özel dosyalı Gizli Dedektif Odası kazanır. Adı Şampiyonlar Panosu’nda kalır. Özel dosyalar puan vermez. En az bir doğru çözüm gerekir; ödül devredilemez ve parasal değeri yoktur.</p><p class="qm-note">Katıldığında oyun adın ve puanın sıralamada görünür. Cevabın hesap başına tek seferliktir; yanlış cevap da hakkını kullanır. Bu hikâyeler kurgudur. Dosya havuzu 31 hikâyeden oluşur ve sonraki aylarda dönebilir. Ay kapanışında sonuçlar doğrulanır; ödül, kapanış kontrolü tamamlanınca açılır.</p></details>
  <div id="qmRoom" hidden><h4>🗝️ Gizli Dedektif Odası</h4><p>Bu ayın şampiyonuna özel, sıralama dışında üç dosya.</p><button id="qmOpenRoom" type="button">Özel dosyalarımı aç</button><div id="qmBonusList"></div><div id="qmBonusBody"></div></div><h4>🏛️ Şampiyonlar Panosu</h4><div id="qmHall"></div>`;
- const games=$('v9Games');games.insertBefore(host,games.children[2]);
+ const games=$('v9Games');games.insertAdjacentElement('afterend',host);host.style.display=document.body.dataset.quizloriaView==='mystery'?'':'none';
  const profile=node('section');profile.id='qmProfile';profile.innerHTML='<h3 id="qmProfileTitle">🕵️ Dedektif Kulübün</h3><p id="qmProfileText"></p>';$('v9Profile').append(profile);profile.append(button('Günün Gizemi’ne git →',go));
  document.querySelector('.daily-panel')?.append(button('🔎 Günün Gizemi’ni çöz →',go));
  $('qmSubmit').onclick=submit;$('qmRefresh').onclick=()=>{if(!busy)load()};$('qmLogin').onclick=()=>q19Open('login');$('qmOpenRoom').onclick=openBonus;

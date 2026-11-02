@@ -1,6 +1,8 @@
 # Günün Gizemi and monthly detective league
 
-The Games view contains one scheduled fictional case each Istanbul day. A home shortcut and a profile card link to it. Registered accounts commit one immutable choice per day; correct answers earn 100 points, wrong answers earn 0 and consume the attempt. Guests may read clues and the public leaderboard but cannot submit. No advertisement placements change.
+The Günün Gizemi tab contains one scheduled fictional case each Istanbul day. Games contains a routing card, with no playable mystery or dilemma inside Games itself. The O mu Bu mu? tab holds the existing dilemma game. A home shortcut and a profile card link directly to the mystery tab. Registered accounts commit one immutable choice per day; correct answers earn 100 points, wrong answers earn 0 and consume the attempt. Guests may read clues and the public leaderboard but cannot submit. No advertisement placements change.
+
+The separate Gece Vardiyası: Kayıp Mühür extra file requires matching two independently deduced orderings. It is freely playable and explicitly non-ranking. Its answer is public client content, unlike ranked daily keys. The existing daily question and submitted answer meanings are preserved after a production answer was detected; no player record or point is reset to replace a published question. `tests/mystery-extra.cjs` exhaustively verifies both orderings and correct/wrong responsive UI flows.
 
 ## Trusted scoring
 
