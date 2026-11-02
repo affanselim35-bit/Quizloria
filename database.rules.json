@@ -1,5 +1,15 @@
 {
   "rules": {
+    "ratherVotes": {
+      "$question": {
+        ".read": "auth != null && auth.token.firebase.sign_in_provider !== 'anonymous' && data.child(auth.uid).exists() && $question.matches(/^w(0[1-9]|[12][0-9]|3[0-9]|40)$/)",
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": "auth != null && auth.uid === $uid && auth.token.firebase.sign_in_provider !== 'anonymous' && $question.matches(/^w(0[1-9]|[12][0-9]|3[0-9]|40)$/) && !data.exists() && newData.exists()",
+          ".validate": "newData.isNumber() && (newData.val() === 0 || newData.val() === 1)"
+        }
+      }
+    },
     "rooms": {
       "$code": {
         ".read": "auth != null && $code.matches(/^[0-9]{6}$/) && (data.child('hostUid').val() === auth.uid || data.child('guestUid').val() === auth.uid || (data.child('status').val() === 'waiting' && !data.child('guestUid').exists()))",

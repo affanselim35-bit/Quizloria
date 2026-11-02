@@ -557,7 +557,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <p class="v11-hint">Test ilerlemesi ve ayarlar yalnızca bu cihazın tarayıcısında tutulur.</p></section>
 <div id="v11Toast" role="status" aria-live="polite" class="v11-toast" hidden></div>
 <section id="v9Games" class="v8-panel" aria-label="Oyun modları">
-<h2>🎮 Oyun Modları</h2><p>Farklı bir deneyim için şans çarkını çevir veya karışık teste katıl.</p>
+<h2>🎮 Oyun Modları</h2><p>İkilemlerde tarafını seç, şans çarkını çevir veya arkadaşlarınla yarış.</p>
 <div class="v8-wheel-wrap" aria-label="Test seçen şans çarkı"><div class="v8-wheel-pointer" aria-hidden="true"></div><div id="v8Wheel" class="v8-wheel" aria-hidden="true"></div><div class="v8-wheel-center" aria-hidden="true">🧠</div></div>
 <div id="v8WheelStatus" class="v8-status" aria-live="polite">Çark seni hangi teste götürecek?</div><div id="v8WheelResult" class="v8-wheel-result" hidden><span id="v8WheelPicked"></span><button id="v8PlayPicked" type="button" onclick="playV8Picked()">▶️ Teste Başla</button></div>
 <div class="v8-actions"><button id="v8SpinBtn" type="button" onclick="spinV8Wheel()">🎡 Şans Çarkını Çevir</button><button type="button" onclick="startMixedV8()">🧠 Karışık Test · 20 Soru</button></div>
@@ -2110,6 +2110,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 </script>
 
 <script defer src="result-card.js?v=1"></script>
+<script defer src="would-you-rather.js?v=1"></script>
 <script defer src="membership.js?v=3"></script>
 <script defer src="research-tests.js?v=3"></script>
 <script defer src="persona-results.js?v=2"></script>
