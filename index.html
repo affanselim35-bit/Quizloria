@@ -324,7 +324,7 @@ footer {
 .daily-panel,.awards-panel{background:linear-gradient(125deg,#201a33,#171521);border:1px solid #55417e;border-radius:20px;padding:22px;margin:22px 0;box-shadow:0 12px 34px #0003}
 .daily-panel{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .daily-panel h2,.awards-panel h2{margin:0 0 8px;color:#e9d7ff}.daily-panel p,.awards-panel p{color:#cbbde3;margin:5px 0}
-.daily-panel button{border:0;border-radius:12px;background:linear-gradient(120deg,#7651d7,#ac70ed);padding:13px 18px;color:white;font:inherit;font-weight:700;cursor:pointer}
+#dailyStart{border:0;border-radius:12px;background:linear-gradient(120deg,#7651d7,#ac70ed);padding:13px 18px;color:white;font:inherit;font-weight:700;cursor:pointer}
 .awards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
 .award-tile{background:#29223a;border:1px solid #4b3a65;border-radius:14px;padding:15px;opacity:.58}
 .award-tile.unlocked{opacity:1;border-color:#a16df0;background:linear-gradient(140deg,#3b2857,#29223a)}
@@ -620,7 +620,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <section id="qHomeInfo" aria-labelledby="qHomeInfoTitle"><h2 id="qHomeInfoTitle">Quizloria’yı tanı</h2><p>Nasıl bir proje olduğunu, bilgilerinin nasıl kullanıldığını ve yönetime nasıl ulaşabileceğini öğren.</p><nav aria-label="Quizloria hakkında"><a href="/hakkimizda.html">Hakkımızda</a><a href="/gizlilik.html">Gizlilik ve Çerezler</a><a href="/iletisim.html">İletişim</a></nav></section>
 <section class="daily-panel" aria-label="Günün testi">
           <div><h2>🎯 Günün Meydan Okuması</h2><p id="dailyName">Bugünün testi hazırlanıyor...</p><p id="dailyStatus">Her gün yeni bir test!</p></div>
-          <button type="button" onclick="startDailyQuiz()">Meydan Okumayı Başlat →</button>
+          <button id="dailyStart" type="button" onclick="startDailyQuiz()">Meydan Okumayı Başlat →</button>
         </section>
         <aside id="qHomeAd" aria-label="Reklam">
   <span class="q-ad-label">Reklam</span>
@@ -1620,7 +1620,7 @@ let currentQuestion = 0;
 let scores = [0, 0, 0, 0];
 
 function showSection(id) {
-    if(id === "quiz") window.qResultInsights?.reset();
+    if(id === "quiz") window.qResultInsights?.reset?.();
     const adminPanel=document.getElementById('q22Admin');
     if(adminPanel)adminPanel.hidden=true;
     document.getElementById("home").classList.add("hidden");
@@ -1654,6 +1654,7 @@ function trackQuizCompletion(record){
   } catch (e) { /* Analitik hatası test deneyimini etkilemesin. */ }
 }
 function saveTestResult(record){
+  window.qDailyChallenge?.complete(record.type,record.date);
   trackQuizCompletion(record);
   try{const history=readTestHistory();history.unshift(record);localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,100)))}catch(e){/* Depolama kapalıysa testler yine çalışır. */}
   if(window.q20SaveResult)window.q20SaveResult(record);
@@ -1669,7 +1670,7 @@ function renderTestStats(){
   if(!history.length){const p=document.createElement("p");p.className="history-empty";p.textContent="Henüz tamamlanmış test yok. İlk testini çöz!";list.appendChild(p);return}
   history.slice(0,5).forEach(item=>{const row=document.createElement("div");row.className="history-row";const label=document.createElement("span");const date=new Date(item.date);label.textContent=(quizNames[item.type]||"Test")+(Number.isNaN(date.getTime())?"":" · "+date.toLocaleDateString("tr-TR"));const score=document.createElement("strong");score.textContent=Number.isFinite(item.points)?item.points+"/100":(item.profile||"Tamamlandı");row.append(label,score);list.appendChild(row)})
 }
-function clearTestHistory(){if(!confirm("Bu cihazdaki test geçmişini ve günlük görev XP ödüllerini silmek istiyor musun? Bulut geçmişi otomatik silinmez."))return;try{localStorage.removeItem(HISTORY_KEY);localStorage.removeItem(V9_BONUS_KEY)}catch(e){}renderTestStats();renderAwards();renderDailyChallenge();renderV9Missions();renderV8XP()}
+function clearTestHistory(){if(!confirm("Bu cihazdaki test geçmişini ve günlük görev XP ödüllerini silmek istiyor musun? Bulut geçmişi otomatik silinmez."))return;try{localStorage.removeItem(HISTORY_KEY);localStorage.removeItem(V9_BONUS_KEY);window.qDailyChallenge?.clearCompletions()}catch(e){}renderTestStats();renderAwards();renderDailyChallenge();renderV9Missions();renderV8XP()}
 function displayScoreRing(points){const ring=document.getElementById("scoreRing");ring.classList.remove("hidden");ring.style.setProperty("--score",points);document.getElementById("scoreRingValue").innerHTML=points+"<small>/100</small>";document.getElementById("personalitySparkle").classList.add("hidden")}
 function setResultSummary(items){const box=document.getElementById("resultSummary");box.replaceChildren();items.forEach(value=>{const span=document.createElement("span");span.className="result-chip";span.textContent=value;box.appendChild(span)});box.classList.remove("hidden")}
 // Sadece bağlantıyla açılan arkadaş testi; genel test listesine eklenmez.
@@ -1894,7 +1895,7 @@ function advanceQuizQuestion() {
 }
 
 function showResult() {
-    window.qResultInsights?.hide();
+    window.qResultInsights?.hide?.();
     stopV6Timer();
     v11ClearProgress();
     const retryButton=document.getElementById("retryWrong");retryButton.classList.add("hidden");
@@ -1941,7 +1942,7 @@ function showResult() {
         if(v6WrongQuestions.length){retryButton.classList.remove("hidden");retryButton.textContent="🔄 "+v6WrongQuestions.length+" Yanlışımı Tekrar Çöz"}
         if(v6Practice){bestLine.textContent="🧩 Yanlışları tekrar etme turu · Bu tur istatistiklerine eklenmez.";bestLine.classList.remove("hidden")}
         else {const record=updatePersonalBest(activeQuiz,points);bestLine.textContent=(record.isNew?"🎉 Yeni kişisel rekor! ":"🥇 Kişisel rekorun: ")+record.best+"/100";bestLine.classList.remove("hidden");saveTestResult({type:activeQuiz,points,date:new Date().toISOString()})}
-        window.qResultInsights?.complete({type:activeQuiz,mode:v6Mode,practice:v6Practice,questions:getActiveQuestions(),answers:selectedAnswers});
+        window.qResultInsights?.complete?.({type:activeQuiz,mode:v6Mode,practice:v6Practice,questions:getActiveQuestions(),answers:selectedAnswers});
         refreshV5();
         document.getElementById("resultText").textContent = activeQuiz === KUZEY_TEST_KEY
             ? `🎉 Kuzey Dalgıç! Bu test Quizloria’nın kurucusu tarafından sana özel hazırlandı. ${correctAnswers}/${total} doğru • ${points}/100 puan!`
@@ -2058,9 +2059,9 @@ const TEST_IDS=["intelligence","love","character","friendrole","socialenergy","p
 function readFavorites(){try{const a=JSON.parse(localStorage.getItem(FAVORITES_KEY)||"[]"),prefix=window.quizloriaMembership?.freeTests?"catalog:":"premium:";return Array.isArray(a)?[...new Set(a.filter(x=>typeof x==="string").map(x=>isLegacyPremiumTest(x)?prefix+x:(x.startsWith("premium:")||x.startsWith("catalog:"))?prefix+x.slice(8):x).filter(x=>TEST_IDS.includes(x)||((x.startsWith("premium:")||x.startsWith("catalog:"))&&(isLegacyPremiumTest(x.slice(8))||window.qPremiumHasTest?.(x.slice(8))))))]:[]}catch(e){return []}}
 function toggleFavorite(type){const fav=readFavorites();const next=fav.includes(type)?fav.filter(x=>x!==type):[...fav,type];try{localStorage.setItem(FAVORITES_KEY,JSON.stringify(next))}catch(e){}renderFavorites();filterTests()}
 function renderFavorites(){const fav=readFavorites();document.querySelectorAll("#testGrid .card").forEach(card=>{const btn=card.querySelector(".favorite-btn");if(!btn)return;const yes=fav.includes(card.dataset.test);btn.classList.toggle("is-favorite",yes);btn.textContent=yes?"♥":"♡";btn.title=yes?"Favorilerden çıkar":"Favorilere ekle";btn.setAttribute("aria-label",btn.title);btn.setAttribute("aria-pressed",String(yes))})}
-function getDailyType(){const date=new Date();const day=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;let hash=0;for(const ch of day)hash=(hash*31+ch.charCodeAt(0))>>>0;return TEST_IDS[hash%TEST_IDS.length]}
-function renderDailyChallenge(){const type=getDailyType();const done=readTestHistory().some(x=>x.type===type&&new Date(x.date).toDateString()===new Date().toDateString());document.getElementById("dailyName").textContent=quizNames[type]+" • Bugünün seçimi";document.getElementById("dailyStatus").textContent=done?"✅ Bugünkü meydan okumayı tamamladın! Yeniden de çözebilirsin.":"✨ Bugün bu testi tamamlayarak meydan okumayı bitir!"}
-function startDailyQuiz(){startQuiz(getDailyType())}
+function getDailyType(){return window.qDailyChallenge?.type()||""}
+function renderDailyChallenge(){if(window.qDailyChallenge){window.qDailyChallenge.render();return}document.getElementById("dailyName").textContent="Günün testi hazırlanıyor…";document.getElementById("dailyStatus").textContent="Test listesi yükleniyor…";document.querySelector("#dailyStart").disabled=true}
+function startDailyQuiz(){return window.qDailyChallenge?.start()}
 const AWARDS=[
  {icon:"🌱",title:"İlk Adım",desc:"İlk testini tamamla",check:(h)=>h.length>=1},
  {icon:"🧠",title:"Bilgi Avcısı",desc:"5 farklı test tamamla",check:(h)=>new Set(h.map(x=>x.type)).size>=5},
@@ -2157,12 +2158,12 @@ function renderV8XP(){
 
 const V9_DIFFICULTIES={intelligence:"easy",love:"easy",character:"easy",friendrole:"easy",socialenergy:"easy",personality:"easy",football:"medium",music:"easy",general:"medium",gaming:"easy",logic:"hard",geography:"medium",cinema:"easy",science:"medium",history:"medium",technology:"medium",cars:"medium",animals:"easy",sportsworld:"medium",puzzles:"hard",food:"easy",mythology:"medium",world:"medium",coding:"hard",footballstars:"medium",lego:"easy",inventions:"medium"};
 const V9_BONUS_KEY="testlab_v9_daily_bonus";
-function v9Today(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
+function v9Today(){return window.qDailyChallenge?.day()||new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Istanbul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
 function v9BonusData(){try{return JSON.parse(localStorage.getItem(V9_BONUS_KEY)||"{}")||{}}catch(e){return {}}}
 function v9BonusXP(){return Object.values(v9BonusData()).reduce((n,v)=>n+(Array.isArray(v)?v.reduce((a,b)=>a+Number(b||0),0):0),0)}
 function renderV9Missions(){
- const today=v9Today();const todays=readTestHistory().filter(r=>{const d=new Date(r.date);return !isNaN(d)&&[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")===today});
- const doneCount=todays.length,highScore=todays.some(r=>Number.isFinite(r.points)&&r.points>=80),dailyDone=todays.some(r=>r.type===getDailyType());
+ const today=v9Today();const todays=readTestHistory().filter(r=>{return (typeof r.date==="string"||typeof r.date==="number")&&window.qDailyChallenge?.day(r.date)===today});
+ const doneCount=todays.length,highScore=todays.some(r=>Number.isFinite(r.points)&&r.points>=80),dailyDone=!!window.qDailyChallenge?.isDone();
  const tasks=[{name:"📚 İki test tamamla",count:Math.min(doneCount,2),total:2,reward:50},{name:"🎯 80 veya üzeri puan al",count:highScore?1:0,total:1,reward:75},{name:"🌟 Günün testini tamamla",count:dailyDone?1:0,total:1,reward:100}];
  const saved=v9BonusData();const claims=Array.isArray(saved[today])?saved[today]:[0,0,0];let newly=0;
  tasks.forEach((t,i)=>{if(t.count===t.total&&!claims[i]){claims[i]=t.reward;newly+=t.reward}});
@@ -2545,7 +2546,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!el('q25DeleteDialo
 window.addEventListener('load',()=>{document.getElementById('q22AdminNav').hidden=true;document.getElementById('q22Admin').hidden=true;if(!auth())return;auth().onAuthStateChanged(checkAdmin)});
 })();
 </script>
-<script defer src="psychology.js?v=4"></script>
+<script defer src="psychology.js?v=5"></script>
 <section id="qcPlay" class="qc-play" hidden aria-live="polite"></section>
 <script>
 /* Quizloria: Firebase tabanlı bağlantıya özel testler. */
@@ -2580,6 +2581,7 @@ function qPersonaRender(){
  const title=document.createElement('h2');title.textContent=item.icon+' '+item.title;root.append(title);
  if(qPersonaIndex>=item.questions.length){
   qPersonaExplain(item,qPersonaAnswers,root);
+  window.qDailyChallenge?.complete(item.id);
   document.getElementById('qPersonaOverlay').scrollTop=0;
   const resultHeading=root.querySelector('.q-persona-result-title');resultHeading.tabIndex=-1;resultHeading.focus({preventScroll:true});
   const again=document.createElement('button');again.textContent='🔄 Yeniden çöz';again.onclick=()=>qPersonaStart(item.id);root.append(again);return;
@@ -2600,11 +2602,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script defer src="daily-mystery.js?v=2"></script>
 <script defer src="mystery-extra.js?v=1"></script>
 <script defer src="membership.js?v=3"></script>
-<script defer src="research-tests.js?v=3"></script>
+<script defer src="research-tests.js?v=4"></script>
 <script defer src="persona-results.js?v=2"></script>
-<script defer src="premium-stories.js?v=3"></script>
+<script defer src="premium-stories.js?v=4"></script>
 <script defer src="discovery.js?v=2"></script>
-<script defer src="premium.js?v=8"></script>
+<script defer src="premium.js?v=9"></script>
+<script defer src="daily-challenge.js?v=1"></script>
 <script src="party.js?v=3"></script>
 <script src="social.js?v=3"></script>
 <script defer src="home-ad.js?v=3"></script>

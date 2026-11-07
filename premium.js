@@ -1,7 +1,8 @@
 (function(){
 'use strict';
-const $=id=>document.getElementById(id),fallback=Object.fromEntries(PREMIUM_KNOWLEDGE_CATALOG.map(({id,...item})=>[id,item]));let catalog={...fallback},busy=false,loadVersion=0;
+const $=id=>document.getElementById(id),fallback=Object.fromEntries(PREMIUM_KNOWLEDGE_CATALOG.map(({id,...item})=>[id,item]));let catalog={...fallback},busy=false,loadVersion=0,catalogReady=false,catalogError=false;
 window.qPremiumHasTest=id=>Object.prototype.hasOwnProperty.call(catalog,id);
+window.qPublicTestCatalog=()=>{const m=window.quizloriaMembership;if(!m?.accessReady)return {ready:false,tests:[]};if(!free())return {ready:true,tests:[]};return {ready:catalogReady,error:catalogError,tests:catalogReady?Object.entries(catalog).filter(([id,t])=>/^[a-zA-Z0-9_-]+$/.test(id)&&t&&typeof t.title==='string'&&(!t.kind||['knowledge','ipip-facet','story-persona'].includes(t.kind))).map(([id,t])=>({id,title:t.title,kind:t.kind==='ipip-facet'?'research':t.kind==='story-persona'?'character':'knowledge'})):[]}};
 function free(){return !!(window.quizloriaMembership?.accessReady&&window.quizloriaMembership.freeTests)}
 function canUse(){const m=window.quizloriaMembership,u=window.firebase?.auth().currentUser;return free()||!!(m?.ready&&m.active&&u&&m.uid===u.uid)}
 function render(){
@@ -24,7 +25,7 @@ function render(){
   const level=document.createElement('span');level.className='v9-level-tag';level.textContent=assessment?'📚 Araştırma temelli · IPIP':story?'🎭 Karakter ve eğlence':'🔴 Zor';
   const favorite=document.createElement('button');favorite.type='button';favorite.className='favorite-btn';favorite.onclick=()=>toggleFavorite((free()?'catalog:':'premium:')+id);
   if(paid)card.append(badge);card.append(title,text,b,level,favorite);list.append(card);
- });window.qDiscoveryRefresh?.();renderFavorites();filterTests();
+ });window.qDiscoveryRefresh?.();renderFavorites();filterTests();window.dispatchEvent(new Event('quizloria:catalog'));
 }
 window.qPremiumStart=async function(id){
  if(busy)return;const member=window.quizloriaMembership,u=firebase.auth().currentUser;
@@ -42,7 +43,6 @@ window.qPremiumStart=async function(id){
  }catch(e){v11Toast('⚠️ '+e.message)}finally{busy=false;render()}
 };
 window.addEventListener('quizloria:membership',()=>{if(!canUse())loadVersion++;render()});
-function start(){render();if(!window.firebase)return;const app=firebase.apps.length?firebase.app():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG);app.database().ref('premiumCatalog').on('value',s=>{catalog={...fallback,...(s.val()||{})};render()},()=>{v11Toast('Premium test listesi şu anda yüklenemiyor.')})}
+function start(){render();if(!window.firebase)return;const app=firebase.apps.length?firebase.app():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG);app.database().ref('premiumCatalog').on('value',s=>{catalog={...fallback,...(s.val()||{})};catalogReady=true;catalogError=false;render()},()=>{catalogError=true;window.dispatchEvent(new Event('quizloria:catalog'));v11Toast('Test listesi şu anda yüklenemiyor.')})}
 if(document.readyState==='complete')start();else window.addEventListener('load',start,{once:true});
 })();
-
