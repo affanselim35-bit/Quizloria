@@ -14,6 +14,7 @@
 </script>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="result-insights.css?v=1">
+<link rel="stylesheet" href="closeup-game.css?v=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quizloria | Kendini Keşfet, Bilgini Sına</title>
 <meta name="description" content="Quizloria’da kişilik testleri, eğlenceli quizler ve bilgi yarışmalarıyla kendini keşfet. Kahramanını bul, bilgini sına ve arkadaşlarınla yarış!">
@@ -550,7 +551,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
     <div class="header-actions"><span>Keşfet • Eğlen • Paylaş</span><button class="feedback-open" type="button" onclick="openFeedback()">💬 Öneri Gönder</button></div>
 </header>
 
-<nav class="v9-nav" aria-label="Site bölümleri"><a href="#home" data-view="home" onclick="openV9Page('home');return false">🏠 Ana Sayfa</a><a href="#v9Tests" data-view="tests" onclick="openV9Page('tests');return false">🧠 Testler</a><a href="#psyHub" data-view="psychology" onclick="openV9Page('psychology');return false">🧠 Psikoloji</a><a href="#v9Games" data-view="games" onclick="openV9Page('games');return false">🎮 Oyun Modları</a><a href="#qMystery" data-view="mystery" onclick="openV9Page('mystery');return false">🔎 Günün Gizemi</a><a href="#qRather" data-view="rather" onclick="openV9Page('rather');return false">🤔 O mu Bu mu?</a><a href="#qCustomBuilder" data-view="custom" onclick="openV9Page('custom');return false">🎁 Özel Test Oluştur</a><a href="#v13Builder" data-view="builder" onclick="openV9Page('builder');return false">✍️ Test Oluştur</a><a href="#v9Profile" data-view="profile"  onclick="openV9Page('profile');return false">🏆 Profilim</a><a href="#qSocial" data-view="social" onclick="openV9Page('social');return false">👥 Sosyal<span id="qsDuelNavBadge"></span></a><a href="#qPremium" data-view="premium" onclick="openV9Page('premium');return false">👑 Premium</a><a href="#v9Missions" data-view="missions" onclick="openV9Page('missions');return false">🎯 Görevler</a><a href="#v11Settings" data-view="settings" onclick="openV9Page('settings');return false">⚙️ Ayarlar</a><a href="#" onclick="openFeedback();return false">💬 Öneri Gönder</a><a href="#q22Admin" id="q22AdminNav" class="q22-admin-nav" hidden onclick="q22OpenAdmin();return false">🛡️ Yönetici</a></nav>
+<nav class="v9-nav" aria-label="Site bölümleri"><a href="#home" data-view="home" onclick="openV9Page('home');return false">🏠 Ana Sayfa</a><a href="#v9Tests" data-view="tests" onclick="openV9Page('tests');return false">🧠 Testler</a><a href="#psyHub" data-view="psychology" onclick="openV9Page('psychology');return false">🧠 Psikoloji</a><a href="#v9Games" data-view="games" onclick="openV9Page('games');return false">🎮 Oyun Modları</a><a href="#qMystery" data-view="mystery" onclick="openV9Page('mystery');return false">🔎 Günün Gizemi</a><a href="#qRather" data-view="rather" onclick="openV9Page('rather');return false">🤔 O mu Bu mu?</a><a href="#qCloseup" data-view="closeup" onclick="openV9Page('closeup');return false">🔍 Yakından Bak</a><a href="#qCustomBuilder" data-view="custom" onclick="openV9Page('custom');return false">🎁 Özel Test Oluştur</a><a href="#v13Builder" data-view="builder" onclick="openV9Page('builder');return false">✍️ Test Oluştur</a><a href="#v9Profile" data-view="profile"  onclick="openV9Page('profile');return false">🏆 Profilim</a><a href="#qSocial" data-view="social" onclick="openV9Page('social');return false">👥 Sosyal<span id="qsDuelNavBadge"></span></a><a href="#qPremium" data-view="premium" onclick="openV9Page('premium');return false">👑 Premium</a><a href="#v9Missions" data-view="missions" onclick="openV9Page('missions');return false">🎯 Görevler</a><a href="#v11Settings" data-view="settings" onclick="openV9Page('settings');return false">⚙️ Ayarlar</a><a href="#" onclick="openFeedback();return false">💬 Öneri Gönder</a><a href="#q22Admin" id="q22AdminNav" class="q22-admin-nav" hidden onclick="q22OpenAdmin();return false">🛡️ Yönetici</a></nav>
 <section id="home"><section id="v11Resume" class="v11-box" hidden><h2>🔖 Yarım Kalan Testin</h2><p id="v11ResumeInfo"></p><div class="v8-actions"><button onclick="v11Resume()">▶️ Devam Et</button><button onclick="v11Discard()">🗑️ Baştan Başla</button></div></section>
 <section id="v11Settings" class="v11-box"><h2>⚙️ Ayarlar</h2><p>Quizloria'yı kendine göre özelleştir. Tercihlerin bu tarayıcıda saklanır.</p>
 <div class="v11-setting"><label for="v11Theme">🎨 Renk teması</label><select id="v11Theme" onchange="v11SaveSettings()"><option value="purple">💜 Mor (Varsayılan)</option><option value="blue">💙 Mavi</option><option value="green">💚 Yeşil</option><option value="pink">🩷 Pembe</option><option value="black">🌑 Siyah</option></select></div>
@@ -560,7 +561,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <div id="v11Toast" role="status" aria-live="polite" class="v11-toast" hidden></div>
 <section id="v9Games" class="v8-panel" aria-label="Oyun modları">
 <h2>🎮 Oyun Modları</h2><p>İkilemlerde tarafını seç, şans çarkını çevir veya arkadaşlarınla yarış.</p>
-<div id="qGameLinks" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:24px 0"><article class="v13panel"><h3>🔎 Günün Gizemi</h3><p>İpuçlarını birleştir, aylık sıralamada yarış. Zor ek dosyayı da kendi sekmesinde çöz.</p><button type="button" onclick="openV9Page('mystery')">Günün Gizemi’ne git →</button></article><article class="v13panel"><h3>🤔 O mu Bu mu?</h3><p>İki seçenekten birini seç, oy verdikten sonra gerçek topluluk oranlarını keşfet.</p><button type="button" onclick="openV9Page('rather')">O mu Bu mu’ya git →</button></article></div>
+<div id="qGameLinks" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:24px 0"><article class="v13panel"><h3>🔎 Günün Gizemi</h3><p>İpuçlarını birleştir, aylık sıralamada yarış. Zor ek dosyayı da kendi sekmesinde çöz.</p><button type="button" onclick="openV9Page('mystery')">Günün Gizemi’ne git →</button></article><article class="v13panel"><h3>🤔 O mu Bu mu?</h3><p>İki seçenekten birini seç, oy verdikten sonra gerçek topluluk oranlarını keşfet.</p><button type="button" onclick="openV9Page('rather')">O mu Bu mu’ya git →</button></article><article class="v13panel"><h3>🔍 Yakından Bak</h3><p>Görselin küçük bir detayından nesneyi bul. 12 görsel, ipuçları ve her tur yeni bir sıra!</p><button type="button" onclick="openV9Page('closeup')">Yakından Bak’a git →</button></article></div>
 <div class="v8-wheel-wrap" aria-label="Test seçen şans çarkı"><div class="v8-wheel-pointer" aria-hidden="true"></div><div id="v8Wheel" class="v8-wheel" aria-hidden="true"></div><div class="v8-wheel-center" aria-hidden="true">🧠</div></div>
 <div id="v8WheelStatus" class="v8-status" aria-live="polite">Çark seni hangi teste götürecek?</div><div id="v8WheelResult" class="v8-wheel-result" hidden><span id="v8WheelPicked"></span><button id="v8PlayPicked" type="button" onclick="playV8Picked()">▶️ Teste Başla</button></div>
 <div class="v8-actions"><button id="v8SpinBtn" type="button" onclick="spinV8Wheel()">🎡 Şans Çarkını Çevir</button><button type="button" onclick="startMixedV8()">🧠 Karışık Test · 20 Soru</button></div>
@@ -2180,6 +2181,7 @@ const v9ViewGroups={
  games:['#v9Games'],
  mystery:['#qMystery'],
  rather:['#qRather'],
+ closeup:['#qCloseup'],
  psychology:['#psyHub'],
  builder:['#v13Builder'],
  custom:['#qCustomBuilder'],
@@ -2592,6 +2594,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script defer src="site-info.js?v=1"></script>
 <script defer src="result-card.js?v=1"></script>
 <script defer src="result-insights.js?v=1"></script>
+<script defer src="closeup-game.js?v=1"></script>
 <script defer src="would-you-rather.js?v=2"></script>
 <script defer src="daily-mystery-core.js?v=1"></script>
 <script defer src="daily-mystery.js?v=2"></script>
