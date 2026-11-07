@@ -764,8 +764,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
                 <div class="icon">🌍</div>
                 <h3>Genel Kültür Testi</h3>
                 <p>
-                    Bakalım kaç soruyu doğru
-                    cevaplayabileceksin?
+                    Tarih, sanat ve gündelik bilgiyi yorumlama: açıklamalı 15 soruda kendini dene.
                 </p>
                 <button onclick="startQuiz('general')">Teste Başla →</button>
             </div>
@@ -780,7 +779,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
             <div class="card" data-category="knowledge">
                 <div class="icon">🧩</div>
                 <h3>Mantık ve Zekâ Testi</h3>
-                <p>Örüntüler ve dikkat sorularıyla kendini dene. Eğlence amaçlıdır, IQ testi değildir.</p>
+                <p>Çıkarım, olasılık ve koşul çözme içeren 15 soru. Eğlence amaçlıdır, IQ testi değildir.</p>
                 <button onclick="startQuiz('logic')">Teste Başla →</button>
             </div>
             <div class="card" data-category="knowledge">
@@ -996,21 +995,178 @@ const musicQuestions = [
     {q:"DJ kısaltmasının açılımı nedir?",a:["Digital Jam","Disc Jockey","Dance Junior","Dynamic Jazz"],correct:1}
 ];
 const generalQuestions = [
-    {q:"Türkiye'nin başkenti neresidir?",a:["İstanbul","Ankara","İzmir","Bursa"],correct:1},
-    {q:"Güneş Sistemi'nin en büyük gezegeni hangisidir?",a:["Dünya","Mars","Jüpiter","Venüs"],correct:2},
-    {q:"Mona Lisa tablosunu kim yapmıştır?",a:["Van Gogh","Picasso","Leonardo da Vinci","Michelangelo"],correct:2},
-    {q:"Dünyanın en büyük okyanusu hangisidir?",a:["Atlas","Hint","Arktik","Pasifik"],correct:3},
-    {q:"İstiklal Marşı'nın şairi kimdir?",a:["Nazım Hikmet","Mehmet Akif Ersoy","Orhan Veli","Yahya Kemal"],correct:1},
-    {q:"Su hangi kimyasal formülle gösterilir?",a:["CO2","O2","H2O","NaCl"],correct:2},
-    {q:"Japonya'nın başkenti neresidir?",a:["Osaka","Tokyo","Kyoto","Seul"],correct:1},
-    {q:"Bir üçgenin iç açılarının toplamı kaç derecedir?",a:["90","180","270","360"],correct:1},
-    {q:"Ay'a ilk ayak basan insan kimdir?",a:["Yuri Gagarin","Neil Armstrong","Buzz Aldrin","Alan Shepard"],correct:1},
-    {q:"Hangi organ kanı vücuda pompalar?",a:["Akciğer","Böbrek","Kalp","Karaciğer"],correct:2},
-    {q:"Türkiye Cumhuriyeti hangi yıl ilan edildi?",a:["1919","1920","1923","1938"],correct:2},
-    {q:"Dünyanın doğal uydusu hangisidir?",a:["Mars","Ay","Güneş","Venüs"],correct:1},
-    {q:"Hangi elementin simgesi Au'dur?",a:["Gümüş","Altın","Bakır","Demir"],correct:1},
-    {q:"Satrançta oyuna her oyuncu kaç taşla başlar?",a:["12","14","16","18"],correct:2},
-    {q:"Bir yılda kaç ay vardır?",a:["10","11","12","13"],correct:2}
+    {
+        "q": "1:250.000 ölçekli bir haritada iki nokta arası 4 cm. Gerçekte bu uzaklık kaç kilometredir?",
+        "a": [
+            "1 km",
+            "25 km",
+            "10 km",
+            "100 km"
+        ],
+        "correct": 2,
+        "explanation": "Haritadaki 1 cm gerçekte 250.000 cm, yani 2,5 km demektir. Dört katı 10 km eder."
+    },
+    {
+        "q": "Göbekli Tepe’nin anıtsal yapıları hangi döneme aittir?",
+        "a": [
+            "Çanak Çömleksiz Neolitik",
+            "Tunç Çağı",
+            "Demir Çağı",
+            "Roma Dönemi"
+        ],
+        "correct": 0,
+        "explanation": "Bu yapılar MÖ 9600–8200 arasına tarihlenir. Dolayısıyla metal çağlarından ve Roma döneminden çok daha eskidir.",
+        "source": "https://whc.unesco.org/en/list/1572/"
+    },
+    {
+        "q": "1215 tarihli Magna Carta hangi krallığın tarihinde ortaya çıktı?",
+        "a": [
+            "Fransa",
+            "İspanya",
+            "Portekiz",
+            "İngiltere"
+        ],
+        "correct": 3,
+        "explanation": "Kral John’un 1215’te mühürlediği Magna Carta, İngiltere’de kraliyet yetkisinin sınırlandırılmasıyla ilişkilidir.",
+        "source": "https://www.parliament.uk/magnacarta/"
+    },
+    {
+        "q": "Don Kişot romanının yazarı kimdir?",
+        "a": [
+            "Federico García Lorca",
+            "Miguel de Cervantes",
+            "Gabriel García Márquez",
+            "Jorge Luis Borges"
+        ],
+        "correct": 1,
+        "explanation": "Don Kişot, Cervantes’in romanıdır. Şövalyelik hikâyelerinin etkisindeki kahramanın yolculuğunu anlatır.",
+        "source": "https://cvc.cervantes.es/quijote/default.htm"
+    },
+    {
+        "q": "Savaş ve Barış hangi yazarın eseridir?",
+        "a": [
+            "Fyodor Dostoyevski",
+            "Lev Tolstoy",
+            "Nikolay Gogol",
+            "İvan Turgenyev"
+        ],
+        "correct": 1,
+        "explanation": "Tolstoy’un romanı, ailelerin yaşamını Napolyon savaşları dönemindeki tarihsel olaylarla birlikte işler.",
+        "source": "https://www.loc.gov/exhibits/empire/chronology.html"
+    },
+    {
+        "q": "Bir su molekülünde iki hidrojen ve bir oksijen atomu vardır. Hangi formül bunu gösterir?",
+        "a": [
+            "CO2",
+            "O2",
+            "H2O",
+            "NaCl"
+        ],
+        "correct": 2,
+        "explanation": "H2O formülündeki 2, iki hidrojen atomunu belirtir; O yanında sayı bulunmaması bir oksijen atomu demektir."
+    },
+    {
+        "q": "Sistine Şapeli’nin tavan fresklerini hangi sanatçı yaptı?",
+        "a": [
+            "Michelangelo",
+            "Raffaello",
+            "Sandro Botticelli",
+            "Leonardo da Vinci"
+        ],
+        "correct": 0,
+        "explanation": "Tavan fresklerini Michelangelo yaptı. Şapelin başka duvarlarında farklı sanatçıların eserleri de bulunduğu için soruda özellikle tavan belirtiliyor.",
+        "source": "https://www.museivaticani.va/content/museivaticani/en/collezioni/musei/cappella-sistina/storia-cappella-sistina.html"
+    },
+    {
+        "q": "Düz bir kâğıttaki üçgenin iki iç açısı 50° ve 70°. Üçüncü açı kaç derecedir?",
+        "a": [
+            "50°",
+            "60°",
+            "70°",
+            "80°"
+        ],
+        "correct": 1,
+        "explanation": "Öklid düzleminde üçgenin iç açıları toplamı 180° olur. 180 − 50 − 70 = 60°."
+    },
+    {
+        "q": "Kuğu Gölü balesinin müziğini kim besteledi?",
+        "a": [
+            "İgor Stravinski",
+            "Sergey Prokofyev",
+            "Nikolay Rimski-Korsakov",
+            "Pyotr İlyiç Çaykovski"
+        ],
+        "correct": 3,
+        "explanation": "Kuğu Gölü’nün bestecisi Çaykovski’dir. Diğer seçenekler de Rus besteciler olsa da bu eserin müziği onlara ait değildir.",
+        "source": "https://www.rbo.org.uk/production/swan-lake-marius-petipa"
+    },
+    {
+        "q": "Bir tarihçi 1915’teki bir olayı araştırıyor. Hangisi o olay için doğrudan tanıklık içeren birincil kaynaktır?",
+        "a": [
+            "Olay hakkında 2020’de yazılmış ders kitabı",
+            "Olayı gören birinin o gün tuttuğu günlük",
+            "Bir yüzyıl sonra çekilmiş kurmaca film",
+            "Sonradan yazılmış roman özeti"
+        ],
+        "correct": 1,
+        "explanation": "Günlük olayın tanığından ve döneminden gelir. Birincil kaynak olması, içindeki her ifadenin doğru olduğu anlamına gelmez; yine karşılaştırılarak incelenir."
+    },
+    {
+        "q": "Gregoryen takvimde aşağıdaki yüzyıl yıllarından hangisi artık yıldır?",
+        "a": [
+            "1900",
+            "2100",
+            "2000",
+            "2200"
+        ],
+        "correct": 2,
+        "explanation": "100’e bölünen yıllar ancak 400’e de bölünüyorsa artık yıldır. 2000 bu koşulu sağlar; diğer üç yıl sağlamaz.",
+        "source": "https://aa.usno.navy.mil/faq/leap_years"
+    },
+    {
+        "q": "Bir müzede eserin “replika” olduğu yazıyor. Bu ifade neyi belirtir?",
+        "a": [
+            "Özgün eserin kopyası olduğunu",
+            "Eserin yarım kaldığını",
+            "Eserin sanatçısının bilinmediğini",
+            "Eserin mutlaka sahtecilik amacıyla üretildiğini"
+        ],
+        "correct": 0,
+        "explanation": "Replika bir kopyadır. Açıkça kopya olarak sergilenmesi, özgün eser diye aldatıcı biçimde sunulduğu anlamına gelmez."
+    },
+    {
+        "q": "Bir kimya etiketinde Au sembolü var. Hangi elementi gösterir?",
+        "a": [
+            "Gümüş",
+            "Altın",
+            "Bakır",
+            "Alüminyum"
+        ],
+        "correct": 1,
+        "explanation": "Au altının sembolüdür ve Latince aurum adından gelir. Gümüş Ag, bakır Cu, alüminyum Al ile gösterilir."
+    },
+    {
+        "q": "Bir katalogda kitaplar yazar soyadına göre alfabetik sıralanıyor. Hangisi ilk gelir?",
+        "a": [
+            "Adıvar",
+            "Atsız",
+            "Aytmatov",
+            "Aziz"
+        ],
+        "correct": 0,
+        "explanation": "Ortak ilk harf A’dan sonra ikinci harf karşılaştırılır. d harfi; t, y ve z’den önce geldiği için Adıvar ilk sıradadır."
+    },
+    {
+        "q": "Bir tabloda nüfus 80 milyondan 84 milyona çıkmış. Yüzde artış kaçtır?",
+        "a": [
+            "%4",
+            "%5",
+            "%8",
+            "%20"
+        ],
+        "correct": 1,
+        "explanation": "Artış 4 milyondur. Başlangıç değerine bölünür: 4 / 80 = 0,05, yani %5."
+    }
 ];
 
 const gamingQuestions = [
@@ -1032,21 +1188,171 @@ const gamingQuestions = [
 ];
 
 const logicQuestions = [
- {q:"2, 4, 8, 16, ?",a:["24","30","32","36"],correct:2},
- {q:"5 kalemin 2'si alınırsa geriye kaç kalem kalır?",a:["2","3","5","7"],correct:1},
- {q:"Bir üçgenin kaç köşesi vardır?",a:["2","3","4","5"],correct:1},
- {q:"1, 1, 2, 3, 5, ?",a:["6","7","8","10"],correct:2},
- {q:"Hangisi diğerlerinden farklıdır?",a:["Elma","Armut","Havuç","Muz"],correct:2},
- {q:"Bir saatte 60 dakika varsa 2,5 saat kaç dakikadır?",a:["120","130","150","180"],correct:2},
- {q:"3, 6, 9, 12, ?",a:["14","15","16","18"],correct:1},
- {q:"Ali, Ece'den uzun; Ece, Can'dan uzun. En uzun kim?",a:["Can","Ece","Ali","Bilinemez"],correct:2},
- {q:"Bir düzine kaç tanedir?",a:["10","12","15","20"],correct:1},
- {q:"Tüm kediler memelidir. Pamuk bir kediyse hangisi kesindir?",a:["Pamuk uçar","Pamuk memelidir","Pamuk siyahtır","Pamuk yüzemez"],correct:1},
- {q:"10, 20, 30, 40, ?",a:["45","50","55","60"],correct:1},
- {q:"4 kişi birbirleriyle birer kez tokalaşırsa toplam kaç tokalaşma olur?",a:["4","6","8","12"],correct:1},
- {q:"Bir sayı 3 ile çarpılınca 21 oluyorsa sayı kaçtır?",a:["6","7","8","9"],correct:1},
- {q:"Kare, üçgen, kare, üçgen, ?",a:["Daire","Kare","Üçgen","Dikdörtgen"],correct:1},
- {q:"Bir kutuda 4 kırmızı ve 3 mavi top var. Toplam kaç top var?",a:["5","6","7","8"],correct:2}
+    {
+        "q": "Bütün A’lar B’dir. Bazı B’ler C’dir. Bu iki öncülden hangisi kesin çıkar?",
+        "a": [
+            "Bütün B’ler A’dır.",
+            "Bazı C’ler B’dir.",
+            "Bazı A’lar C’dir.",
+            "Hiçbir A, C değildir."
+        ],
+        "correct": 1,
+        "explanation": "Bazı B’lerin C olması, aynı üyelerin hem C hem B olmasıdır. A kümesiyle C’nin kesişip kesişmediği ise verilmemiştir."
+    },
+    {
+        "q": "Bir dizide her terim öncekinin 2 katının 1 fazlası: 3, 7, 15, 31, ... Sıradaki terim nedir?",
+        "a": [
+            "47",
+            "62",
+            "64",
+            "63"
+        ],
+        "correct": 3,
+        "explanation": "Kural açıkça veriliyor: 31 × 2 + 1 = 63. Yalnız birkaç sayıya bakarak gizli bir kural tahmin etmek gerekmiyor."
+    },
+    {
+        "q": "Anahtar A, B veya C kutusunda. A etiketi “Anahtar B’de”, B etiketi “Anahtar B’de değil”, C etiketi “Anahtar A’da değil” diyor. Yalnız bir etiket doğruysa anahtar nerede?",
+        "a": [
+            "A kutusunda",
+            "B kutusunda",
+            "C kutusunda",
+            "Kesin belirlenemez"
+        ],
+        "correct": 0,
+        "explanation": "A ve B etiketleri birbirinin tersidir; zaten tam biri doğrudur. Tek doğru etiket olması için C yanlış olmalı, yani anahtar A’da bulunmalıdır."
+    },
+    {
+        "q": "Soldan sağa dört kişi oturuyor. Aslı, Bora’nın hemen solunda; Cem, Aslı’nın solunda; Deniz, Bora’nın sağında. Soldan üçüncü kim?",
+        "a": [
+            "Aslı",
+            "Cem",
+            "Bora",
+            "Deniz"
+        ],
+        "correct": 2,
+        "explanation": "Koşulların oluşturduğu tek sıra Cem–Aslı–Bora–Deniz’dir. Bu sırada üçüncü kişi Bora olur."
+    },
+    {
+        "q": "Bir torbada 3 kırmızı ve 2 mavi top var. Geri koymadan rastgele iki top çekiliyor. İkisinin de kırmızı olma olasılığı nedir?",
+        "a": [
+            "3/10",
+            "1/5",
+            "9/25",
+            "3/5"
+        ],
+        "correct": 0,
+        "explanation": "İlk kırmızı için olasılık 3/5, ardından ikinci kırmızı için 2/4’tür. Çarpımları 6/20 = 3/10 eder."
+    },
+    {
+        "q": "Her kartın bir yüzünde harf, diğerinde sayı var. Görünen yüzler A, D, 4, 7. “Bir yüzde sesli harf varsa diğer yüzde çift sayı vardır” kuralını denetlemek için hangi kartlar mutlaka çevrilmeli?",
+        "a": [
+            "A ve 4",
+            "D ve 4",
+            "A ve 7",
+            "D ve 7"
+        ],
+        "correct": 2,
+        "explanation": "A’nın arkasında tek sayı, 7’nin arkasında sesli harf çıkması kuralı bozar. Çift sayı veya sessiz harf tek başına bir ihlal göstermez."
+    },
+    {
+        "q": "Çekmecede 5 siyah, 4 beyaz, 3 mavi çorap var. Bakmadan en az kaç çorap alırsan aynı renkten 3 çorabın kesin olur?",
+        "a": [
+            "5",
+            "6",
+            "9",
+            "7"
+        ],
+        "correct": 3,
+        "explanation": "En elverişsiz durumda her renkten ikişer çorap alarak 6’ya ulaşırsın. Yedinci çorap hangi renk olursa olsun o renkten üçüncüyü oluşturur."
+    },
+    {
+        "q": "Bir işçi aynı işi tek başına 6 saatte, diğeri 12 saatte bitiriyor. Hızları sabit ve birbirini etkilemiyorsa birlikte kaç saatte bitirirler?",
+        "a": [
+            "3 saat",
+            "4 saat",
+            "6 saat",
+            "9 saat"
+        ],
+        "correct": 1,
+        "explanation": "Saatlik iş payları 1/6 ve 1/12’dir. Toplam 1/4 iş/saat olduğundan bir tam iş 4 saatte biter."
+    },
+    {
+        "q": "Bir araç 120 km yolu 60 km/sa, aynı yolu dönüşte 40 km/sa hızla gidiyor. Toplam yolculuğun ortalama hızı nedir?",
+        "a": [
+            "45 km/sa",
+            "50 km/sa",
+            "48 km/sa",
+            "52 km/sa"
+        ],
+        "correct": 2,
+        "explanation": "Gidiş 2, dönüş 3 saat sürer. Toplam 240 km / 5 saat = 48 km/sa; hızların aritmetik ortalaması burada kullanılamaz."
+    },
+    {
+        "q": "Beş kişiden üç kişilik bir ekip seçilecek. Ekip içinde görev veya sıra ayrımı yok. Kaç farklı ekip seçilebilir?",
+        "a": [
+            "10",
+            "15",
+            "20",
+            "60"
+        ],
+        "correct": 0,
+        "explanation": "Sıralı seçim sayısı 5 × 4 × 3 = 60’tır. Aynı üç kişi 3 × 2 × 1 = 6 sırayla sayıldığından 60 / 6 = 10 ekip vardır."
+    },
+    {
+        "q": "30 kişilik kulüpte 18 kişi satranç, 14 kişi müzik grubunda; 6 kişi iki grupta da var. İki grupta da olmayan kaç kişi vardır?",
+        "a": [
+            "2",
+            "4",
+            "6",
+            "8"
+        ],
+        "correct": 1,
+        "explanation": "En az bir grupta bulunanlar 18 + 14 − 6 = 26 kişidir. Ortak üyeleri iki kez saymamak için 6 çıkarılır; 30 − 26 = 4 kalır."
+    },
+    {
+        "q": "Ada’nın yaşı Bora’nın yaşının iki katı. Altı yıl sonra yaşları toplamı 42 olacak. Bora şimdi kaç yaşında?",
+        "a": [
+            "8",
+            "12",
+            "14",
+            "10"
+        ],
+        "correct": 3,
+        "explanation": "Altı yıl içinde toplam yaş 12 artar; bugünkü toplam 30’dur. Bora x, Ada 2x ise 3x = 30 ve x = 10 olur."
+    },
+    {
+        "q": "Üç kutuda yalnız elma, yalnız armut ve karışık meyve var. “Elma”, “Armut”, “Karışık” etiketlerinin üçü de yanlış. Tek bir meyve çekerek tüm kutuları belirlemek için hangi etiketli kutudan çekmelisin?",
+        "a": [
+            "Karışık etiketli kutudan",
+            "Elma etiketli kutudan",
+            "Armut etiketli kutudan",
+            "Hangi kutu olduğu fark etmez"
+        ],
+        "correct": 0,
+        "explanation": "Karışık etiketi yanlış olduğundan o kutu tek tür meyve içerir. Çekilen meyve kutuyu kesin belirler; kalan iki kutu da etiketlerinin yanlış olmasıyla çözülür."
+    },
+    {
+        "q": "İki adil altı yüzlü zar atılıyor. Toplamın 9 olduğu biliniyor. İlk zarın 4 gelmiş olma olasılığı nedir?",
+        "a": [
+            "1/6",
+            "1/3",
+            "1/4",
+            "1/2"
+        ],
+        "correct": 2,
+        "explanation": "Toplamı 9 yapan sıralı çiftler (3,6), (4,5), (5,4), (6,3)’tür. Eş olasılıklı dört durumun yalnız birinde ilk zar 4’tür."
+    },
+    {
+        "q": "Yalnız bir kişi yalan söylüyor. Ece: “Anahtar Mina’da.” Mina: “Anahtar bende değil.” Can: “Anahtar Ece’de değil.” Anahtar bu üç kişiden birindeyse kimdedir?",
+        "a": [
+            "Yalnız Ece",
+            "Kesin belirlenemez; Mina veya Can",
+            "Yalnız Mina",
+            "Yalnız Can"
+        ],
+        "correct": 1,
+        "explanation": "Ece ve Mina’nın sözleri birbirinin tersidir; zaten biri yalandır. Can doğru söylemeli, dolayısıyla anahtar Ece’de değildir. Hem Mina hem Can olasılığı koşulları sağlar."
+    }
 ];
 
 const geographyQuestions = [
@@ -1087,18 +1393,142 @@ const cinemaQuestions = [
 
 
 const scienceQuestions = [
- {q:"Güneş Sistemi'ndeki en büyük gezegen hangisidir?",a:["Dünya","Jüpiter","Mars","Venüs"],correct:1},
- {q:"Bitkiler fotosentez sırasında atmosferden hangi gazı alır?",a:["Oksijen","Helyum","Karbondioksit","Azot"],correct:2},
- {q:"Suyun kimyasal formülü hangisidir?",a:["CO2","H2O","O2","NaCl"],correct:1},
- {q:"İnsan vücudunda kanı pompalayan organ hangisidir?",a:["Akciğer","Beyin","Karaciğer","Kalp"],correct:3},
- {q:"Dünya'nın doğal uydusu hangisidir?",a:["Ay","Güneş","Mars","Venüs"],correct:0},
- {q:"Ses boşlukta yayılabilir mi?",a:["Evet, her zaman","Hayır","Yalnızca geceleri","Yalnızca uzay araçlarında"],correct:1},
- {q:"Maddenin temel hâllerinden biri hangisidir?",a:["Işık","Ses","Gaz","Gölge"],correct:2},
- {q:"İnsanlar solunum için en çok hangi gaza ihtiyaç duyar?",a:["Oksijen","Hidrojen","Argon","Helyum"],correct:0},
- {q:"Kızıl Gezegen olarak bilinen gezegen hangisidir?",a:["Merkür","Satürn","Mars","Neptün"],correct:2},
- {q:"Yer çekimi üzerine çalışmalarıyla tanınan bilim insanı kimdir?",a:["Isaac Newton","Mozart","Picasso","Homeros"],correct:0},
- {q:"Elektrik akımının SI birimi hangisidir?",a:["Metre","Amper","Kilogram","Saniye"],correct:1},
- {q:"Hücrenin genetik bilgisinin büyük kısmı ökaryot hücrelerde nerede bulunur?",a:["Hücre duvarı","Sitoplazma","Çekirdek","Ribozom"],correct:2}
+    {
+        "q": "Dünya’da mevsimlerin oluşmasının temel nedeni nedir?",
+        "a": [
+            "Dünya’nın Güneş’e her mevsimde farklı yüzünü dönmesi",
+            "Dünya’nın dönüş hızının her ay değişmesi",
+            "Güneş’e olan uzaklığın tek başına değişmesi",
+            "Dönme ekseninin yörünge düzlemine göre eğik olması"
+        ],
+        "correct": 3,
+        "explanation": "Eksen eğikliği yıl boyunca ışınların geliş açısını ve gündüz süresini değiştirir. Bu yüzden iki yarımkürede mevsimler ters yaşanır.",
+        "source": "https://spaceplace.nasa.gov/seasons/en/"
+    },
+    {
+        "q": "Işık yılı hangi büyüklüğün birimidir?",
+        "a": [
+            "Zaman",
+            "Uzaklık",
+            "Parlaklık",
+            "Hız"
+        ],
+        "correct": 1,
+        "explanation": "Işık yılı, ışığın boşlukta bir yılda aldığı yoldur. Adında yıl geçmesine rağmen süreyi değil uzaklığı belirtir.",
+        "source": "https://science.nasa.gov/exoplanets/what-is-a-light-year/"
+    },
+    {
+        "q": "Ay’ın olağan evrelerinde hilalden dolunaya farklı görünmesinin nedeni nedir?",
+        "a": [
+            "Güneş’in aydınlattığı yarısının farklı bölümlerini görmemiz",
+            "Dünya gölgesinin her gece Ay’ın üzerine düşmesi",
+            "Ay’ın kendi ışığını düzenli olarak artırması",
+            "Ay’ın Dünya çevresinde şekil değiştirmesi"
+        ],
+        "correct": 0,
+        "explanation": "Ay’ın bir yarısı Güneş tarafından aydınlanır. Dünya’dan baktığımızda bu aydınlık yarının görünen oranı değişir; Dünya gölgesi ise Ay tutulmasıyla ilgilidir.",
+        "source": "https://science.nasa.gov/moon/moon-phases/"
+    },
+    {
+        "q": "V = I × R bağıntısına göre 4 ohmluk direncin uçlarına 12 volt uygulanırsa akım kaç amper olur?",
+        "a": [
+            "0,33 A",
+            "8 A",
+            "3 A",
+            "48 A"
+        ],
+        "correct": 2,
+        "explanation": "Verilen bağıntıdan I = V / R olur. 12 / 4 = 3 amperdir; gerilim ile direnci çarpmak akımı vermez."
+    },
+    {
+        "q": "Bir bitki deneyinde yalnız günlük ışık süresi değiştiriliyor. Su, toprak ve sıcaklık aynı tutulup boy uzaması ölçülüyor. Bağımsız değişken hangisidir?",
+        "a": [
+            "Boy uzaması",
+            "Günlük ışık süresi",
+            "Su miktarı",
+            "Toprak türü"
+        ],
+        "correct": 1,
+        "explanation": "Bağımsız değişken araştırmacının değiştirdiği etkendir. Boy uzaması ölçülen sonuç, diğer koşullar ise sabit tutulan değişkenlerdir."
+    },
+    {
+        "q": "Bir örnekte atomların çekirdekleri 6 proton içeriyor. Elektron sayısı değişse bile elementin kimliğini ne belirler?",
+        "a": [
+            "Elektron sayısı",
+            "Nötron sayısı",
+            "Proton sayısı",
+            "Toplam parçacık sayısı"
+        ],
+        "correct": 2,
+        "explanation": "Elementin atom numarası proton sayısıdır. Elektron kazanıp kaybetmek iyon oluşturur; proton sayısı değişmedikçe element aynı kalır."
+    },
+    {
+        "q": "Aşağıdakilerden hangisi yeni maddeler oluşturan kimyasal bir değişimdir?",
+        "a": [
+            "Demirin paslanması",
+            "Buzun erimesi",
+            "Camın kırılması",
+            "Suyun buharlaşması"
+        ],
+        "correct": 0,
+        "explanation": "Paslanmada demir tepkimeye girerek yeni bileşikler oluşturur. Diğer seçeneklerde biçim veya fiziksel hâl değişir."
+    },
+    {
+        "q": "Saf bir maddenin erimesi sırasında, sabit basınçta katı ve sıvı birlikte bulunuyor. Verilen ısı esas olarak neye harcanır?",
+        "a": [
+            "Taneciklerin kimliğinin değişmesine",
+            "Atom çekirdeklerinin parçalanmasına",
+            "Sıcaklığın zorunlu olarak sürekli artmasına",
+            "Tanecikler arasındaki düzenin değişmesine"
+        ],
+        "correct": 3,
+        "explanation": "Erime boyunca verilen enerji hâl değişimine gider; saf madde sabit basınçta erirken sıcaklık sabit kalır. Isı vermek her durumda sıcaklığın artması demek değildir."
+    },
+    {
+        "q": "Bir gezegenin yıldızının önünden geçişiyle saptandığı transit yönteminde doğrudan hangi sinyal izlenir?",
+        "a": [
+            "Gezegen yüzeyindeki kıtaların fotoğrafı",
+            "Gezegenden gelen ses dalgaları",
+            "Yıldız parlaklığındaki düzenli küçük düşüşler",
+            "Yıldızın kimyasal elementlerinin tamamen kaybolması"
+        ],
+        "correct": 2,
+        "explanation": "Gezegen yıldızın önünden geçerken ışığın küçük bir bölümünü engeller. Tekrarlanan parlaklık düşüşleri geçişlerin saptanmasını sağlar.",
+        "source": "https://science.nasa.gov/exoplanets/whats-a-transit/"
+    },
+    {
+        "q": "İki dalganın frekansı aynı ortamda karşılaştırılıyor. Dalga hızı sabitse frekans iki katına çıkınca dalga boyu nasıl değişir?",
+        "a": [
+            "Yarıya iner",
+            "İki katına çıkar",
+            "Değişmez",
+            "Dört katına çıkar"
+        ],
+        "correct": 0,
+        "explanation": "Dalga hızı, frekans ile dalga boyunun çarpımıdır. Hız sabitken bir çarpan iki kat olursa diğeri yarıya inmelidir."
+    },
+    {
+        "q": "Bir deneyde aynı koşullarda ölçüm tekrarları yapmak öncelikle neyi değerlendirmeye yardımcı olur?",
+        "a": [
+            "Sonucun her koşulda doğru olduğunu",
+            "Sistematik hataların kesin olarak yok olduğunu",
+            "Hipotezin artık sınanmasına gerek olmadığını",
+            "Ölçümlerin tutarlılığını ve rastgele değişkenliği"
+        ],
+        "correct": 3,
+        "explanation": "Tekrarlar sonuçların ne kadar değiştiğini gösterir. Aynı sistematik hata tüm ölçümlerde bulunabileceğinden tekrar tek başına doğruluğu garanti etmez."
+    },
+    {
+        "q": "Bir ışın havadan cama eğik girince yön değiştiriyor. Bu olay hangisidir?",
+        "a": [
+            "Yalnız yansıma",
+            "Kırılma",
+            "Işık üretimi",
+            "Kütleçekimsel çekim"
+        ],
+        "correct": 1,
+        "explanation": "Işık farklı bir ortamda farklı hızla yayıldığında eğik geçişte doğrultusu değişebilir; buna kırılma denir. Yansıma ise ışığın geldiği ortama geri dönmesidir."
+    }
 ];
 const historyQuestions = [
  {q:"Türkiye Cumhuriyeti hangi yıl ilan edildi?",a:["1919","1920","1923","1938"],correct:2},
@@ -1398,6 +1828,7 @@ function showAnswerFeedback(item, selected) {
     feedback.append(title, correct);
     const explanation = typeof item.explanation === "string" ? item.explanation : QUIZ_ANSWER_EXPLANATIONS[item.q];
     if (explanation) { const text = document.createElement("p"); text.className = "question-explanation"; text.textContent = explanation; feedback.append(text); }
+    if (typeof item.source === "string" && /^https:\/\//.test(item.source)) { const link = document.createElement("a"); link.href = item.source; link.textContent = "Kaynağı incele ↗"; link.target = "_blank"; link.rel = "noopener noreferrer"; feedback.append(link); }
     feedback.hidden = false;
     const next = document.getElementById("nextQuestion");
     next.disabled = false;
@@ -1676,7 +2107,7 @@ function renderV8XP(){
 
 
 
-const V9_DIFFICULTIES={intelligence:"easy",love:"easy",character:"easy",friendrole:"easy",socialenergy:"easy",personality:"easy",football:"medium",music:"easy",general:"medium",gaming:"easy",logic:"hard",geography:"medium",cinema:"easy",science:"hard",history:"medium",technology:"medium",cars:"medium",animals:"easy",sportsworld:"medium",puzzles:"hard",food:"easy",mythology:"medium",world:"medium",coding:"hard",footballstars:"medium",lego:"easy",inventions:"medium"};
+const V9_DIFFICULTIES={intelligence:"easy",love:"easy",character:"easy",friendrole:"easy",socialenergy:"easy",personality:"easy",football:"medium",music:"easy",general:"medium",gaming:"easy",logic:"hard",geography:"medium",cinema:"easy",science:"medium",history:"medium",technology:"medium",cars:"medium",animals:"easy",sportsworld:"medium",puzzles:"hard",food:"easy",mythology:"medium",world:"medium",coding:"hard",footballstars:"medium",lego:"easy",inventions:"medium"};
 const V9_BONUS_KEY="testlab_v9_daily_bonus";
 function v9Today(){const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-")}
 function v9BonusData(){try{return JSON.parse(localStorage.getItem(V9_BONUS_KEY)||"{}")||{}}catch(e){return {}}}
@@ -2128,11 +2559,3 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script defer src="home-ad.js?v=3"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
