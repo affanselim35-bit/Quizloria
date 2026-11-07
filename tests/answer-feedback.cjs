@@ -5,7 +5,7 @@ async function main(){
  server=http.createServer(async(req,res)=>{try{
   const pathname=new URL(req.url,'http://localhost').pathname;
   if(pathname.startsWith('/sdk/')){const name=path.basename(pathname);res.setHeader('Content-Type','application/javascript');res.end(process.env.QUIZLORIA_SDK_DIR?fs.readFileSync(path.join(process.env.QUIZLORIA_SDK_DIR,name)):await(await fetch('https://www.gstatic.com/firebasejs/10.14.1/'+name)).text());return}
-  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','psychology.js','social.js','party.js','home-ad.js','membership.js','premium.js','result-card.js','discovery.js','premium-stories.js','research-tests.js','persona-results.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
+  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','psychology.js','social.js','party.js','home-ad.js','membership.js','premium.js','result-card.js','discovery.js','premium-stories.js','research-tests.js','persona-results.js','favicon.svg','site-info.js','site-info.css'].includes(name)){res.writeHead(404);res.end();return}
   let content=fs.readFileSync(path.join(root,name),'utf8');if(name==='index.html')content=content.replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
   res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.css')?'text/css':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
  }catch(e){res.writeHead(500);res.end(e.message)}});
@@ -15,6 +15,21 @@ async function main(){
   await page.goto('http://127.0.0.1:8090/');await page.waitForFunction(()=>typeof startQuiz==='function');
   const settleAuth=()=>page.evaluate(()=>new Promise(resolve=>{const off=firebase.auth().onAuthStateChanged(()=>{off();resolve()})}));await settleAuth();
   const state=()=>page.evaluate(()=>({question:currentQuestion,correct:correctAnswers,answers:[...selectedAnswers],revealed:answerRevealed,timer:v6TimerId===null}));
+  const refreshed=await page.evaluate(()=>({general:generalQuestions,logic:logicQuestions,science:scienceQuestions}));
+  for(const [type,bank] of Object.entries(refreshed)){
+   assert.equal(bank.length,type==='science'?12:15);checks++;
+   assert.equal(new Set(bank.map(q=>q.q)).size,bank.length);checks++;
+   for(let index=0;index<bank.length;index++){
+    const item=bank[index];assert.equal(new Set(item.a).size,4);assert.ok(Number.isInteger(item.correct)&&item.correct>=0&&item.correct<4);assert.ok(item.explanation.length>40);checks++;
+    for(const correct of [false,true]){
+     await page.evaluate(({type,index,correct})=>{document.getElementById('quizMode').value='normal';startQuiz(type);const item=({general:generalQuestions,logic:logicQuestions,science:scienceQuestions})[type][index];activeQuestionList=[item];showQuestion();selectAnswer(correct?item.correct:(item.correct+1)%4);confirmAnswer()},{type,index,correct});
+     assert.equal(await page.locator('#questionFeedback').getAttribute('data-outcome'),correct?'correct':'wrong');assert.equal(await page.locator('.question-explanation').textContent(),item.explanation);assert.equal((await state()).correct,correct?1:0);checks++;
+     if(item.source){assert.equal(await page.locator('#questionFeedback a').getAttribute('href'),item.source);assert.equal(await page.locator('#questionFeedback a').getAttribute('rel'),'noopener noreferrer');checks++}
+    }
+   }
+  }
+  assert.equal(await page.locator('[data-test="science"]').getAttribute('data-difficulty'),'medium');checks++;
+  await page.evaluate(()=>{v11ClearProgress();localStorage.removeItem('quizloria_test_history')});
   await page.evaluate(()=>{startQuiz('general');activeQuestionList=[generalQuestions[5],generalQuestions[7],generalQuestions[12]];showQuestion()});
   assert.equal(await page.locator('#nextQuestion').textContent(),'Cevabı Onayla');assert.equal(await page.locator('#nextQuestion').isDisabled(),true);checks++;
   await page.locator('#answers button').nth(0).click();assert.equal(await page.locator('#questionFeedback').isVisible(),false);assert.equal((await state()).answers.length,0);checks++;
@@ -40,6 +55,3 @@ async function main(){
  assert.deepEqual(errors,[]);console.log(checks+' answer feedback checks passed at mobile and desktop widths (correct/wrong, lock, scoring, resume, last question, practice, personality, mixed, speed timeout).');
 }
 main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
-
-
-
