@@ -23,6 +23,7 @@
 <meta property="og:description" content="Quizloria’da kişilik testleri, eğlenceli quizler ve bilgi yarışmalarıyla kendini keşfet. Kahramanını bul, bilgini sına ve arkadaşlarınla yarış!">
 <meta property="og:url" content="https://quizloria.com/">
 <link rel="canonical" href="https://quizloria.com/">
+<link rel="stylesheet" href="site-info.css?v=1">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -614,6 +615,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
 <div class="qs-card"><h3>🤝 Arkadaşlarım</h3><div id="qsFriends" class="qs-muted">Henüz arkadaş yok.</div></div>
 <div class="qs-card"><h3>🏆 Arkadaş sıralaması</h3><p class="qs-muted">Şimdilik arkadaşlarını listeler. Doğrulanmış puan sistemi sonraki güncellemede eklenecek.</p><div id="qsLeaderboard"></div></div>
 </div></section><section id="qCustomBuilder" style="display:none" aria-label="Özel test oluşturucu"><h2>🎁 Arkadaşına Özel Test Oluştur</h2><p class="qc-muted">5–15 soru hazırla, her soru için dört şık ve doğru cevabı seç. Oluşturduğun test normal listede görünmez. Bağlantıyı alan herkes çözebilir.</p><label for="qcTitle">Testin adı</label><input id="qcTitle" maxlength="70" placeholder="Örn. Arkadaşım beni ne kadar tanıyor?"><label for="qcCount">Soru sayısı</label><select id="qcCount" onchange="qcBuild()"></select><div id="qcFields"></div><button type="button" id="qcPublish" onclick="qcPublish()">🔗 Özel Bağlantı Oluştur</button><div id="qcStatus" class="qc-status" role="status" aria-live="polite"></div></section><section id="psyHub" style="display:none" aria-label="Psikolojik farkındalık anketleri"><h2>🧠 Psikolojik Farkındalık</h2><p class="psy-muted">Psikoloji araştırmalarında incelenen konulara dayalı, özgün öz değerlendirme soruları. Bunlar klinik olarak doğrulanmış ölçekler değildir; tanı, risk tahmini veya tedavi önerisi sunmaz.</p><div id="psyContent"></div></section><section id="v13Builder" class="v13panel"><h2>✍️ Kendi Testini Oluştur</h2><p>Her soruya 4 seçenek ekle ve doğru cevabı belirle. Testlerin bu cihazda saklanır.</p><input id="v13Title" placeholder="Testin adı" maxlength="60"><input id="v13Q" placeholder="Soru" maxlength="200"><div class="v13options"><input class="v13A" placeholder="A seçeneği"><input class="v13A" placeholder="B seçeneği"><input class="v13A" placeholder="C seçeneği"><input class="v13A" placeholder="D seçeneği"></div><label>Doğru cevap: <select id="v13Correct"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select></label><button onclick="v13Add()">➕ Soru Ekle</button><p id="v13Count">0 soru</p><button onclick="v13Save()">💾 Testi Kaydet</button><button onclick="v13Draft=[];document.getElementById('v13Count').textContent='0 soru'">Taslağı Temizle</button><h3>Testlerim</h3><div id="v13List"></div></section><section id="v9Missions"  class="v9-missions" aria-label="Günlük görevler"><h2>🎯 Günlük Görevler</h2><p>Bugün test çözerek görevleri tamamla, bonus XP kazan. Görevler her gün yenilenir.</p><div id="v9MissionGrid" class="v9-mission-grid"></div><p id="v9MissionStatus" role="status" style="margin-top:13px"></p></section>
+<section id="qHomeInfo" aria-labelledby="qHomeInfoTitle"><h2 id="qHomeInfoTitle">Quizloria’yı tanı</h2><p>Nasıl bir proje olduğunu, bilgilerinin nasıl kullanıldığını ve yönetime nasıl ulaşabileceğini öğren.</p><nav aria-label="Quizloria hakkında"><a href="/hakkimizda.html">Hakkımızda</a><a href="/gizlilik.html">Gizlilik ve Çerezler</a><a href="/iletisim.html">İletişim</a></nav></section>
 <section class="daily-panel" aria-label="Günün testi">
           <div><h2>🎯 Günün Meydan Okuması</h2><p id="dailyName">Bugünün testi hazırlanıyor...</p><p id="dailyStatus">Her gün yeni bir test!</p></div>
           <button type="button" onclick="startDailyQuiz()">Meydan Okumayı Başlat →</button>
@@ -863,9 +865,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
   <span class="q-ad-label">Reklam</span>
   <ins class="adsbygoogle quizloria_result_banner" data-ad-client="ca-pub-7873665910436939" data-ad-slot="9467142425"></ins>
 </aside>
-<footer>
-    © 2026 Quizloria | Eğlence ve keşif dünyası
-</footer>
+<footer id="qSiteFooter"><p>© 2026 Quizloria | Eğlence ve keşif dünyası</p><nav aria-label="Bilgi ve iletişim"><a href="/hakkimizda.html">Hakkımızda</a><a href="/gizlilik.html">Gizlilik ve Çerezler</a><a href="/iletisim.html">İletişim</a></nav></footer>
 
 <script>
 
@@ -1697,7 +1697,7 @@ function renderV9Missions(){
 
 // V9: Each navigation tab is a separate view, rather than an anchor scroll.
 const v9ViewGroups={
- home:['.hero','#qPremiumHome','.daily-panel','#qHomeAd'],
+ home:['.hero','#qPremiumHome','.daily-panel','#qHomeInfo','#qHomeAd'],
  tests:['#v9Tests','#qTestKinds','.v9-difficulty','.test-discovery','#testGrid','#noTests'],
  games:['#v9Games'],
  mystery:['#qMystery'],
@@ -1890,11 +1890,11 @@ openV9Page("home");
   <h2 id="feedbackTitle">💬 Quizloria'yı Birlikte Geliştirelim</h2>
   <p>Yeni test fikirlerini, geliştirme önerilerini ve karşılaştığın hataları bizimle paylaşabilirsin.</p>
   <label for="feedbackType">Öneri türü</label>
-  <select id="feedbackType"><option>💡 Yeni özellik önerisi</option><option>🧠 Yeni test isteği</option><option>🐛 Hata bildirimi</option><option>⭐ Genel değerlendirme</option></select>
+  <select id="feedbackType"><option>💡 Yeni özellik önerisi</option><option>🧠 Yeni test isteği</option><option>🐛 Hata bildirimi</option><option>⭐ Genel değerlendirme</option><option>🔒 Gizlilik / veri talebi</option></select>
   <label for="feedbackMessage">Mesajın</label>
   <textarea id="feedbackMessage" maxlength="1500" placeholder="Quizloria'da şunu görmek isterdim..."></textarea>
   <button id="feedbackSend" class="feedback-send" type="button" onclick="sendQuizloriaFeedback()">🚀 Önerimi Gönder</button>
-  <p class="feedback-note" id="feedbackStatus" role="status">🔒 Öneri göndermek için Quizloria hesabınla giriş yapmalısın.</p>
+  <button id="feedbackLogin" type="button" onclick="qInfoLogin()" hidden>Giriş Yap / Kayıt Ol</button><p class="feedback-links">Mesajını göndermeden önce <a href="/gizlilik.html">gizlilik açıklamasını</a> ve <a href="/iletisim.html">iletişim bilgilerini</a> okuyabilirsin.</p><p class="feedback-note" id="feedbackStatus" role="status">🔒 Öneri göndermek için Quizloria hesabınla giriş yapmalısın.</p>
  </section>
 </div>
 <script>
@@ -2111,6 +2111,7 @@ function qPersonaRender(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPersonaClose()});
 </script>
 
+<script defer src="site-info.js?v=1"></script>
 <script defer src="result-card.js?v=1"></script>
 <script defer src="would-you-rather.js?v=2"></script>
 <script defer src="daily-mystery-core.js?v=1"></script>

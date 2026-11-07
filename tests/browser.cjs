@@ -8,10 +8,10 @@ async function main(){
  server=http.createServer(async(req,res)=>{try{
   const pathname=new URL(req.url,'http://localhost').pathname;
   if(pathname.startsWith('/sdk/')){const name=path.basename(pathname);res.setHeader('Content-Type','application/javascript');res.end(sdkDir?fs.readFileSync(path.join(sdkDir,name)):await (await fetch('https://www.gstatic.com/firebasejs/10.14.1/'+name)).text());return}
-  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','party.js','home-ad.js','membership.js','premium.js','mystery-extra.js','daily-mystery.js','daily-mystery-core.js','result-card.js','would-you-rather.js','discovery.js','social.js','psychology.js','favicon.svg'].includes(name)){res.statusCode=404;res.end();return}
+  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','party.js','home-ad.js','membership.js','premium.js','mystery-extra.js','daily-mystery.js','daily-mystery-core.js','site-info.js','site-info.css','result-card.js','would-you-rather.js','discovery.js','social.js','psychology.js','favicon.svg'].includes(name)){res.statusCode=404;res.end();return}
   let content=fs.readFileSync(path.join(root,name),'utf8');
   if(name==='index.html')content=content.replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
-  res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
+  res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.css')?'text/css':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
  }catch(e){res.statusCode=500;res.end(e.message)}});
  await new Promise(resolve=>server.listen(8088,'127.0.0.1',resolve));
  browser=await chromium.launch({headless:true,...(process.env.QUIZLORIA_BROWSER?{executablePath:process.env.QUIZLORIA_BROWSER}:{})});

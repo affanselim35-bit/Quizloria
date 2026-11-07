@@ -1,0 +1,10 @@
+# Public information pages
+
+Three crawlable static pages explain the real site: hakkimizda.html, gizlilik.html and iletisim.html. Their shared stylesheet and existing logo work without JavaScript, sign-in, Firebase, analytics or advertising SDKs. Canonicals, descriptions, active navigation, a skip link and sitemap entries use the real quizloria.com paths. No company identity, professional team, invented email address or AdSense approval guarantee is claimed.
+
+The owner selected the existing site message form as the public contact channel. The Contact page clearly states that sending requires a free account, that there is no reply inbox/email automation or guaranteed response time, and that a data request does not itself delete data. General, bug, idea and privacy links open the existing form via allowlisted feedback query values. A guest can open sign-in/register and return to the same message draft; authentication alone never sends it. The existing backend permissions and storage schema do not change. A privacy-request option is added to the message types; messages still go only to the existing administrator feedback area.
+
+Home and permanent footer links expose all three pages. The home information card hides on other app views. The privacy explanation follows actual source behavior: Firebase accounts and guest IDs, local history/settings, optional cloud history summaries, shared quizzes with publicly readable known IDs, social/room visibility, public season scores, participant-readable dilemma ballots, on-device result cards, feedback storage, GA4 page/completion measurement and AdSense technology. It does not promise anonymous ballots, local-only accounts, automatic cloud deletion, a consent control that does not exist, or a deployed always-on prize worker. General source-provider links support the explanation; it is not a claim of comprehensive legal compliance.
+
+Information content was compiled with the private local build-site-info.cjs helper; only the generated HTML/CSS is published. The pages are dated 7 November 2026 and should be revised when data flows or public contact channels change.
+

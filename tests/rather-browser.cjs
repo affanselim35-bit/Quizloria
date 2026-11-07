@@ -6,7 +6,7 @@ async function main(){
  server=http.createServer((req,res)=>{try{const u=new URL(req.url,'http://localhost'),name=u.pathname==='/'?'index.html':u.pathname.slice(1);if(u.pathname.startsWith('/sdk/')){res.setHeader('Content-Type','application/javascript');return res.end(fs.readFileSync(path.join(process.env.QUIZLORIA_SDK_DIR,path.basename(name))))}
  if(!/^[a-zA-Z0-9.-]+$/.test(name)||!fs.existsSync(path.join(root,name))){res.writeHead(404);return res.end()}
  let content=fs.readFileSync(path.join(root,name));if(name==='index.html')content=content.toString().replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
- res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
+ res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.css')?'text/css':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
  }catch(e){res.writeHead(500);res.end(e.message)}});await new Promise(r=>server.listen(8097,'127.0.0.1',r));
  browser=await chromium.launch({headless:true,executablePath:process.env.QUIZLORIA_BROWSER});
  const context=await browser.newContext({viewport:{width:390,height:900}});
