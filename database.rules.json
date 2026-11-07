@@ -535,6 +535,46 @@
     "mysteryBonus": {
       ".read": "auth != null && root.child('mysteryEntitlements').child(auth.uid).child('activeFrom').val() <= now && root.child('mysteryEntitlements').child(auth.uid).child('expiresAt').val() > now",
       ".write": false
+    },
+    "sharedQuizzes": {
+      "$quizId": {
+        ".read": "$quizId.matches(/^[A-Za-z0-9_-]{15,60}$/)",
+        ".write": "auth != null && !data.exists() && newData.exists() && $quizId.matches(/^[A-Za-z0-9_-]{20}$/)",
+        ".validate": "newData.hasChildren(['title','questions','createdAt','creator'])",
+        "title": {
+          ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 70"
+        },
+        "creator": {
+          ".validate": "newData.isString() && newData.val() === auth.uid"
+        },
+        "createdAt": {
+          ".validate": "newData.isNumber() && newData.val() === now"
+        },
+        "questions": {
+          ".validate": "newData.hasChildren(['0','1','2','3','4'])",
+          "$index": {
+            ".validate": "($index.matches(/^[0-4]$/) || ($index === '5' && newData.parent().child('4').exists()) || ($index === '6' && newData.parent().child('5').exists()) || ($index === '7' && newData.parent().child('6').exists()) || ($index === '8' && newData.parent().child('7').exists()) || ($index === '9' && newData.parent().child('8').exists()) || ($index === '10' && newData.parent().child('9').exists()) || ($index === '11' && newData.parent().child('10').exists()) || ($index === '12' && newData.parent().child('11').exists()) || ($index === '13' && newData.parent().child('12').exists()) || ($index === '14' && newData.parent().child('13').exists())) && newData.hasChildren(['q','a','correct'])",
+            "q": {
+              ".validate": "newData.isString() && newData.val().length >= 5 && newData.val().length <= 240"
+            },
+            "a": {
+              ".validate": "newData.hasChildren(['0','1','2','3'])",
+              "$option": {
+                ".validate": "$option.matches(/^[0-3]$/) && newData.isString() && newData.val().length > 0 && newData.val().length <= 140"
+              }
+            },
+            "correct": {
+              ".validate": "newData.isNumber() && (newData.val() === 0 || newData.val() === 1 || newData.val() === 2 || newData.val() === 3)"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
     }
   }
 }
