@@ -9,7 +9,7 @@ async function main(){
  server=http.createServer(async(req,res)=>{try{
   const pathname=new URL(req.url,'http://localhost').pathname;
   if(pathname.startsWith('/sdk/')){res.setHeader('Content-Type','application/javascript');res.end(fs.readFileSync(path.join(process.env.QUIZLORIA_SDK_DIR,path.basename(pathname))));return}
-  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','party.js','social.js','psychology.js','membership.js','premium.js','mystery-extra.js','daily-mystery.js','daily-mystery-core.js','site-info.js','site-info.css','result-card.js','would-you-rather.js','discovery.js','premium-stories.js','research-tests.js','persona-results.js','home-ad.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
+  const name=pathname==='/'?'index.html':pathname.slice(1);if(!['index.html','result-insights.js','result-insights.css','party.js','social.js','psychology.js','membership.js','premium.js','mystery-extra.js','daily-mystery.js','daily-mystery-core.js','site-info.js','site-info.css','result-card.js','would-you-rather.js','discovery.js','premium-stories.js','research-tests.js','persona-results.js','home-ad.js','favicon.svg'].includes(name)){res.writeHead(404);res.end();return}
   let content=fs.readFileSync(path.join(root,name),'utf8');if(name==='index.html')content=content.replaceAll('https://www.gstatic.com/firebasejs/10.14.1/','/sdk/').replace('</head>',`<script>document.addEventListener('DOMContentLoaded',()=>{const app=firebase.initializeApp({apiKey:'demo-key',projectId:'demo-quizloria',authDomain:'demo-quizloria.firebaseapp.com',databaseURL:'https://demo-quizloria-default-rtdb.firebaseio.com'});app.auth().useEmulator('http://127.0.0.1:9099',{disableWarnings:true});app.database().useEmulator('127.0.0.1',9000);});</script></head>`);
   res.setHeader('Content-Type',name.endsWith('.js')?'application/javascript':name.endsWith('.css')?'text/css':name.endsWith('.svg')?'image/svg+xml':'text/html; charset=utf-8');res.end(content);
  }catch(e){res.writeHead(500);res.end(e.message)}});
@@ -49,4 +49,3 @@ async function main(){
  await p.setViewportSize({width:1280,height:900});await p.evaluate(()=>qOpenResultCard({kind:'knowledge',test:'Masaüstü testi',result:'85 / 100',summary:'20 sorudan 17 tanesini doğru yanıtladım.'}));await ready();await p.locator('.q-result-card-close').click();assert.deepEqual(errors,[]);console.log(checks+' result-card browser checks passed (five result paths, actual PNG, file share/cancel, copy fallback, privacy, nested focus and long text).');
 }
 main().catch(e=>{console.error(e);console.error(errors);process.exitCode=1}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r))});
-
