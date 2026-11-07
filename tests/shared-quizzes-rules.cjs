@@ -12,6 +12,7 @@ const key=()=> 'sharedQuizzes/Q'+String(++serial).padStart(19,'0');
  await check(false,'owner cannot overwrite published quiz','PUT',first,fixture());await check(false,'other account cannot edit','PUT',first+'/title','Changed','bob');await check(false,'owner cannot delete','DELETE',first);
  await check(true,'anonymous creator supported','PUT',key(),fixture(5,'anon'),'anon','anonymous');
  for(let n=6;n<=15;n++)await check(true,'valid question count '+n,'PUT',key(),fixture(n));
+ const short=fixture();short.questions.forEach(q=>{q.q='?';q.a=['1','2','3','4']});await check(true,'short complete questions supported','PUT',key(),short);
  const bad=[
   ['too few questions',v=>v.questions=fixture(4).questions],['too many questions',v=>v.questions=fixture(16).questions],
   ['title short',v=>v.title='ab'],['title long',v=>v.title='x'.repeat(71)],['title wrong type',v=>v.title=123],
@@ -20,7 +21,7 @@ const key=()=> 'sharedQuizzes/Q'+String(++serial).padStart(19,'0');
   ['noncontiguous questions',v=>{v.questions=Object.fromEntries(v.questions.map((q,i)=>[i,q]));v.questions[6]=v.questions[4];delete v.questions[4]}],
   ['gap after first five',v=>{v.questions=Object.fromEntries(v.questions.map((q,i)=>[i,q]));v.questions[7]=v.questions[4]}],
   ['question key text',v=>{v.questions={...v.questions,extra:v.questions[0]}}],
-  ['short question',v=>v.questions[0].q='abcd'],['long question',v=>v.questions[0].q='x'.repeat(241)],
+  ['empty question',v=>v.questions[0].q=''],['whitespace question',v=>v.questions[0].q='   '],['long question',v=>v.questions[0].q='x'.repeat(241)],
   ['question wrong type',v=>v.questions[0].q=5],['unexpected question field',v=>v.questions[0].points=999],
   ['missing option',v=>v.questions[0].a.pop()],['extra option',v=>v.questions[0].a.push('Extra')],
   ['sparse options',v=>v.questions[0].a={0:'A',1:'B',2:'C',4:'D'}],['empty option',v=>v.questions[0].a[0]=''],

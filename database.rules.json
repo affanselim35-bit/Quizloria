@@ -555,7 +555,7 @@
           "$index": {
             ".validate": "($index.matches(/^[0-4]$/) || ($index === '5' && newData.parent().child('4').exists()) || ($index === '6' && newData.parent().child('5').exists()) || ($index === '7' && newData.parent().child('6').exists()) || ($index === '8' && newData.parent().child('7').exists()) || ($index === '9' && newData.parent().child('8').exists()) || ($index === '10' && newData.parent().child('9').exists()) || ($index === '11' && newData.parent().child('10').exists()) || ($index === '12' && newData.parent().child('11').exists()) || ($index === '13' && newData.parent().child('12').exists()) || ($index === '14' && newData.parent().child('13').exists())) && newData.hasChildren(['q','a','correct'])",
             "q": {
-              ".validate": "newData.isString() && newData.val().length >= 5 && newData.val().length <= 240"
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 240 && newData.val().matches(/.*[^ ].*/)"
             },
             "a": {
               ".validate": "newData.hasChildren(['0','1','2','3'])",
