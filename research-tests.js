@@ -36,6 +36,7 @@ function show(){
   const next=button(s.index===9?'Açıklamalı sonucumu gör →':'Sonraki madde →',()=>{if(!Number.isInteger(s.answers[s.index]))return;if(s.index===9)s.stage='result';else s.index++;show()});next.disabled=!Number.isInteger(s.answers[s.index]);actions.append(next);root.append(actions);
  }else{
   if(s.answers.length!==10||s.answers.some(v=>!Number.isInteger(v)||v<1||v>5)){close();return}
+  window.qDailyChallenge?.complete('catalog:'+s.id);
   const scored=s.test.items.map((item,i)=>({...item,response:s.answers[i],score:item.reverse?6-s.answers[i]:s.answers[i]}));
   const total=scored.reduce((sum,item)=>sum+item.score,0),mean=total/10;
   const hero=node('section',undefined,'q-research-result');hero.append(node('p','YANITLARININ ÖZETİ','q-research-kicker'),node('h3',mean.toLocaleString('tr-TR',{minimumFractionDigits:1})+' / 5','q-research-score'),node('p','Toplam puan: '+total+' / 50 · IPIP '+s.test.facet));
@@ -62,4 +63,3 @@ window.qResearchOpen=function(test,id){
 window.addEventListener('quizloria:membership',()=>{if(session&&!allowed()){close();v11Toast(window.quizloriaMembership?.freeTests?'Hesabın değiştiği için test kapatıldı.':'Premium erişimin sona erdi veya hesabın değişti.')}});
 document.addEventListener('keydown',event=>{if(!session)return;if(event.key==='Escape'){event.preventDefault();close()}else if(event.key==='Tab'){const focusable=[...document.querySelectorAll('#qResearchOverlay button:not(:disabled),#qResearchOverlay a,#qResearchOverlay summary')].filter(el=>el.getClientRects().length);const first=focusable[0],last=focusable.at(-1);if(event.shiftKey&&(document.activeElement===first||document.activeElement.tagName==='H2')){event.preventDefault();last?.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus()}}});
 })();
-

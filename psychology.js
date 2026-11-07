@@ -160,6 +160,8 @@ const root=()=>document.getElementById('psyContent');
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e}
 function button(text,action,cls){const b=node('button',text,cls);b.type='button';b.onclick=action;return b}
 function focusQuestion(){const q=root().querySelector('.psy-question,.psy-result-title');if(q)q.focus({preventScroll:true});const p=root().querySelector('.psy-panel');if(p){const nav=document.querySelector('.v9-nav');window.scrollTo({top:Math.max(0,p.getBoundingClientRect().top+scrollY-(nav?.getBoundingClientRect().height||0)-16),behavior:'instant'})}}
+window.qPsychologyTests=tests.map((t,i)=>({id:String(i),title:t[0]}));
+window.qPsychologyStart=function(id){const i=Number(id);if(!Number.isInteger(i)||!tests[i])return;current=i;step=0;answers=[];openV9Page('psychology');draw();focusQuestion()};
 function list(){current=-1;step=0;answers=[];const grid=node('div',undefined,'psy-grid');tests.forEach((t,i)=>{const card=node('article',undefined,'psy-card');card.append(node('h3',t[1]+' '+t[0]),node('p',t[2]+' · '+t[3].length+' soru'),button('Değerlendirmeye Başla →',()=>{current=i;step=0;answers=[];draw();focusQuestion()}));grid.append(card)});root().replaceChildren(grid)}
 function draw(){
  const t=tests[current],question=t[3][step],panel=node('div',undefined,'psy-panel');
@@ -175,7 +177,8 @@ function draw(){
  actions.append(previous,next,button('Anketlere dön',list));panel.append(choices,selected,actions,node('p','Özgün bir farkındalık anketidir; klinik ölçek veya tanı aracı değildir. Yanıtların kaydedilmez.','psy-muted'));root().replaceChildren(panel);
 }
 function finish(){
- const t=tests[current],panel=node('div',undefined,'psy-panel psy-result');
+ const t=tests[current];if(!t||answers.length!==t[3].length||!Array.from(answers).every(a=>Number.isInteger(a)&&a>=0&&a<4))return;window.qDailyChallenge?.complete('reflection:'+current);
+ const panel=node('div',undefined,'psy-panel psy-result');
  const easier=answers.filter(a=>a<2).length,harder=answers.length-easier,kind=easier>harder?0:harder>easier?1:2;
  const [title,explanation]=interpretations[current][kind],hero=node('section',undefined,'psy-result-hero');
  hero.dataset.pattern=['resources','difficulties','mixed'][kind];
@@ -198,5 +201,3 @@ function finish(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',list);else list();
 })();
-
-

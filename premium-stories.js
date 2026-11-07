@@ -25,6 +25,7 @@ function render(){
   const next=button(s.index===11?'Karakterimi keşfet →':'Sonraki senaryo →',()=>{if(!Number.isInteger(s.answers[s.index]))return;if(s.index===11)s.stage='result';else s.index++;render()});next.disabled=!Number.isInteger(s.answers[s.index]);actions.append(next);root.append(actions);
  }else{
   if(s.answers.length!==12||s.answers.some(v=>!Number.isInteger(v)||v<0||v>3)){close();return}
+  window.qDailyChallenge?.complete('catalog:'+s.id);
   const {counts,results}=rank(s.story,s.answers),winner=results[0],ties=results.filter(r=>Math.abs(r.distance-winner.distance)<1e-9);
   const dominant=counts.map((count,i)=>({count,i})).sort((a,b)=>b.count-a.count||a.i-b.i);
   const hero=el('section',undefined,'q-research-result');hero.append(el('p','HİKÂYENDEKİ KARAKTERİN','q-research-kicker'),el('h3',winner.name,'q-story-result-title'),el('p',winner.description));root.append(hero);
@@ -47,4 +48,3 @@ window.qStoryOpen=function(story,id){const m=window.quizloriaMembership,u=fireba
 window.addEventListener('quizloria:membership',()=>{if(session&&!allowed()){close();v11Toast(window.quizloriaMembership?.freeTests?'Hesabın değiştiği için test kapatıldı.':'Premium erişimin sona erdi veya hesabın değişti.')}});
 document.addEventListener('keydown',e=>{if(!session)return;if(e.key==='Escape'){e.preventDefault();close()}else if(e.key==='Tab'){const items=[...document.querySelectorAll('#qStoryOverlay button:not(:disabled),#qStoryOverlay summary')].filter(x=>x.getClientRects().length);if(e.shiftKey&&(document.activeElement===items[0]||document.activeElement.tagName==='H2')){e.preventDefault();items.at(-1)?.focus()}else if(!e.shiftKey&&document.activeElement===items.at(-1)){e.preventDefault();items[0]?.focus()}}});
 })();
-
