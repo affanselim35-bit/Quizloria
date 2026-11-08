@@ -15,6 +15,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="result-insights.css?v=1">
 <link rel="stylesheet" href="closeup-game.css?v=1">
+<link rel="stylesheet" href="earlier-quiz.css?v=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quizloria | Kendini Keşfet, Bilgini Sına</title>
 <meta name="description" content="Quizloria’da kişilik testleri, eğlenceli quizler ve bilgi yarışmalarıyla kendini keşfet. Kahramanını bul, bilgini sına ve arkadaşlarınla yarış!">
@@ -648,6 +649,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
           <div class="q-discovery-tools"><p id="qDiscoverySelection">Tüm test türlerini görüyorsun.</p><button type="button" class="q-reset-discovery" onclick="qResetTestDiscovery()">Tüm testler / filtreleri temizle</button></div><p class="test-count" id="testCount" aria-live="polite">Testler yükleniyor…</p>
         </div>
         <div class="grid" id="testGrid">
+<article class="card" data-test="earlier" data-category="knowledge" data-kind="knowledge" data-difficulty="medium"><div class="icon">⏳</div><h3>Hangisi Daha Önce?</h3><p>12 karşılaştırma, her soruda 2 şık. Önce gerçekleşen olayı seç; tarihleri ve kısa açıklamasını keşfet.</p><button type="button" onclick="qEarlierQuiz.open()">Teste Başla →</button><span class="v9-level-tag">🟡 Orta</span></article>
 <article class="card" data-test="closeup" data-category="fun" data-kind="knowledge" data-difficulty="medium"><div class="icon">🔍</div><h3>Yakından Bak: Görseli Tahmin Et</h3><p>12 görselin küçük detaylarından nesneyi bul. İpucu açabilir, her cevaptan sonra görselin tamamını görebilirsin.</p><button type="button" onclick="qCloseupGame.open()">Teste Başla →</button><span class="v9-level-tag">🟡 Orta</span></article>
 
 
@@ -1621,6 +1623,7 @@ let currentQuestion = 0;
 let scores = [0, 0, 0, 0];
 
 function showSection(id) {
+    document.getElementById("qEarlier")?.classList.add("hidden");
     document.getElementById("qCloseup")?.classList.add("hidden");
     if(id === "quiz") window.qResultInsights?.reset?.();
     const adminPanel=document.getElementById('q22Admin');
@@ -2598,6 +2601,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script defer src="result-card.js?v=1"></script>
 <script defer src="result-insights.js?v=1"></script>
 <script defer src="closeup-game.js?v=2"></script>
+<script defer src="earlier-quiz.js?v=1"></script>
 <script defer src="would-you-rather.js?v=2"></script>
 <script defer src="daily-mystery-core.js?v=1"></script>
 <script defer src="daily-mystery.js?v=2"></script>
@@ -2608,7 +2612,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script defer src="premium-stories.js?v=4"></script>
 <script defer src="discovery.js?v=2"></script>
 <script defer src="premium.js?v=9"></script>
-<script defer src="daily-challenge.js?v=2"></script>
+<script defer src="daily-challenge.js?v=3"></script>
 <script src="party.js?v=3"></script>
 <script src="social.js?v=3"></script>
 <script defer src="home-ad.js?v=3"></script>

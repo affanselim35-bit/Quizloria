@@ -1,0 +1,7 @@
+const assert=require('node:assert/strict'),q=require('../earlier-quiz.js');let checks=0;assert.equal(q.pairs.length,12);assert.equal(new Set(q.pairs.map(p=>p.id)).size,12);checks+=2;
+for(const p of q.pairs){const opts=p.ids.map(id=>q.events[id]);assert.equal(opts.length,2);assert.equal(new Set(p.ids).size,2);assert.ok(opts.every(e=>/^https:\/\//.test(e.source)));const key=q.earlierIndex(opts);assert.ok(q.range(opts[key].date)[1]<q.range(opts[1-key].date)[0]);assert.equal(q.earlierIndex([...opts].reverse()),1-key);checks+=5}
+assert.throws(()=>q.earlierIndex([{date:'2009'},{date:'2009-05-17'}]));assert.throws(()=>q.range('2026-02-31'));assert.throws(()=>q.earlierIndex([{date:'2009'}]));checks+=3;
+assert.equal(q.earlierIndex([q.events.nasa,q.events.lego]),1);assert.equal(q.earlierIndex([q.events.capital,q.events.republic]),0);assert.equal(q.dateLabel('1998'),'1998');checks+=3;
+let s=q.create(()=>.2);assert.equal(q.next(s),s);assert.equal(q.answer(s,2),s);assert.equal(q.answer(s,-1),s);checks+=3;while(s.status==='playing'){s=q.answer(s,s.deck[s.index].correct);assert.equal(q.answer(s,1),s);checks++;s=q.next(s)}assert.equal(s.correctCount,12);assert.equal(q.next(s),s);checks+=2;
+let wrong=q.create();while(wrong.status==='playing')wrong=q.next(q.answer(wrong,1-wrong.deck[wrong.index].correct));assert.equal(wrong.correctCount,0);checks++;
+for(let i=0;i<30;i++){const run=q.create();assert.equal(new Set(run.deck.map(p=>p.id)).size,12);assert.ok(run.deck.every(p=>p.options.length===2));checks+=2}console.log(checks+' chronology logic checks passed.');

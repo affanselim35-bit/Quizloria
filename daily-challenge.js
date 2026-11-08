@@ -13,12 +13,12 @@ function history(){try{return typeof readTestHistory==='function'?readTestHistor
 function read(){try{const p=JSON.parse(localStorage.getItem(PIN)||'null');pin=p&&typeof p==='object'?p:null;const m=JSON.parse(localStorage.getItem(DONE)||'[]');marks=Array.isArray(m)?m.filter(r=>r&&typeof r.day==='string'&&typeof r.id==='string').slice(-32):[]}catch{writing=false}}
 function legacy(today,rows){let hash=0;for(const ch of today)hash=(hash*31+ch.charCodeAt(0))>>>0;const id=TEST_IDS[hash%TEST_IDS.length];return completed(id,today,[],history())&&rows.some(r=>r.id===id)?{day:today,id}:null}
 function pool(){
- if(typeof TEST_IDS==='undefined'||typeof QPERSONAS==='undefined'||!window.qPsychologyTests||!window.qPublicTestCatalog||!window.qCloseupGame?.open)return {ready:false,tests:[]};
+ if(typeof TEST_IDS==='undefined'||typeof QPERSONAS==='undefined'||!window.qPsychologyTests||!window.qPublicTestCatalog||!window.qCloseupGame?.open||!window.qEarlierQuiz?.open)return {ready:false,tests:[]};
  const remote=window.qPublicTestCatalog();if(!remote.ready)return remote;
  const native=TEST_IDS.map(id=>({id,title:quizNames[id]||id,kind:isPersonalityQuiz(id)?'reflection':'knowledge',open:()=>startQuiz(id)}));
  const personas=QPERSONAS.map(t=>({id:t.id,title:t.title,kind:'character',open:()=>{openV9Page('tests');qPersonaStart(t.id)}}));
  const reflection=window.qPsychologyTests.map(t=>({id:'reflection:'+t.id,title:t.title,kind:'reflection',open:()=>window.qPsychologyStart(t.id)}));
- return {ready:true,tests:unique([...native,...personas,...reflection,{id:'closeup',title:'Yakından Bak: Görseli Tahmin Et',kind:'knowledge',open:()=>window.qCloseupGame.open()},...remote.tests.map(t=>({...t,id:'catalog:'+t.id,open:()=>window.qPremiumStart(t.id)}))])};
+ return {ready:true,tests:unique([...native,...personas,...reflection,{id:'earlier',title:'Hangisi Daha Önce?',kind:'knowledge',open:()=>window.qEarlierQuiz.open()},{id:'closeup',title:'Yakından Bak: Görseli Tahmin Et',kind:'knowledge',open:()=>window.qCloseupGame.open()},...remote.tests.map(t=>({...t,id:'catalog:'+t.id,open:()=>window.qPremiumStart(t.id)}))])};
 }
 function current(){if(!loaded){loaded=true;read()}latest=pool();if(!latest.ready){selection=null;return null}const today=day();if(!pin||pin.day!==today)pin=legacy(today,latest.tests)||pin;selection=choose(latest.tests,today,pin);if(selection&&(pin?.id!==selection.id||pin?.day!==today)){pin={day:today,id:selection.id};try{localStorage.setItem(PIN,JSON.stringify(pin))}catch{writing=false}}return selection}
 function type(){return current()?.id||''}
