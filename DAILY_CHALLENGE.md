@@ -1,6 +1,6 @@
 # All-public-test daily challenge
 
-The home challenge uses all public test engines, rather than TEST_IDS alone. Current inventory is 148: Yakından Bak plus 48 built-in quizzes, 6 character quizzes, 83 publicly released remote knowledge/story/IPIP tests and 10 original reflection forms. User-created/private quizzes, mixed mode and other standalone games are outside the pool. The list comes from the native registries and the loaded public server catalogue, so supported new public catalogue entries participate automatically.
+The home challenge uses all public test engines, rather than TEST_IDS alone. Current inventory is 149: Hangisi Daha Önce? and Yakından Bak plus 48 built-in quizzes, 6 character quizzes, 83 publicly released remote knowledge/story/IPIP tests and 10 original reflection forms. User-created/private quizzes, mixed mode and other standalone games are outside the pool. The list comes from the native registries and the loaded public server catalogue, so supported new public catalogue entries participate automatically.
 
 Selection waits for access and metadata readiness; no temporary small-pool choice is shown during loading. A sorted-id daily rotation covers every entry once per pool-length cycle. Day boundaries use Europe/Istanbul. The selected public test is pinned on this browser for the day, survives reload and remains pinned when the catalogue expands. Removal/restricted access invalidates the pin. An already completed legacy daily quiz is preserved for the current day.
 
@@ -8,4 +8,4 @@ Each engine opens through its own entry point. Native quizzes use existing compl
 
 Loading failure is explicit; the button stays unavailable until the public list is ready. Visibility/focus and a one-minute refresh detect date changes. Old quiz history remains compatible. Clearing local history also clears the daily completion marker.
 
-Validation: 20 date/rotation/canonical-id logic checks; 237 mobile/desktop browser checks cover all 148 pool entries, eight opening/completion paths, cancelled/unfinished tests, loading/error recovery, private marker contents, reload, Istanbul midnight and single mission reward. Existing catalogue, answer-feedback, result-insights and home-ad checks cover integration.
+Validation: 20 date/rotation/canonical-id logic checks; 263 mobile/desktop browser checks cover all 149 pool entries, nine opening/completion paths, cancelled/unfinished tests, loading/error recovery, private marker contents, reload, Istanbul midnight and single mission reward. Existing catalogue, answer-feedback, result-insights and home-ad checks cover integration.
