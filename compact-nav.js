@@ -13,7 +13,7 @@ function current(){const selected=panel.querySelector('[aria-current="page"]');b
 function layout(){const focused=document.activeElement;close(false);for(const link of extras)panel.append(link);if(!small.matches)for(const view of ['games','profile']){const link=links.find(a=>a.dataset.view===view);if(link)nav.insertBefore(link,button)}if(panel.contains(focused))button.focus({preventScroll:true});current()}
 button.addEventListener('click',()=>{const opening=panel.hidden;panel.hidden=!opening;button.setAttribute('aria-expanded',String(opening))});
 nav.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden){event.preventDefault();close(true)}});
-panel.addEventListener('click',event=>{if(event.target.closest('a')){const restore=panel.contains(document.activeElement);close(restore)}});
+nav.addEventListener('click',event=>{if(event.target.closest('a')){const restore=panel.contains(document.activeElement);close(restore)}});
 document.addEventListener('click',event=>{if(!panel.hidden&&!nav.contains(event.target))close(false)});
 document.addEventListener('focusin',event=>{if(!panel.hidden&&!nav.contains(event.target))close(false)});
 new MutationObserver(current).observe(nav,{subtree:true,attributes:true,attributeFilter:['aria-current']});
