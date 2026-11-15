@@ -10,3 +10,6 @@ No test content, memberships, administrator roles, ad configuration or access po
 
 Validation: `tests/discovery-browser.cjs` checks all four types, current counts, no New Arrivals section, stories retained in the common catalog, combined filters, empty state/reset, favorites, no horizontal page overflow and view separation at 390px/1280px. The 95 free-catalog checks pass as regression coverage. Test fixtures serve scripts locally and block real ad requests.
 
+## Compact browsing
+
+The main Test türleri tiles are compact controls rather than tall intro cards. Both the main catalog and /testler/ initially show 12 matches, with 12 more per explicit click. Main search, type/topic/difficulty/favorite filters apply to the complete catalog before pagination; changing criteria resets the display limit. The directory has text search and a type selector, hides empty groups, and retains all ordinary links when JavaScript is disabled. Individual guides, questions and sources are unchanged. Pagination changes no scores or database content.
