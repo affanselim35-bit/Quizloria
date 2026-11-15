@@ -12,3 +12,8 @@ Text wrapping and adaptive sizing handle long Turkish results and unbroken words
 
 Validation: `tests/result-card-browser.cjs` covers five renderer paths, true PNG download and dimensions, native file metadata, share cancellation, clipboard fallback, long text, privacy markers, nested-modal focus and cancelled rendering. Regression coverage includes the 95 free-catalog, 34 discovery and 40 result-ad checks. Generated example images are local output artifacts, not customer results.
 
+## Direct invitations to the same test
+
+Result text and native share captions now include an allowlisted direct test URL rather than only the homepage. Existing result producers supply stable public test IDs; unique-title lookup supports older callers, and unknown/private tests fall back to the homepage. A separate copy-link action works without sharing a PNG. Links include fixed campaign tags for the existing analytics setup, but never names, account IDs, scores or individual answers. There are no new analytics events, server records or automatic posts; sharing remains an explicit visitor action.
+
+Validation: 39 local result-card/browser checks cover real result paths, duplicate titles, private-answer exclusion, rejecting arbitrary destinations, clipboard denial, PNG sharing/cancellation and opening the shared URL in the correct existing engine.
