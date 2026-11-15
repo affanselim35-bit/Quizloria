@@ -4570,6 +4570,7 @@ function retryWrongAnswers(){if(!v6WrongQuestions.length)return;stopV6Timer();v6
 
 
 function startQuiz(type = "personality") {
+    window.qAsyncChallenge?.reset();
     if(type.startsWith("premium:")||type.startsWith("catalog:")||isLegacyPremiumTest(type)){window.qPremiumStart?.(type.startsWith("premium:")||type.startsWith("catalog:")?type.slice(8):type);return;}
     stopV6Timer();v6Practice=false;v6Mode=document.getElementById("quizMode").value;
     activeQuiz = type;
@@ -4743,6 +4744,7 @@ function advanceQuizQuestion() {
 }
 
 function showResult() {
+    window.qAsyncChallenge?.reset();
     window.qResultInsights?.hide?.();
     stopV6Timer();
     v11ClearProgress();
@@ -4791,6 +4793,7 @@ function showResult() {
         if(v6Practice){bestLine.textContent="🧩 Yanlışları tekrar etme turu · Bu tur istatistiklerine eklenmez.";bestLine.classList.remove("hidden")}
         else {const record=updatePersonalBest(activeQuiz,points);bestLine.textContent=(record.isNew?"🎉 Yeni kişisel rekor! ":"🥇 Kişisel rekorun: ")+record.best+"/100";bestLine.classList.remove("hidden");saveTestResult({type:activeQuiz,points,date:new Date().toISOString()})}
         window.qResultInsights?.complete?.({type:activeQuiz,mode:v6Mode,practice:v6Practice,questions:getActiveQuestions(),answers:selectedAnswers});
+        window.qAsyncChallenge?.capture({type:activeQuiz,mode:v6Mode,practice:v6Practice,questions:getActiveQuestions(),answers:selectedAnswers});
         refreshV5();
         document.getElementById("resultText").textContent = activeQuiz === KUZEY_TEST_KEY
             ? `🎉 Kuzey Dalgıç! Bu test Quizloria’nın kurucusu tarafından sana özel hazırlandı. ${correctAnswers}/${total} doğru • ${points}/100 puan!`
@@ -5451,6 +5454,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&qPersonaActive)qPer
 <script defer src="test-pages.js?v=1"></script>
 <script defer src="site-info.js?v=1"></script>
 <script defer src="result-card.js?v=2"></script>
+<link rel="stylesheet" href="async-challenge.css?v=1">
+<script defer src="async-challenge-edition.js?v=1"></script>
+<script defer src="async-challenge.js?v=1"></script>
 <script defer src="result-insights.js?v=1"></script>
 <script defer src="closeup-game.js?v=2"></script>
 <script defer src="earlier-quiz.js?v=2"></script>
