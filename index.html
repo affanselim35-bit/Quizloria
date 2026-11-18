@@ -650,7 +650,7 @@ body[data-quizloria-view="tests"] #v9Tests{display:block!important}
           </div>
           <div class="q-discovery-tools"><p id="qDiscoverySelection">Tüm test türlerini görüyorsun.</p><button type="button" class="q-reset-discovery" onclick="qResetTestDiscovery()">Tüm testler / filtreleri temizle</button></div><p class="test-count" id="testCount" aria-live="polite">Testler yükleniyor…</p>
         </div>
-        <p class="q-public-directory"><a href="/testler/">Test rehberini aç: konular, açıklamalar ve kaynaklar →</a></p>
+        <details id="qcCommunity" class="q-public-directory"><summary>Topluluk Testleri</summary><p>Quizloria oyuncularının hazırladığı ve yönetici tarafından onaylanan testler.</p><p id="qcCommunityStatus" role="status"></p><ul id="qcCommunityList"></ul></details><p class="q-public-directory"><a href="/testler/">Test rehberini aç: konular, açıklamalar ve kaynaklar →</a></p>
         <div class="grid" id="testGrid">
 <article class="card" data-test="earlier" data-category="knowledge" data-kind="knowledge" data-difficulty="medium"><div class="icon">⏳</div><h3>Hangisi Daha Önce?</h3><p>12 karşılaştırma, her soruda 2 şık. Önce gerçekleşen olayı seç; tarihleri ve kısa açıklamasını keşfet.</p><button type="button" onclick="qEarlierQuiz.open()">Teste Başla →</button><span class="v9-level-tag">🟡 Orta</span></article>
 <article class="card" data-test="closeup" data-category="fun" data-kind="knowledge" data-difficulty="medium"><div class="icon">🔍</div><h3>Yakından Bak: Görseli Tahmin Et</h3><p>12 görselin küçük detaylarından nesneyi bul. İpucu açabilir, her cevaptan sonra görselin tamamını görebilirsin.</p><button type="button" onclick="qCloseupGame.open()">Teste Başla →</button><span class="v9-level-tag">🟡 Orta</span></article>
@@ -5349,7 +5349,7 @@ if(document.readyState==='complete')init();else window.addEventListener('load',i
  window.q20Sync=async function(){const context=dbUser();if(!context)return oldSync();await oldSync();if(status().textContent.startsWith('✅'))localStorage.setItem('q20_sync_optin_'+context.user.uid,'yes')};
 })();
 </script>
-<section id="q22Admin" class="q22-admin" hidden aria-label="Yönetici paneli"><h2>🛡️ Quizloria Yönetici Paneli</h2><p>Bu sayfa yalnızca yönetici hesabına açıktır. Ana sayfaya dönmek için üst menüyü kullanabilirsin.</p><p>Gelen önerileri burada yönetebilirsin. Bu bölüm yalnızca Firebase'de yetki verilen yönetici hesabında çalışır.</p><div class="q22-admin-toolbar"><button type="button" onclick="q22RefreshAdmin()">🔄 Yenile</button><span id="q22AdminStatus" class="q22-admin-status" role="status">Öneriler yükleniyor...</span></div><div id="q22AdminList" class="q22-admin-list"></div></section>
+<section id="q22Admin" class="q22-admin" hidden aria-label="Yönetici paneli"><h2>🛡️ Quizloria Yönetici Paneli</h2><p>Bu sayfa yalnızca yönetici hesabına açıktır. Ana sayfaya dönmek için üst menüyü kullanabilirsin.</p><p>Gelen önerileri burada yönetebilirsin. Bu bölüm yalnızca Firebase'de yetki verilen yönetici hesabında çalışır.</p><div class="q22-admin-toolbar"><button type="button" onclick="q22RefreshAdmin()">🔄 Yenile</button><span id="q22AdminStatus" class="q22-admin-status" role="status">Öneriler yükleniyor...</span></div><div id="q22AdminList" class="q22-admin-list"></div><details id="qcModeration"><summary>Topluluk testi başvuruları</summary><button id="qcModerationRefresh" type="button">Listeyi yenile</button><p id="qcModerationStatus" role="status"></p><ul id="qcModerationList"></ul></details></section>
 <div id="q25DeleteDialog" class="q25-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="q25DeleteTitle" onclick="if(event.target===this)q25CloseDelete()">
  <div class="q25-dialog"><div class="q25-icon">🗑️</div><h2 id="q25DeleteTitle">Öneriyi silmek istiyor musun?</h2><p>Bu işlem geri alınamaz. Öneri kalıcı olarak silinecek.</p><div class="q25-actions"><button type="button" id="q25CancelDelete" onclick="q25CloseDelete()">Vazgeç</button><button type="button" class="q25-danger" onclick="q25DoDelete()">Evet, Sil</button></div></div>
 </div>
@@ -5413,7 +5413,107 @@ const params=new URLSearchParams(location.search);
 const count=$('qcCount');for(let i=5;i<=15;i++){const o=document.createElement('option');o.value=i;o.textContent=i+' soru';count.append(o)}
 window.qcBuild=function(){const holder=$('qcFields'),old=[...holder.querySelectorAll('.qc-item')].map(e=>({q:e.querySelector('.qc-q').value,a:[...e.querySelectorAll('.qc-a')].map(x=>x.value),correct:Number(e.querySelector('.qc-c').value)}));holder.replaceChildren();for(let i=0;i<Number(count.value);i++){const data=old[i]||{q:'',a:['','','',''],correct:0};const item=document.createElement('div');item.className='qc-item';const title=document.createElement('h3');title.textContent=(i+1)+'. Soru';item.append(title);const label=document.createElement('label');label.textContent='Soru metni';const q=document.createElement('input');q.className='qc-q';q.maxLength=240;q.placeholder='Sorunu yaz';q.value=data.q;item.append(label,q);const grid=document.createElement('div');grid.className='qc-options';for(let j=0;j<4;j++){const box=document.createElement('div'),lab=document.createElement('label'),a=document.createElement('input');lab.textContent='ABCD'[j]+' şıkkı';a.className='qc-a';a.maxLength=140;a.placeholder='Cevap seçeneği';a.value=data.a[j];box.append(lab,a);grid.append(box)}item.append(grid);const cl=document.createElement('label');cl.textContent='Doğru cevap';const sel=document.createElement('select');sel.className='qc-c';for(let j=0;j<4;j++){const o=document.createElement('option');o.value=j;o.textContent='ABCD'[j]+' şıkkı';sel.append(o)}sel.value=data.correct;item.append(cl,sel);holder.append(item)}};qcBuild();
 function db(){if(!window.firebase)throw Error('Firebase yüklenemedi.');const app=firebase.apps.length?firebase.app():firebase.initializeApp(QUIZORA_FIREBASE_CONFIG);return {auth:app.auth(),database:app.database()}}
-window.qcPublish=async function(){const status=$('qcStatus'),btn=$('qcPublish');status.textContent='';const title=$('qcTitle').value.trim(),questions=[...document.querySelectorAll('#qcFields .qc-item')].map(el=>({q:el.querySelector('.qc-q').value.trim(),a:[...el.querySelectorAll('.qc-a')].map(x=>x.value.trim()),correct:Number(el.querySelector('.qc-c').value)}));const items=[...document.querySelectorAll('#qcFields .qc-item')];document.querySelectorAll('#qCustomBuilder [aria-invalid]').forEach(el=>{el.removeAttribute('aria-invalid');if(el.getAttribute('aria-describedby')==='qcFieldError')el.removeAttribute('aria-describedby')});$('qcFieldError')?.remove();function invalid(field,message){status.textContent='⚠️ '+message;field.setAttribute('aria-invalid','true');field.setAttribute('aria-describedby','qcFieldError');const hint=document.createElement('p');hint.id='qcFieldError';hint.textContent=message;hint.style.cssText='color:#ffd4a6;font-size:14px;margin:8px 0;line-height:1.5';field.insertAdjacentElement('afterend',hint);field.focus({preventScroll:true});const nav=document.querySelector('.v9-nav');scrollTo({top:Math.max(0,scrollY+field.getBoundingClientRect().top-(nav?.offsetHeight||0)-24),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}if(title.length<3||title.length>70){invalid($('qcTitle'),'Test adını 3–70 karakter arasında yaz.');return}if(questions.length<5||questions.length>15){invalid($('qcCount'),'5–15 soru seç.');return}for(let i=0;i<questions.length;i++){const q=questions[i],item=items[i];if(!q.q){invalid(item.querySelector('.qc-q'),(i+1)+'. sorunun metnini yaz.');return}if(q.q.length>240){invalid(item.querySelector('.qc-q'),(i+1)+'. sorunun metni en fazla 240 karakter olabilir.');return}for(let j=0;j<4;j++){if(!q.a[j]){invalid(item.querySelectorAll('.qc-a')[j],(i+1)+'. sorunun '+'ABCD'[j]+' şıkkını doldur.');return}if(q.a[j].length>140){invalid(item.querySelectorAll('.qc-a')[j],(i+1)+'. sorunun '+'ABCD'[j]+' şıkkı en fazla 140 karakter olabilir.');return}}if(!Number.isInteger(q.correct)||q.correct<0||q.correct>3){invalid(item.querySelector('.qc-c'),(i+1)+'. soru için doğru cevabı seç.');return}}btn.disabled=true;status.textContent='⏳ Test kaydediliyor...';try{const {auth,database}=db();if(!auth.currentUser)await auth.signInAnonymously();const ref=database.ref('sharedQuizzes').push();await ref.set({title,questions,createdAt:firebase.database.ServerValue.TIMESTAMP,creator:auth.currentUser.uid});const link=location.origin+location.pathname+'?custom='+encodeURIComponent(ref.key);status.replaceChildren();const p=document.createElement('p');p.textContent='✅ Test hazır! Bağlantıyı arkadaşına gönder:';const a=document.createElement('a');a.href=link;a.textContent=link;a.style.color='#d7b7ff';a.style.overflowWrap='anywhere';const copy=document.createElement('button');copy.type='button';copy.textContent='📋 Bağlantıyı Kopyala';copy.style.margin='12px 0';copy.onclick=async()=>{try{await navigator.clipboard.writeText(link);copy.textContent='✅ Kopyalandı!'}catch(e){status.append(document.createTextNode(' Bağlantıyı seçip kopyalayabilirsin.'))}};status.append(p,a,document.createElement('br'),copy)}catch(e){status.textContent='⚠️ Kaydedilemedi: '+(e.code==='PERMISSION_DENIED'?'Firebase veritabanı izinleri güncellenmeli.':e.message)}finally{btn.disabled=false}};
+window.qcPublish=async function(){const status=$('qcStatus'),btn=$('qcPublish');status.textContent='';const title=$('qcTitle').value.trim(),questions=[...document.querySelectorAll('#qcFields .qc-item')].map(el=>({q:el.querySelector('.qc-q').value.trim(),a:[...el.querySelectorAll('.qc-a')].map(x=>x.value.trim()),correct:Number(el.querySelector('.qc-c').value)}));const items=[...document.querySelectorAll('#qcFields .qc-item')];document.querySelectorAll('#qCustomBuilder [aria-invalid]').forEach(el=>{el.removeAttribute('aria-invalid');if(el.getAttribute('aria-describedby')==='qcFieldError')el.removeAttribute('aria-describedby')});$('qcFieldError')?.remove();function invalid(field,message){status.textContent='⚠️ '+message;field.setAttribute('aria-invalid','true');field.setAttribute('aria-describedby','qcFieldError');const hint=document.createElement('p');hint.id='qcFieldError';hint.textContent=message;hint.style.cssText='color:#ffd4a6;font-size:14px;margin:8px 0;line-height:1.5';field.insertAdjacentElement('afterend',hint);field.focus({preventScroll:true});const nav=document.querySelector('.v9-nav');scrollTo({top:Math.max(0,scrollY+field.getBoundingClientRect().top-(nav?.offsetHeight||0)-24),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}if(title.length<3||title.length>70){invalid($('qcTitle'),'Test adını 3–70 karakter arasında yaz.');return}if(questions.length<5||questions.length>15){invalid($('qcCount'),'5–15 soru seç.');return}for(let i=0;i<questions.length;i++){const q=questions[i],item=items[i];if(!q.q){invalid(item.querySelector('.qc-q'),(i+1)+'. sorunun metnini yaz.');return}if(q.q.length>240){invalid(item.querySelector('.qc-q'),(i+1)+'. sorunun metni en fazla 240 karakter olabilir.');return}for(let j=0;j<4;j++){if(!q.a[j]){invalid(item.querySelectorAll('.qc-a')[j],(i+1)+'. sorunun '+'ABCD'[j]+' şıkkını doldur.');return}if(q.a[j].length>140){invalid(item.querySelectorAll('.qc-a')[j],(i+1)+'. sorunun '+'ABCD'[j]+' şıkkı en fazla 140 karakter olabilir.');return}}if(!Number.isInteger(q.correct)||q.correct<0||q.correct>3){invalid(item.querySelector('.qc-c'),(i+1)+'. soru için doğru cevabı seç.');return}}btn.disabled=true;status.textContent='⏳ Test kaydediliyor...';try{const {auth,database}=db();if(!auth.currentUser)await auth.signInAnonymously();const ref=database.ref('sharedQuizzes').push();await ref.set({title,questions,createdAt:firebase.database.ServerValue.TIMESTAMP,creator:auth.currentUser.uid});const link=location.origin+location.pathname+'?custom='+encodeURIComponent(ref.key);status.replaceChildren();const p=document.createElement('p');p.textContent='✅ Test hazır! Bağlantıyı arkadaşına gönder:';const a=document.createElement('a');a.href=link;a.textContent=link;a.style.color='#d7b7ff';a.style.overflowWrap='anywhere';const copy=document.createElement('button');copy.type='button';copy.textContent='📋 Bağlantıyı Kopyala';copy.style.margin='12px 0';copy.onclick=async()=>{try{await navigator.clipboard.writeText(link);copy.textContent='✅ Kopyalandı!'}catch(e){status.append(document.createTextNode(' Bağlantıyı seçip kopyalayabilirsin.'))}};status.append(p,a,document.createElement('br'),copy);offerCommunity(status,ref.key)}catch(e){status.textContent='⚠️ Kaydedilemedi: '+(e.code==='PERMISSION_DENIED'?'Firebase veritabanı izinleri güncellenmeli.':e.message)}finally{btn.disabled=false}};
+function communityLink(id, title) {
+ const link = document.createElement('a');
+ link.href = '/?custom=' + encodeURIComponent(id);
+ link.textContent = title;
+ return link;
+}
+function offerCommunity(container, id) {
+ const button = document.createElement('button');
+ button.type = 'button';
+ button.textContent = 'Topluluk incelemesine gönder';
+ const note = document.createElement('p');
+ note.textContent = 'Onaylanan testleri herkes görebilir. Sorularına kişisel bilgi ekleme.';
+ const outcome = document.createElement('p');
+ outcome.setAttribute('role', 'status');
+ container.append(note, button, outcome);
+ button.onclick = async () => {
+  const {auth,database} = db();
+  if (!auth.currentUser || auth.currentUser.isAnonymous) {
+   outcome.textContent = 'Başvuru göndermek için hesabınla giriş yapıp testi yeniden oluştur.';
+   return;
+  }
+  button.disabled = true;
+  try {
+   await database.ref('communitySubmissions/' + id).set(true);
+   outcome.textContent = 'Testin incelenmek üzere gönderildi.';
+  } catch (err) {
+   outcome.textContent = 'Başvuru gönderilemedi. Daha sonra tekrar dene.';
+   button.disabled = false;
+  }
+ };
+}
+async function listCommunity() {
+ const list = $('qcCommunityList'), status = $('qcCommunityStatus');
+ status.textContent = 'Topluluk testleri yükleniyor…';
+ try {
+  const snapshot = await db().database.ref('communityQuizzes').once('value');
+  list.replaceChildren();
+  snapshot.forEach(quiz => {
+   const row = document.createElement('li');
+   row.append(communityLink(quiz.key,quiz.val()));
+   list.append(row);
+  });
+  status.textContent = snapshot.exists() ? '' : 'Henüz onaylanan topluluk testi yok.';
+ } catch (err) {
+  status.textContent = 'Topluluk testleri yüklenemedi. Bölümü yeniden açarak tekrar dene.';
+ }
+}
+async function listSubmissions() {
+ const list = $('qcModerationList'), status = $('qcModerationStatus');
+ const refresh = $('qcModerationRefresh');
+ if (refresh.disabled) return;
+ refresh.disabled = true;
+ status.textContent = 'Başvurular yükleniyor…';
+ try {
+  const {database} = db();
+  const snapshot = await database.ref('communitySubmissions').limitToFirst(30).once('value');
+  const ids = [];
+  snapshot.forEach(item => { ids.push(item.key); });
+  const quizzes = await Promise.all(ids.map(id => database.ref('sharedQuizzes/' + id + '/title').once('value')));
+  list.replaceChildren();
+  quizzes.forEach(quiz => {
+   const id = quiz.ref.parent.key, title = quiz.val();
+   const row = document.createElement('li');
+   const link = communityLink(id, title);
+   link.target = '_blank';
+   link.rel = 'noopener';
+   const approve = document.createElement('button'), reject = document.createElement('button');
+   approve.type = reject.type = 'button';
+   approve.textContent = 'Onayla';
+   reject.textContent = 'Reddet';
+   const decide = async approved => {
+    approve.disabled = reject.disabled = true;
+    try {
+     const changes = {['communitySubmissions/' + id]: null};
+     if (approved) changes['communityQuizzes/' + id] = title;
+     await database.ref().update(changes);
+     row.remove();
+     status.textContent = approved ? 'Test topluluk listesinde yayınlandı.' : 'Başvuru reddedildi.';
+    } catch (err) {
+     status.textContent = 'Karar kaydedilemedi. Listeyi yenileyip tekrar dene.';
+     approve.disabled = reject.disabled = false;
+    }
+   };
+   approve.onclick = () => decide(true);
+   reject.onclick = () => decide(false);
+   row.append(link, ' ', approve, ' ', reject);
+   list.append(row);
+  });
+  status.textContent = ids.length ? 'Bekleyen başvurular (en fazla 30 gösterilir).' : 'Bekleyen başvuru yok.';
+ } catch (err) {
+  status.textContent = 'Başvurular yüklenemedi. Listeyi yeniden yenile.';
+ } finally {
+  refresh.disabled = false;
+ }
+}
+$('qcCommunity').addEventListener('toggle', () => { if ($('qcCommunity').open) listCommunity(); });
+window.addEventListener('DOMContentLoaded', () => {
+ $('qcModeration').addEventListener('toggle', () => { if ($('qcModeration').open) listSubmissions(); });
+ $('qcModerationRefresh').addEventListener('click', listSubmissions);
+});
 let current=null,answers=[],position=0;
 function switchPlay(){['home','quiz','result','v13DuelScreen','v14OnlineScreen'].forEach(id=>{const e=$(id);if(e)e.classList.add('hidden')});$('qcPlay').hidden=false;scrollTo(0,0)}
 function render(){switchPlay();const box=$('qcPlay');box.replaceChildren();const heading=document.createElement('h2');heading.textContent='🎁 '+current.title;box.append(heading);if(position>=current.questions.length){let score=0;current.questions.forEach((q,i)=>{if(q.correct===answers[i])score++});const result=document.createElement('h3');result.textContent='🏆 '+score+' / '+current.questions.length+' doğru!';box.append(result);const msg=document.createElement('p');msg.textContent='Puanın: '+Math.round(score/current.questions.length*100)+'/100';box.append(msg);const again=document.createElement('button');again.textContent='🔄 Tekrar Çöz';again.onclick=()=>{position=0;answers=[];render()};box.append(again);return}const q=current.questions[position];const progress=document.createElement('p');progress.textContent='Soru '+(position+1)+' / '+current.questions.length;box.append(progress);const question=document.createElement('h3');question.textContent=q.q;box.append(question);q.a.forEach((a,i)=>{const b=document.createElement('button');b.className='qc-choice';b.textContent='ABCD'[i]+') '+a;b.onclick=()=>{answers.push(i);position++;render()};box.append(b)})}
